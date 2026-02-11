@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Vortex - Register</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    
+    <style>
+        body { 
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); 
+            min-height: 100vh; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
+        }
+        
+        .register-card { 
+            background: white; 
+            border-radius: 20px; 
+            padding: 40px; 
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3); 
+            max-width: 500px; 
+            width: 100%;
+        }
+        
+        .register-header { 
+            text-align: center; 
+            margin-bottom: 30px; 
+        }
+        
+        .register-header h2 { 
+            background: linear-gradient(90deg, #1abc9c, #3498db); 
+            -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent; 
+            font-weight: 800;
+        }
+        
+        .btn-vortex { 
+            background: linear-gradient(90deg, #1abc9c, #3498db); 
+            color: white; 
+            border: none; 
+            font-weight: 600;
+        }
+        
+        .btn-vortex:hover { opacity: 0.9; color: white; }
+    </style>
+</head>
+
+<body>
+
+<div class="register-card">
+    <div class="register-header">
+        <h2>Join Vortex</h2>
+        <p class="text-muted">Create your account to get started</p>
+    </div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+            <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <form method="POST">
+        <div class="mb-3">
+            <label class="form-label">Username</label>
+            <input type="text" name="username" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Email</label>
+            <input type="email" name="email" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Password</label>
+            <input type="password" name="password" class="form-control" required>
+        </div>
+
+        <button type="submit" class="btn btn-vortex w-100 mb-3">
+            <i class="bi bi-person-plus"></i> Register
+        </button>
+    </form>
+
+    <div class="text-center">
+        <p class="mb-0">Already have an account? 
+            <a href="{{ url_for('login') }}">Login here</a>
+        </p>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

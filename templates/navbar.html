@@ -1,0 +1,270 @@
+<nav class="navbar navbar-expand-lg px-4 shadow-sm">
+    <a class="navbar-brand fw-bold" href="{{ url_for('home') }}">
+        <i class="bi bi-hurricane"></i> Vortex
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMenu">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarMenu">
+        <ul class="navbar-nav ms-auto gap-3 align-items-center">
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('home') }}">
+                    <i class="bi bi-house-door-fill"></i> Home
+                </a>
+            </li>
+            
+            {% if current_user.is_authenticated %}
+
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="gamificationDropdown" 
+                   role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi bi-trophy"></i> Gamification
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="gamificationDropdown">
+                    <li>
+                        <a class="dropdown-item" href="{{ url_for('quiz_page') }}">
+                            <i class="bi bi-card-checklist"></i> Quiz
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="{{ url_for('quiz_battles') }}">
+                            <i class="bi bi-lightning-fill"></i> Quiz Battles
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="{{ url_for('puzzle_mode') }}">
+                            <i class="bi bi-puzzle-fill"></i> Puzzle Mode
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="{{ url_for('daily_challenge') }}">
+                            <i class="bi bi-calendar-check"></i> Daily Challenge
+                        </a>
+                    </li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li>
+                        <a class="dropdown-item" href="{{ url_for('leaderboard') }}">
+                            <i class="bi bi-bar-chart-fill"></i> Leaderboard
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="{{ url_for('gamification') }}">
+                            <i class="bi bi-stars"></i> Your Progress
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('grading_center') }}">
+                    <i class="bi bi-clipboard-data"></i> Grades
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('shared_library') }}">
+                    <i class="bi bi-folder-fill"></i> Library
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('search') }}">
+                    <i class="bi bi-search"></i> Search
+                </a>
+            </li>
+            
+            {% endif %}
+            
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('about') }}">
+                    <i class="bi bi-info-circle-fill"></i> About
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('help_page') }}">
+                    <i class="bi bi-question-circle-fill"></i> Help
+                </a>
+            </li>
+            
+            {% if current_user.is_authenticated %}
+            
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle user-dropdown" href="#" id="userDropdown" 
+                   role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi bi-person-circle"></i> {{ current_user.username }}
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                    <li>
+                        <a class="dropdown-item" href="{{ url_for('dashboard') }}">
+                            <i class="bi bi-speedometer2"></i> Dashboard
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="{{ url_for('analytics') }}">
+                            <i class="bi bi-graph-up-arrow"></i> Analytics
+                        </a>
+                    </li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li>
+                        <a class="dropdown-item text-danger" href="{{ url_for('logout') }}">
+                            <i class="bi bi-box-arrow-right"></i> Logout
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            
+            {% else %}
+            
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('login') }}">
+                    <i class="bi bi-box-arrow-in-right"></i> Login
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('register') }}">
+                    <i class="bi bi-person-plus"></i> Register
+                </a>
+            </li>
+            
+            {% endif %}
+            
+            <li class="nav-item ms-3">
+                <button id="toggle-mode" class="btn btn-outline-light btn-sm">
+                    <i class="bi bi-moon-stars"></i>
+                </button>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<style>
+    .navbar { 
+        background: linear-gradient(90deg, #1abc9c, #3498db); 
+        transition: background 0.5s; 
+    }
+    body.dark-mode .navbar { 
+        background: linear-gradient(90deg, #2c3e50, #34495e); 
+    }
+    
+    .navbar-brand { 
+        color: white !important; 
+        font-size: 1.8rem; 
+        font-weight: 800;
+    }
+    
+    .nav-link { 
+        color: white !important; 
+        font-weight: 600; 
+        transition: all 0.3s; 
+        padding: 8px 15px !important;
+        border-radius: 8px;
+    }
+    
+    .nav-link:hover { 
+        background: rgba(255,255,255,0.2);
+        transform: translateY(-2px);
+    }
+    
+    .dropdown-menu { 
+        background: white; 
+        border-radius: 12px; 
+        box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+        border: none;
+        margin-top: 10px !important;
+        min-width: 220px;
+    }
+    
+    body.dark-mode .dropdown-menu {
+        background: #2a2a40;
+        color: #f0f0f0;
+    }
+    
+    .dropdown-item { 
+        padding: 12px 20px;
+        transition: all 0.3s;
+        border-radius: 8px;
+        margin: 4px 8px;
+        color: #333;
+    }
+    
+    body.dark-mode .dropdown-item {
+        color: #f0f0f0;
+    }
+    
+    .dropdown-item:hover { 
+        background: linear-gradient(90deg, #1abc9c, #3498db);
+        color: white !important;
+        transform: translateX(5px);
+    }
+    
+    .dropdown-item i {
+        width: 20px;
+        margin-right: 8px;
+    }
+    
+    .dropdown-divider {
+        margin: 8px 0;
+        border-color: rgba(0,0,0,0.1);
+    }
+    
+    body.dark-mode .dropdown-divider {
+        border-color: rgba(255,255,255,0.1);
+    }
+    
+    .user-dropdown {
+        background: rgba(255,255,255,0.15);
+        border-radius: 25px;
+        padding: 8px 20px !important;
+    }
+    
+    .btn-outline-light {
+        border-color: white;
+        color: white;
+    }
+    
+    .btn-outline-light:hover {
+        background: white;
+        color: #1abc9c;
+    }
+    
+    @media (max-width: 991px) {
+        .dropdown-menu {
+            background: rgba(255,255,255,0.95);
+        }
+        
+        body.dark-mode .dropdown-menu {
+            background: rgba(42, 42, 64, 0.95);
+        }
+    }
+</style>
+
+<script>
+const toggleBtn = document.getElementById('toggle-mode');
+const body = document.body;
+const icon = toggleBtn.querySelector('i');
+
+if(localStorage.getItem('theme') === 'dark'){
+    body.classList.add('dark-mode');
+    body.classList.remove('light-mode');
+    icon.className = 'bi bi-sun';
+} else {
+    body.classList.add('light-mode');
+    body.classList.remove('dark-mode');
+    icon.className = 'bi bi-moon-stars';
+}
+
+toggleBtn.addEventListener('click', () => {
+    body.classList.toggle('dark-mode');
+    body.classList.toggle('light-mode');
+    
+    if(body.classList.contains('dark-mode')){
+        icon.className = 'bi bi-sun';
+        localStorage.setItem('theme','dark');
+    } else {
+        icon.className = 'bi bi-moon-stars';
+        localStorage.setItem('theme','light');
+    }
+});
+</script>

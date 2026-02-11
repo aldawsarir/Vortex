@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Vortex - Gamification</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    
+    <style>
+        body.light-mode { background: #f5f5f5; color: #333; }
+        body.dark-mode { background: #1e1e2f; color: #f0f0f0; }
+        
+        .card { border-radius: 18px; }
+        body.dark-mode .card { background: #2a2a40; color: #f0f0f0; }
+        
+        .score-display {
+            font-size: 3rem;
+            font-weight: 900;
+            background: linear-gradient(90deg, #FFD700, #FFA500);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .progress { height: 35px; margin: 30px 0; }
+        
+        .flashcards-container { 
+            display: flex; 
+            flex-wrap: wrap; 
+            gap: 1rem; 
+            justify-content: center; 
+            margin-top: 2rem; 
+        }
+        
+        .flashcard { 
+            perspective: 1000px; 
+            width: 180px; 
+            height: 100px; 
+            cursor: pointer; 
+            position: relative; 
+        }
+        
+        .flashcard div { 
+            width: 100%; 
+            height: 100%; 
+            position: absolute; 
+            backface-visibility: hidden; 
+            border-radius: 0.5rem; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            padding: 0.5rem; 
+            font-weight: bold; 
+            text-align: center; 
+            transition: transform 0.6s; 
+        }
+        
+        .flashcard .front { 
+            background: linear-gradient(90deg, #6C63FF, #8A76FF); 
+            color: white; 
+        }
+        
+        .flashcard .back { 
+            background: linear-gradient(90deg, #FF6F61, #FF9C6E); 
+            color: white; 
+            transform: rotateY(180deg); 
+        }
+        
+        .flashcard.flipped .front { transform: rotateY(180deg); }
+        .flashcard.flipped .back { transform: rotateY(0deg); }
+        
+        footer { 
+            background: #1f2d3d; 
+            color: #ddd; 
+            padding: 25px 0; 
+            margin-top: 80px; 
+            text-align: center; 
+        }
+        body.dark-mode footer { background: #111; }
+    </style>
+</head>
+
+<body class="light-mode">
+
+{% include 'navbar.html' %}
+
+<div class="container mt-5">
+    <h1 class="text-center mb-4">Gamification Dashboard</h1>
+
+    <div class="card shadow text-center p-4 mb-4">
+        <h3>Your Score</h3>
+        <div class="score-display">{{ score }}</div>
+        <p class="text-muted">Points Earned</p>
+    </div>
+
+    <div class="card shadow p-4 mb-4">
+        <h5 class="mb-3">Progress to Next Level</h5>
+        <div class="progress">
+            <div class="progress-bar bg-success" 
+                 role="progressbar" 
+                 style="width: {{ (score % 100) }}%">
+                {{ score % 100 }}%
+            </div>
+        </div>
+        <p class="text-muted mt-2">Level {{ (score // 100) + 1 }}</p>
+    </div>
+
+    <div class="card shadow p-4 mb-4">
+        <h5 class="mb-3">Achievements</h5>
+        <div class="row">
+            <div class="col-md-4 text-center mb-3">
+                <i class="bi bi-trophy-fill" style="font-size: 3rem; color: #FFD700;"></i>
+                <p class="mt-2">First Quiz Completed</p>
+            </div>
+            <div class="col-md-4 text-center mb-3">
+                <i class="bi bi-star-fill" style="font-size: 3rem; color: #FFA500;"></i>
+                <p class="mt-2">{{ score }} Points Earned</p>
+            </div>
+            <div class="col-md-4 text-center mb-3">
+                <i class="bi bi-lightning-fill" style="font-size: 3rem; color: #FF6F61;"></i>
+                <p class="mt-2">Quick Learner</p>
+            </div>
+        </div>
+    </div>
+
+    {% if quiz and quiz|length > 0 %}
+    <h4 class="text-center mb-3">Review Flashcards</h4>
+    <div class="flashcards-container">
+        {% for q in quiz %}
+        <div class="flashcard">
+            <div class="front">{{ q.q }}</div>
+            <div class="back">{{ q.a }}</div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <div class="text-center mt-5 mb-4">
+        <a href="{{ url_for('quiz_page') }}" class="btn btn-primary me-2">
+            Take Quiz Again
+        </a>
+        <a href="{{ url_for('home') }}" class="btn btn-secondary">
+            Back Home
+        </a>
+    </div>
+</div>
+
+<footer>
+    <div class="container text-center">
+        Developed by <strong>Vortex Team</strong> - Level 10 Students
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+document.querySelectorAll('.flashcard').forEach(card => {
+    card.addEventListener('click', () => {
+        card.classList.toggle('flipped');
+    });
+});
+</script>
+
+</body>
+</html>

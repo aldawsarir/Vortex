@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Vortex - Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    
+    <style>
+        body.light-mode { background: #f5f5f5; color: #333; }
+        body.dark-mode { background: #1e1e2f; color: #f0f0f0; }
+        
+        .card { border-radius: 18px; margin-bottom: 20px; }
+        body.dark-mode .card { background: #2a2a40; color: #f0f0f0; }
+        
+        .stat-card { text-align: center; padding: 30px; }
+        .stat-number { font-size: 2.5rem; font-weight: 800; }
+        
+        .upload-item { 
+            border-bottom: 1px solid #ddd; 
+            padding: 15px 0; 
+        }
+        
+        .upload-item:last-child { border-bottom: none; }
+        
+        body.dark-mode .upload-item { border-color: #444; }
+        
+        footer { 
+            background: #1f2d3d; 
+            color: #ddd; 
+            padding: 25px 0; 
+            margin-top: 80px; 
+            text-align: center; 
+        }
+        body.dark-mode footer { background: #111; }
+    </style>
+</head>
+
+<body class="light-mode">
+
+{% include 'navbar.html' %}
+
+<div class="container mt-5">
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+<h1>Welcome, {{ current_user.username }}</h1>
+<a href="{{ url_for('analytics') }}" class="btn btn-primary">
+<i class="bi bi-graph-up"></i> View Analytics
+</a>
+</div>
+
+<div class="row mb-4">
+
+<div class="col-md-3">
+<div class="card stat-card shadow">
+<i class="bi bi-trophy-fill" style="font-size: 3rem; color: #FFD700;"></i>
+<div class="stat-number">{{ current_user.score }}</div>
+<p class="text-muted">Total Points</p>
+</div>
+</div>
+
+<div class="col-md-3">
+<div class="card stat-card shadow">
+<i class="bi bi-star-fill" style="font-size: 3rem; color: #FFA500;"></i>
+<div class="stat-number">{{ current_user.level }}</div>
+<p class="text-muted">Current Level</p>
+</div>
+</div>
+
+<div class="col-md-3">
+<div class="card stat-card shadow">
+<i class="bi bi-file-earmark-text" style="font-size: 3rem; color: #6C63FF;"></i>
+<div class="stat-number">{{ uploads|length }}</div>
+<p class="text-muted">Uploads</p>
+</div>
+</div>
+
+<div class="col-md-3">
+<div class="card stat-card shadow">
+<i class="bi bi-clipboard-check" style="font-size: 3rem; color: #28a745;"></i>
+<div class="stat-number">{{ quizzes|length }}</div>
+<p class="text-muted">Quizzes Taken</p>
+</div>
+</div>
+
+</div>
+
+<div class="card shadow p-4 mb-4">
+<h4 class="mb-3">Your Recent Uploads</h4>
+
+{% if uploads %}
+{% for upload in uploads %}
+<div class="upload-item">
+<div class="d-flex justify-content-between align-items-center">
+<div>
+<strong>{{ upload.filename }}</strong>
+<br>
+<small class="text-muted">{{ upload.uploaded_at.strftime('%Y-%m-%d %H:%M') }}</small>
+</div>
+<div>
+<a href="{{ url_for('visualize_upload', upload_id=upload.id) }}" class="btn btn-sm btn-info me-2">
+<i class="bi bi-bar-chart"></i> Visualize
+</a>
+<a href="{{ url_for('share_upload', upload_id=upload.id) }}" class="btn btn-sm btn-{{ 'success' if upload.is_shared else 'outline-secondary' }}">
+<i class="bi bi-share"></i> {{ 'Shared' if upload.is_shared else 'Share' }}
+</a>
+</div>
+</div>
+</div>
+{% endfor %}
+{% else %}
+<p class="text-muted">No uploads yet. Start by uploading a document.</p>
+{% endif %}
+</div>
+
+<div class="card shadow p-4">
+<h4 class="mb-3">Recent Quiz Results</h4>
+
+{% if quizzes %}
+<table class="table table-hover">
+<thead class="table-light">
+<tr>
+<th>Score</th>
+<th>Total Questions</th>
+<th>Percentage</th>
+<th>Date</th>
+</tr>
+</thead>
+<tbody>
+
+{% for quiz in quizzes %}
+<tr>
+<td>{{ quiz.score }}</td>
+<td>{{ quiz.total_questions }}</td>
+<td>
+{% set percentage = ((quiz.score / (quiz.total_questions * 10)) * 100)|round(1) %}
+<span class="badge 
+{% if percentage >= 80 %}bg-success
+{% elif percentage >= 60 %}bg-warning
+{% else %}bg-danger
+{% endif %}">
+{{ percentage }}%
+</span>
+</td>
+<td>{{ quiz.completed_at.strftime('%Y-%m-%d') }}</td>
+</tr>
+{% endfor %}
+
+</tbody>
+</table>
+{% else %}
+<p class="text-muted">No quiz results yet. Take a quiz to see your progress.</p>
+{% endif %}
+</div>
+
+</div>
+
+<footer>
+<div class="container text-center">
+Developed by <strong>Vortex Team</strong> - Level 10 Students
+</div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>
