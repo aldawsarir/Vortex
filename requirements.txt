@@ -12,3 +12,4 @@ pandas==2.1.4
 Pillow==10.1.0
 pytesseract==0.3.10
 PyMuPDF==1.23.8
+gunicorn
