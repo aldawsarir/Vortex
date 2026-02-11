@@ -9,4 +9,7 @@ Werkzeug==3.0.1
 nltk==3.8.1
 pandas==2.1.4
 Pillow==10.1.0
+pytesseract==0.3.10
+PyMuPDF==1.23.8
+matplotlib==3.8.2
 gunicorn
