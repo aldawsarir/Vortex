@@ -1,18 +1,19 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ current_lang }}" {% if current_lang == 'ar' %}dir="rtl"{% endif %}>
 <head>
     <meta charset="UTF-8">
-    <title>Vortex - Register</title>
+    <title>Vortex - {{ t('register') }}</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     
     <style>
         body { 
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); 
+            background: linear-gradient(135deg, #1abc9c 0%, #3498db 100%); 
             min-height: 100vh; 
             display: flex; 
             align-items: center; 
             justify-content: center;
+            padding: 20px;
         }
         
         .register-card { 
@@ -34,6 +35,24 @@
             -webkit-background-clip: text; 
             -webkit-text-fill-color: transparent; 
             font-weight: 800;
+            font-size: 2.5rem;
+        }
+        
+        .form-label {
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .form-control {
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 12px;
+            transition: all 0.3s ease;
+        }
+        
+        .form-control:focus {
+            border-color: #1abc9c;
+            box-shadow: 0 0 0 3px rgba(26, 188, 156, 0.1);
         }
         
         .btn-vortex { 
@@ -41,18 +60,92 @@
             color: white; 
             border: none; 
             font-weight: 600;
+            padding: 14px 30px;
+            border-radius: 10px;
+            transition: all 0.3s ease;
         }
         
-        .btn-vortex:hover { opacity: 0.9; color: white; }
+        .btn-vortex:hover { 
+            opacity: 0.9; 
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(26, 188, 156, 0.3);
+        }
+        
+        .language-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+        
+        [dir="rtl"] .language-toggle {
+            right: auto;
+            left: 20px;
+        }
+        
+        .btn-lang {
+            background: white;
+            border: 2px solid rgba(255,255,255,0.3);
+            color: #1abc9c;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: 600;
+            margin: 0 5px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-lang:hover {
+            background: #1abc9c;
+            color: white;
+            border-color: #1abc9c;
+        }
+        
+        .btn-lang.active {
+            background: #1abc9c;
+            color: white;
+            border-color: #1abc9c;
+        }
+        
+        a {
+            color: #1abc9c;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        
+        a:hover {
+            color: #3498db;
+        }
+        
+        @media (max-width: 576px) {
+            .register-card {
+                padding: 30px 20px;
+            }
+            
+            .register-header h2 {
+                font-size: 2rem;
+            }
+        }
     </style>
 </head>
 
 <body>
 
+<!-- Language Toggle -->
+<div class="language-toggle">
+    <a href="{{ url_for('change_language', lang='en') }}" 
+       class="btn btn-lang btn-sm {% if current_lang == 'en' %}active{% endif %}">
+        EN
+    </a>
+    <a href="{{ url_for('change_language', lang='ar') }}" 
+       class="btn btn-lang btn-sm {% if current_lang == 'ar' %}active{% endif %}">
+        ع
+    </a>
+</div>
+
 <div class="register-card">
     <div class="register-header">
-        <h2>Join Vortex</h2>
-        <p class="text-muted">Create your account to get started</p>
+        <h2>{{ t('join_vortex') }}</h2>
+        <p class="text-muted">{{ t('create_account_message') }}</p>
     </div>
 
     {% with messages = get_flashed_messages(with_categories=true) %}
@@ -68,28 +161,31 @@
 
     <form method="POST">
         <div class="mb-3">
-            <label class="form-label">Username</label>
-            <input type="text" name="username" class="form-control" required>
+            <label class="form-label">{{ t('username') }}</label>
+            <input type="text" name="username" class="form-control" 
+                   placeholder="{{ t('enter_username') }}" required>
         </div>
 
         <div class="mb-3">
-            <label class="form-label">Email</label>
-            <input type="email" name="email" class="form-control" required>
+            <label class="form-label">{{ t('email') }}</label>
+            <input type="email" name="email" class="form-control" 
+                   placeholder="{{ t('enter_email') }}" required>
         </div>
 
         <div class="mb-3">
-            <label class="form-label">Password</label>
-            <input type="password" name="password" class="form-control" required>
+            <label class="form-label">{{ t('password') }}</label>
+            <input type="password" name="password" class="form-control" 
+                   placeholder="{{ t('enter_password') }}" required>
         </div>
 
         <button type="submit" class="btn btn-vortex w-100 mb-3">
-            <i class="bi bi-person-plus"></i> Register
+            <i class="bi bi-person-plus"></i> {{ t('register') }}
         </button>
     </form>
 
     <div class="text-center">
-        <p class="mb-0">Already have an account? 
-            <a href="{{ url_for('login') }}">Login here</a>
+        <p class="mb-0">{{ t('already_have_account') }} 
+            <a href="{{ url_for('login') }}">{{ t('login_here') }}</a>
         </p>
     </div>
 </div>

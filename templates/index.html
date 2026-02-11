@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ current_lang }}" {% if current_lang == 'ar' %}dir="rtl"{% endif %}>
 <head>
     <meta charset="UTF-8">
     <title>Vortex | Smart Learning</title>
@@ -37,14 +37,31 @@
         .card { border-radius: 18px; }
         body.dark-mode .card { background: #2a2a40; color: #f0f0f0; }
         
+        .form-label {
+            font-weight: 600;
+        }
+        
+        body.dark-mode .form-control {
+            background: #1e1e2f;
+            border-color: #444;
+            color: #f0f0f0;
+        }
+        
         .btn-vortex { 
             background: linear-gradient(90deg, #1abc9c, #3498db); 
             color: #fff; 
             border: none; 
             font-size: 1.1rem; 
-            font-weight: 600; 
+            font-weight: 600;
+            padding: 12px 30px;
+            border-radius: 12px;
+            transition: all 0.3s ease;
         }
-        .btn-vortex:hover { opacity: 0.9; color: white; }
+        .btn-vortex:hover { 
+            opacity: 0.9; 
+            color: white;
+            transform: translateY(-2px);
+        }
         
         footer { 
             background: #1f2d3d; 
@@ -54,6 +71,20 @@
             text-align: center; 
         }
         body.dark-mode footer { background: #111; color: #eee; }
+        
+        footer strong {
+            color: #1abc9c;
+        }
+        
+        /* RTL Support */
+        [dir="rtl"] .hero-title,
+        [dir="rtl"] .hero-text {
+            text-align: right;
+        }
+        
+        [dir="rtl"] .text-center {
+            text-align: center !important;
+        }
     </style>
 </head>
 
@@ -66,12 +97,10 @@
         <div class="row align-items-center">
             <div class="col-md-6 mb-4">
                 <h1 class="hero-title">
-                    Learn Smarter with <span>Vortex</span>
+                    {{ t('learn_smarter') }} <span>Vortex</span>
                 </h1>
                 <p class="hero-text">
-                    Vortex transforms your study materials into summaries, quizzes,
-                    flashcards and mind maps using smart AI tools making learning
-                    easier faster and more fun.
+                    {{ t('hero_description') }}
                 </p>
             </div>
             
@@ -88,33 +117,33 @@
 <div class="container">
     <div class="card shadow-lg p-4">
         {% if current_user.is_authenticated %}
-        <h4 class="mb-3 text-center">Upload Your Study Material</h4>
+        <h4 class="mb-3 text-center">{{ t('upload_material') }}</h4>
 
         <form method="POST" action="{{ url_for('summarize') }}" enctype="multipart/form-data">
             <div class="mb-3">
-                <label class="form-label">Paste Your Text</label>
+                <label class="form-label">{{ t('paste_text') }}</label>
                 <textarea name="text" class="form-control" rows="5"
-                          placeholder="Paste your notes or text here..."></textarea>
+                          placeholder="{{ t('paste_placeholder') }}"></textarea>
             </div>
 
             <div class="mb-3">
-                <label class="form-label">Or Upload Document</label>
+                <label class="form-label">{{ t('or_upload') }}</label>
                 <input type="file" name="file" class="form-control" accept=".pdf,.docx,.pptx">
-                <small class="text-muted">PDF DOCX PPTX supported</small>
+                <small class="text-muted">{{ t('file_support') }}</small>
             </div>
 
             <button type="submit" class="btn btn-vortex w-100">
-                Generate Summary and Quiz
+                🚀 {{ t('generate_btn') }}
             </button>
         </form>
 
         {% else %}
         <div class="text-center p-5">
             <i class="bi bi-lock-fill" style="font-size: 4rem; color: #ccc;"></i>
-            <h4 class="mt-3">Login Required</h4>
-            <p class="text-muted">Please login or register to start using Vortex</p>
-            <a href="{{ url_for('login') }}" class="btn btn-primary me-2">Login</a>
-            <a href="{{ url_for('register') }}" class="btn btn-outline-primary">Register</a>
+            <h4 class="mt-3">{{ t('login_required') }}</h4>
+            <p class="text-muted">{{ t('login_message') }}</p>
+            <a href="{{ url_for('login') }}" class="btn btn-primary me-2">{{ t('login') }}</a>
+            <a href="{{ url_for('register') }}" class="btn btn-outline-primary">{{ t('register') }}</a>
         </div>
         {% endif %}
     </div>
@@ -122,8 +151,8 @@
 
 <footer>
     <div class="container text-center">
-        <p class="mb-1">Developed By <strong>Vortex Team</strong></p>
-        <p class="mb-0">University College Of Ranyah - Computer Science - Level 10</p>
+        <p class="mb-1">{{ t('developed_by') }} <strong>{{ t('team_name') }}</strong></p>
+        <p class="mb-0">💚 💙 {{ t('university') }} 💚 💙</p>
     </div>
 </footer>
 

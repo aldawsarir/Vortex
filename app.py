@@ -14,6 +14,7 @@ from utils.visualize import create_mindmap
 from utils.visualization import create_bar_chart, create_pie_chart, analyze_quiz_performance
 from utils.analytics import calculate_user_stats, generate_performance_report
 from utils.ocr import extract_text_from_image
+from translations import get_translation
 
 # ================= Configuration =================
 ALLOWED_EXTENSIONS = {'pdf', 'docx', 'pptx'}
@@ -45,6 +46,28 @@ with app.app_context():
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
+
+# ================= Language Support =================
+@app.before_request
+def set_language():
+    """Set language from session or default to English"""
+    if 'language' not in session:
+        session['language'] = 'en'
+
+@app.route('/change-language/<lang>')
+def change_language(lang):
+    """Change language"""
+    if lang in ['en', 'ar']:
+        session['language'] = lang
+    return redirect(request.referrer or url_for('home'))
+
+@app.context_processor
+def inject_translation():
+    """Make translation function available in templates"""
+    lang = session.get('language', 'en')
+    def t(key):
+        return get_translation(lang, key)
+    return dict(t=t, current_lang=lang)
 
 # ================= Helper Functions =================
 def allowed_file(filename):
@@ -157,20 +180,17 @@ def summarize():
                 import PyPDF2
                 with open(filepath, 'rb') as f:
                     reader = PyPDF2.PdfReader(f)
-                    # قراءة أول 10 صفحات فقط
                     pages_to_read = min(10, len(reader.pages))
                     file_text = "\n".join(
                         page.extract_text() or "" 
                         for page in reader.pages[:pages_to_read]
                     )
-                    # تحديد الحد الأقصى للنص
                     file_text = file_text[:5000]
                 print(f"✅ PDF extracted: {len(file_text)} chars (first {pages_to_read} pages)")
             
             elif ext == 'docx':
                 import docx
                 doc = docx.Document(filepath)
-                # قراءة أول 50 فقرة
                 paragraphs = [p.text.strip() for p in doc.paragraphs[:50] if p.text.strip()]
                 file_text = "\n".join(paragraphs)
                 file_text = file_text[:5000]
@@ -179,7 +199,6 @@ def summarize():
             elif ext == 'pptx':
                 from pptx import Presentation
                 prs = Presentation(filepath)
-                # قراءة أول 5 شرائح
                 slides_to_read = min(5, len(prs.slides))
                 extracted_text = []
                 
@@ -187,14 +206,11 @@ def summarize():
                     for shape in slide.shapes:
                         if hasattr(shape, "text") and shape.text.strip():
                             text_content = shape.text.strip()
-                            # تجاهل النصوص الطويلة جداً (أكثر من 200 حرف)
                             if len(text_content) <= 200:
-                                # للعناوين: خذ كامل النص
                                 if hasattr(shape, 'text_frame') and shape.text_frame.paragraphs:
                                     if len(shape.text_frame.paragraphs) == 1:
                                         extracted_text.append(text_content)
                                     else:
-                                        # للنقاط: خذ أول 3 نقاط
                                         bullets = [p.text.strip() for p in shape.text_frame.paragraphs[:3] if p.text.strip()]
                                         extracted_text.extend(bullets)
                 
@@ -212,20 +228,17 @@ def summarize():
             flash(f"Error reading file: {str(e)}", 'danger')
             return redirect(url_for('home'))
     
-    # التحقق من النص
     if not text or len(text.strip()) < 20:
         print("❌ No text or text too short")
         flash("Please provide text or upload a file with sufficient content", 'warning')
         return redirect(url_for('home'))
 
-    # تحديد طول النص لمنع المشاكل
     if len(text) > 5000:
         text = text[:5000]
         flash("Text was truncated to 5000 characters for better performance", 'info')
 
     print(f"📊 Final text length: {len(text)} chars")
 
-    # معالجة النص
     try:
         cleaned_text = preprocess_text(text)
         print(f"✅ Cleaned text: {len(cleaned_text)} chars")
@@ -251,7 +264,6 @@ def summarize():
             flash("Could not generate quiz.", 'warning')
             return redirect(url_for('home'))
         
-        # حفظ في قاعدة البيانات
         upload = Upload(
             filename=filename_to_save,
             summary=summary,
@@ -260,23 +272,18 @@ def summarize():
         db.session.add(upload)
         db.session.commit()
         
-        # حفظ في الـ Session
         session['summary'] = summary
         session['quiz'] = quiz
         session['score'] = 0
 
-        # إنشاء الخريطة الذهنية - محسّنة
         try:
-            # استخراج كلمات مهمة فقط
             words = summary.split()
-            # تصفية: كلمات أطول من 4 أحرف وحروف فقط
             important_words = [
                 word.strip('.,;:!?"\'') 
                 for word in words 
                 if len(word) > 4 and word.isalpha()
             ]
             
-            # إذا كانت الكلمات قليلة، خذ أي كلمات
             if len(important_words) < 6:
                 important_words = [
                     word.strip('.,;:!?"\'') 
@@ -315,25 +322,21 @@ def quiz_page():
         for i, q in enumerate(quiz):
             q_type = q.get('type', 'fill_blank')
             
-            # MCQ
             if q_type == 'mcq':
                 user_answer = request.form.get(f'answer_{i}', '').strip()
                 if user_answer.lower() == q['a'].lower():
                     score += 10
             
-            # True/False
             elif q_type == 'true_false':
                 user_answer = request.form.get(f'answer_{i}', '').strip().lower()
                 if user_answer == q['a'].lower():
                     score += 10
             
-            # Fill Blank
             elif q_type == 'fill_blank':
                 user_answer = request.form.get(f'answer_{i}', '').strip()
                 if user_answer.lower() == q['a'].lower():
                     score += 10
             
-            # Matching
             elif q_type == 'matching':
                 correct_matches = 0
                 for j in range(len(q.get('list_a', []))):
@@ -342,12 +345,10 @@ def quiz_page():
                     if user_match == correct_answer:
                         correct_matches += 1
                 
-                # نسبة الصحة
                 if len(q.get('list_a', [])) > 0:
                     match_score = int((correct_matches / len(q['list_a'])) * 10)
                     score += match_score
         
-        # Save quiz result
         quiz_result = QuizResult(
             score=score,
             total_questions=len(quiz),
@@ -355,7 +356,6 @@ def quiz_page():
         )
         db.session.add(quiz_result)
         
-        # Update user score
         current_user.score += score
         current_user.level = (current_user.score // 100) + 1
         db.session.commit()
@@ -365,13 +365,10 @@ def quiz_page():
     
     return render_template('quiz.html', quiz=quiz)
 
-# ================= ✨ FLASHCARDS ROUTES (NEW) ✨ =================
+# ================= ✨ FLASHCARDS ROUTES ✨ =================
 @app.route('/flashcards')
 @login_required
 def flashcards():
-    """
-    صفحة الفلاش كاردز المنفصلة
-    """
     if 'quiz' not in session:
         flash('Please generate a summary first to create flashcards', 'warning')
         return redirect(url_for('home'))
@@ -382,9 +379,6 @@ def flashcards():
 @app.route('/submit-flashcards', methods=['POST'])
 @login_required
 def submit_flashcards():
-    """
-    حفظ نتيجة الفلاش كاردز (اختياري)
-    """
     if 'quiz' not in session:
         return redirect(url_for('home'))
     
@@ -392,7 +386,6 @@ def submit_flashcards():
     total_cards = len(session['quiz'])
     score = known_count * 10
     
-    # حفظ في قاعدة البيانات (اختياري)
     quiz_result = QuizResult(
         score=score,
         total_questions=total_cards,
@@ -400,7 +393,6 @@ def submit_flashcards():
     )
     db.session.add(quiz_result)
     
-    # تحديث نقاط المستخدم
     current_user.score += score
     current_user.level = (current_user.score // 100) + 1
     db.session.commit()
@@ -471,7 +463,6 @@ def create_battle():
     db.session.add(battle)
     db.session.commit()
     
-    # Add creator as first participant
     participant = BattleParticipant(battle_id=battle.id, user_id=current_user.id)
     db.session.add(participant)
     db.session.commit()
@@ -484,14 +475,12 @@ def create_battle():
 def battle_room(battle_id):
     battle = QuizBattle.query.get_or_404(battle_id)
     
-    # Check if user is participant
     participant = BattleParticipant.query.filter_by(
         battle_id=battle_id, 
         user_id=current_user.id
     ).first()
     
     if not participant:
-        # Join battle
         participant = BattleParticipant(battle_id=battle_id, user_id=current_user.id)
         db.session.add(participant)
         db.session.commit()
@@ -518,18 +507,15 @@ def submit_battle(battle_id):
     participant.score = score
     participant.completed = True
     
-    # Update user total score
     current_user.score += score
     current_user.level = (current_user.score // 100) + 1
     
     db.session.commit()
     
-    # Check if all participants completed
     battle = QuizBattle.query.get(battle_id)
     all_completed = all(p.completed for p in battle.participants)
     
     if all_completed:
-        # Determine winner
         winner = max(battle.participants, key=lambda p: p.score)
         battle.winner_id = winner.user_id
         battle.status = 'completed'
@@ -542,10 +528,8 @@ def submit_battle(battle_id):
 @app.route('/puzzle-mode')
 @login_required
 def puzzle_mode():
-    # Get summary from session or create sample
     summary = session.get('summary', 'Learning is fun. Knowledge is power. Education transforms lives.')
     
-    # Scramble words
     import random
     words = summary.split()
     scrambled = words.copy()
@@ -570,7 +554,6 @@ def submit_puzzle(puzzle_id):
     puzzle = PuzzleGame.query.get_or_404(puzzle_id)
     user_answer = request.form.get('answer', '').strip()
     
-    # Simple scoring
     original_words = puzzle.content.lower().split()
     user_words = user_answer.lower().split()
     
@@ -592,12 +575,10 @@ def submit_puzzle(puzzle_id):
 @app.route('/grading-center')
 @login_required
 def grading_center():
-    # Get all quiz results
     results = QuizResult.query.filter_by(user_id=current_user.id).order_by(
         QuizResult.completed_at.desc()
     ).all()
     
-    # Calculate statistics
     total_quizzes = len(results)
     avg_score = sum(r.score for r in results) / total_quizzes if total_quizzes > 0 else 0
     
@@ -645,7 +626,6 @@ def search():
     if not query:
         return render_template('search.html', results=[], query='')
     
-    # Search in uploads
     results = Upload.query.filter(
         db.or_(
             Upload.filename.contains(query),
@@ -669,7 +649,6 @@ def export_upload(upload_id, format):
         )
     
     elif format == 'pdf':
-        # Simple PDF export
         buffer = BytesIO()
         buffer.write(upload.summary.encode('utf-8'))
         buffer.seek(0)
@@ -691,13 +670,8 @@ def analytics():
     quiz_results = QuizResult.query.filter_by(user_id=current_user.id).all()
     uploads = Upload.query.filter_by(user_id=current_user.id).all()
     
-    # حساب الإحصائيات
     stats = calculate_user_stats(current_user, quiz_results, uploads)
-    
-    # تحليل الأداء
     performance_data = analyze_quiz_performance(quiz_results)
-    
-    # تقرير أسبوعي
     weekly_report = generate_performance_report(current_user, quiz_results)
     
     return render_template('analytics.html', 
@@ -711,10 +685,7 @@ def analytics():
 def visualize_upload(upload_id):
     upload = Upload.query.get_or_404(upload_id)
     
-    # إنشاء visualizations
     keywords = extract_keywords(upload.summary)
-    
-    # إنشاء رسم بياني للكلمات المفتاحية
     keyword_freq = {kw: upload.summary.lower().count(kw) for kw in keywords}
     chart_path = create_bar_chart(
         list(keyword_freq.keys()),
@@ -741,12 +712,10 @@ def ocr_upload():
     filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
     file.save(filepath)
     
-    # استخراج النص من الصورة
     text = extract_text_from_image(filepath)
     
     if text:
         flash('Text extracted successfully!', 'success')
-        # معالجة النص المستخرج
         cleaned_text = preprocess_text(text)
         summary = summarize_text(cleaned_text)
         quiz = generate_quiz(summary)
@@ -766,7 +735,6 @@ def admin_login():
         username = request.form.get('username')
         password = request.form.get('password')
         
-        # Check admin credentials (hardcoded for demo)
         if username == 'admin' and password == 'vortex2026':
             session['is_admin'] = True
             flash('Admin login successful!', 'success')
@@ -781,16 +749,12 @@ def admin_dashboard():
     if not session.get('is_admin'):
         return redirect(url_for('admin_login'))
     
-    # Statistics
     total_users = User.query.count()
     total_uploads = Upload.query.count()
     total_quizzes = QuizResult.query.count()
     total_battles = QuizBattle.query.count()
     
-    # Recent users
     recent_users = User.query.order_by(User.created_at.desc()).limit(10).all()
-    
-    # Recent uploads
     recent_uploads = Upload.query.order_by(Upload.uploaded_at.desc()).limit(10).all()
     
     return render_template('admin_dashboard.html',
@@ -822,7 +786,6 @@ def admin_delete_user(user_id):
     
     user = User.query.get_or_404(user_id)
     
-    # Delete user's data
     Upload.query.filter_by(user_id=user_id).delete()
     QuizResult.query.filter_by(user_id=user_id).delete()
     
@@ -837,4 +800,5 @@ if __name__ == '__main__':
     print("🚀 Vortex is running...")
     print("📚 Flashcards feature enabled!")
     print("✨ File processing optimized!")
+    print("🌍 Arabic/English language support enabled!")
     app.run(host="0.0.0.0", port=5000, debug=True)

@@ -1,30 +1,117 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ current_lang }}" {% if current_lang == 'ar' %}dir="rtl"{% endif %}>
 <head>
     <meta charset="UTF-8">
-    <title>Vortex - Leaderboard</title>
+    <title>Vortex - {{ t('leaderboard') }}</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     
     <style>
-        body.light-mode { background: #f5f5f5; color: #333; }
-        body.dark-mode { background: #1e1e2f; color: #f0f0f0; }
+        body.light-mode { 
+            background: #f0f8ff; 
+            color: #333; 
+            transition: all 0.3s ease;
+        }
+        body.dark-mode { 
+            background: #1e1e2f; 
+            color: #f0f0f0; 
+            transition: all 0.3s ease;
+        }
         
-        .card { border-radius: 18px; }
-        body.dark-mode .card { background: #2a2a40; color: #f0f0f0; }
+        .page-title {
+            font-size: 3rem;
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 40px;
+            background: linear-gradient(90deg, #1abc9c, #3498db);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
         
-        .rank-1 { background: linear-gradient(135deg, #FFD700, #FFA500); color: white; }
-        .rank-2 { background: linear-gradient(135deg, #C0C0C0, #A8A8A8); color: white; }
-        .rank-3 { background: linear-gradient(135deg, #CD7F32, #8B4513); color: white; }
+        .card { 
+            border-radius: 18px; 
+            border: none;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        body.dark-mode .card { 
+            background: #2a2a40; 
+            color: #f0f0f0; 
+        }
+        
+        .rank-1 { 
+            background: linear-gradient(135deg, #FFD700, #FFA500); 
+            color: white;
+            box-shadow: 0 8px 20px rgba(255, 215, 0, 0.3);
+        }
+        .rank-2 { 
+            background: linear-gradient(135deg, #C0C0C0, #A8A8A8); 
+            color: white;
+            box-shadow: 0 8px 20px rgba(192, 192, 192, 0.3);
+        }
+        .rank-3 { 
+            background: linear-gradient(135deg, #CD7F32, #8B4513); 
+            color: white;
+            box-shadow: 0 8px 20px rgba(205, 127, 50, 0.3);
+        }
         
         .leaderboard-item { 
             padding: 20px; 
-            border-radius: 10px; 
+            border-radius: 12px; 
             margin-bottom: 15px; 
-            transition: transform 0.3s;
+            transition: all 0.3s ease;
+            background: white;
         }
         
-        .leaderboard-item:hover { transform: scale(1.02); }
+        body.dark-mode .leaderboard-item {
+            background: #1e1e2f;
+        }
+        
+        .leaderboard-item:hover { 
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(26, 188, 156, 0.2);
+        }
+        
+        .rank-number {
+            font-size: 2rem;
+            font-weight: 900;
+            width: 60px;
+            text-align: center;
+        }
+        
+        .trophy-icon {
+            font-size: 2.5rem;
+            margin-right: 15px;
+        }
+        
+        [dir="rtl"] .trophy-icon {
+            margin-right: 0;
+            margin-left: 15px;
+        }
+        
+        .user-info h5 {
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        
+        .user-stats {
+            text-align: right;
+        }
+        
+        [dir="rtl"] .user-stats {
+            text-align: left;
+        }
+        
+        .score-number {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #1abc9c;
+        }
+        
+        .rank-1 .score-number,
+        .rank-2 .score-number,
+        .rank-3 .score-number {
+            color: white;
+        }
         
         footer { 
             background: #1f2d3d; 
@@ -34,6 +121,40 @@
             text-align: center; 
         }
         body.dark-mode footer { background: #111; }
+        
+        footer strong {
+            color: #1abc9c;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+        }
+        
+        .empty-state i {
+            font-size: 5rem;
+            color: #ccc;
+            margin-bottom: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .page-title {
+                font-size: 2rem;
+            }
+            
+            .rank-number {
+                font-size: 1.5rem;
+                width: 50px;
+            }
+            
+            .trophy-icon {
+                font-size: 2rem;
+            }
+            
+            .score-number {
+                font-size: 1.5rem;
+            }
+        }
     </style>
 </head>
 
@@ -42,39 +163,51 @@
 {% include 'navbar.html' %}
 
 <div class="container mt-5">
-    <h1 class="text-center mb-4">Leaderboard</h1>
+    <h1 class="page-title">🏆 {{ t('leaderboard') }}</h1>
 
     <div class="card shadow p-4">
         {% if users %}
             {% for user in users %}
-            <div class="leaderboard-item {{ 'rank-' + loop.index|string if loop.index <= 3 else 'bg-light' }}">
+            <div class="leaderboard-item {{ 'rank-' + loop.index|string if loop.index <= 3 else '' }}">
                 <div class="d-flex justify-content-between align-items-center">
                     <div class="d-flex align-items-center">
-                        <div class="me-3" style="font-size: 2rem; font-weight: bold;">
-                            #{{ loop.index }}
-                        </div>
-                        <div>
+                        {% if loop.index == 1 %}
+                            <div class="trophy-icon">🥇</div>
+                        {% elif loop.index == 2 %}
+                            <div class="trophy-icon">🥈</div>
+                        {% elif loop.index == 3 %}
+                            <div class="trophy-icon">🥉</div>
+                        {% else %}
+                            <div class="rank-number">#{{ loop.index }}</div>
+                        {% endif %}
+                        
+                        <div class="user-info">
                             <h5 class="mb-0">{{ user.username }}</h5>
-                            <small>Level {{ user.level }}</small>
+                            <small>{{ t('level') }} {{ user.level }}</small>
                         </div>
                     </div>
                     
-                    <div class="text-end">
-                        <h4 class="mb-0">{{ user.score }}</h4>
-                        <small>points</small>
+                    <div class="user-stats">
+                        <div class="score-number">{{ user.score }}</div>
+                        <small>{{ t('points') }}</small>
                     </div>
                 </div>
             </div>
             {% endfor %}
         {% else %}
-            <p class="text-center text-muted">No users yet. Be the first to join!</p>
+            <div class="empty-state">
+                <i class="bi bi-trophy"></i>
+                <h4>{{ t('no_users_yet') }}</h4>
+                <p class="text-muted">{{ t('be_first_to_join') }}</p>
+            </div>
         {% endif %}
     </div>
 </div>
 
 <footer>
     <div class="container text-center">
-        Developed by <strong>Vortex Team</strong> - Level 10 Students
+        <p class="mb-1">{{ t('developed_by') }} <strong>{{ t('team_name') }}</strong></p>
+        <p class="mb-0">💚 💙 {{ t('university') }} 💚 💙</p>
     </div>
 </footer>
 

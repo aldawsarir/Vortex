@@ -1,35 +1,38 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ get_locale() }}" dir="{{ 'rtl' if get_locale() == 'ar' else 'ltr' }}">
 <head>
     <meta charset="UTF-8">
-    <title>About Vortex</title>
+    <title>{{ _('About Vortex') }}</title>
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
-    
+
     <style>
         body.light-mode { background: #f0f8ff; color: #333; }
         body.dark-mode { background: #1e1e2f; color: #f0f0f0; }
-        
+
         .content { padding: 60px 20px; }
-        
-        h1 { 
-            font-size: 2.8rem; 
-            color: #1abc9c; 
-            margin-bottom: 30px; 
+
+        h1 {
+            font-size: 2.8rem;
+            color: #1abc9c;
+            margin-bottom: 30px;
             text-align: center;
         }
+
         body.dark-mode h1 { color: #4bc0c8; }
-        
+
         .card { border-radius: 18px; margin-bottom: 20px; }
         body.dark-mode .card { background: #2a2a40; color: #f0f0f0; }
-        
-        footer { 
-            background: #1f2d3d; 
-            color: #ddd; 
-            padding: 25px 0; 
-            margin-top: 80px; 
-            text-align: center; 
+
+        footer {
+            background: #1f2d3d;
+            color: #ddd;
+            padding: 25px 0;
+            margin-top: 80px;
+            text-align: center;
         }
+
         body.dark-mode footer { background: #111; }
     </style>
 </head>
@@ -40,52 +43,56 @@
 
 <div class="content">
     <div class="container">
-        <h1>About Vortex</h1>
+
+        <!-- زر تغيير اللغة -->
+        <div class="text-end mb-3">
+            <a href="/change-language/en" class="btn btn-sm btn-outline-primary">English</a>
+            <a href="/change-language/ar" class="btn btn-sm btn-outline-success">العربية</a>
+        </div>
+
+        <h1>{{ _('About Vortex') }}</h1>
 
         <div class="card shadow p-4 mb-4">
-            <h4 class="mb-3">What is Vortex?</h4>
+            <h4 class="mb-3">{{ _('What is Vortex?') }}</h4>
             <p>
-                Vortex is an interactive learning platform designed to transform traditional 
-                study materials into engaging, intelligent, and interactive formats. Using 
-                smart AI tools, Vortex converts PDFs, lecture slides, and notes into summaries, 
-                quizzes, flashcards, and mind maps.
+                {{ _('Vortex is an interactive learning platform designed to transform traditional study materials into engaging, intelligent, and interactive formats. Using smart AI tools, Vortex converts PDFs, lecture slides, and notes into summaries, quizzes, flashcards, and mind maps.') }}
             </p>
         </div>
 
         <div class="card shadow p-4 mb-4">
-            <h4 class="mb-3">Features</h4>
+            <h4 class="mb-3">{{ _('Features') }}</h4>
             <ul>
-                <li><strong>Smart Summarization:</strong> Automatically generates concise summaries from lengthy documents</li>
-                <li><strong>Interactive Quizzes:</strong> Creates questions to test your understanding</li>
-                <li><strong>Flashcards:</strong> Generates interactive flashcards for quick review</li>
-                <li><strong>Mind Maps:</strong> Visualizes key concepts and relationships</li>
-                <li><strong>Gamification:</strong> Earn points, unlock achievements, and track progress</li>
-                <li><strong>Dark/Light Mode:</strong> Choose your preferred viewing experience</li>
+                <li><strong>{{ _('Smart Summarization:') }}</strong> {{ _('Automatically generates concise summaries from lengthy documents') }}</li>
+                <li><strong>{{ _('Interactive Quizzes:') }}</strong> {{ _('Creates questions to test your understanding') }}</li>
+                <li><strong>{{ _('Flashcards:') }}</strong> {{ _('Generates interactive flashcards for quick review') }}</li>
+                <li><strong>{{ _('Mind Maps:') }}</strong> {{ _('Visualizes key concepts and relationships') }}</li>
+                <li><strong>{{ _('Gamification:') }}</strong> {{ _('Earn points, unlock achievements, and track progress') }}</li>
+                <li><strong>{{ _('Dark/Light Mode:') }}</strong> {{ _('Choose your preferred viewing experience') }}</li>
             </ul>
         </div>
 
         <div class="card shadow p-4 mb-4">
-            <h4 class="mb-3">Development Team</h4>
+            <h4 class="mb-3">{{ _('Development Team') }}</h4>
             <p>
-                Vortex was developed by the <strong>Vortex Development Team</strong>, 
-                Computer Science students at Level 10, University College of Ranyah.
+                {{ _('Vortex was developed by the Vortex Development Team, Computer Science students at Level 10, University College of Ranyah.') }}
             </p>
             <p class="text-center mt-4">
-                <strong>Made with passion for better learning</strong>
+                <strong>{{ _('Made with passion for better learning') }}</strong>
             </p>
         </div>
 
         <div class="text-center mt-4">
             <a href="{{ url_for('home') }}" class="btn btn-primary">
-                Back to Home
+                {{ _('Back to Home') }}
             </a>
         </div>
+
     </div>
 </div>
 
 <footer>
     <div class="container text-center">
-        Developed by <strong>Vortex Team</strong> - Level 10 Students
+        {{ _('Developed by Vortex Team - Level 10 Students') }}
     </div>
 </footer>
 

@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg px-4 shadow-sm">
+<nav class="navbar navbar-expand-lg px-4 shadow-sm" {% if current_lang == 'ar' %}dir="rtl"{% endif %}>
     <a class="navbar-brand fw-bold" href="{{ url_for('home') }}">
         <i class="bi bi-hurricane"></i> Vortex
     </a>
@@ -7,10 +7,10 @@
     </button>
 
     <div class="collapse navbar-collapse" id="navbarMenu">
-        <ul class="navbar-nav ms-auto gap-3 align-items-center">
+        <ul class="navbar-nav {% if current_lang == 'ar' %}me-auto{% else %}ms-auto{% endif %} gap-3 align-items-center">
             <li class="nav-item">
                 <a class="nav-link" href="{{ url_for('home') }}">
-                    <i class="bi bi-house-door-fill"></i> Home
+                    <i class="bi bi-house-door-fill"></i> {{ t('home') }}
                 </a>
             </li>
             
@@ -19,38 +19,38 @@
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="gamificationDropdown" 
                    role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    <i class="bi bi-trophy"></i> Gamification
+                    <i class="bi bi-trophy"></i> {{ t('gamification') }}
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="gamificationDropdown">
                     <li>
                         <a class="dropdown-item" href="{{ url_for('quiz_page') }}">
-                            <i class="bi bi-card-checklist"></i> Quiz
+                            <i class="bi bi-card-checklist"></i> {{ t('quiz') }}
                         </a>
                     </li>
                     <li>
                         <a class="dropdown-item" href="{{ url_for('quiz_battles') }}">
-                            <i class="bi bi-lightning-fill"></i> Quiz Battles
+                            <i class="bi bi-lightning-fill"></i> {{ t('quiz_battles') }}
                         </a>
                     </li>
                     <li>
                         <a class="dropdown-item" href="{{ url_for('puzzle_mode') }}">
-                            <i class="bi bi-puzzle-fill"></i> Puzzle Mode
+                            <i class="bi bi-puzzle-fill"></i> {{ t('puzzle_mode') }}
                         </a>
                     </li>
                     <li>
                         <a class="dropdown-item" href="{{ url_for('daily_challenge') }}">
-                            <i class="bi bi-calendar-check"></i> Daily Challenge
+                            <i class="bi bi-calendar-check"></i> {{ t('daily_challenge') }}
                         </a>
                     </li>
                     <li><hr class="dropdown-divider"></li>
                     <li>
                         <a class="dropdown-item" href="{{ url_for('leaderboard') }}">
-                            <i class="bi bi-bar-chart-fill"></i> Leaderboard
+                            <i class="bi bi-bar-chart-fill"></i> {{ t('leaderboard') }}
                         </a>
                     </li>
                     <li>
                         <a class="dropdown-item" href="{{ url_for('gamification') }}">
-                            <i class="bi bi-stars"></i> Your Progress
+                            <i class="bi bi-stars"></i> {{ t('your_progress') }}
                         </a>
                     </li>
                 </ul>
@@ -58,19 +58,19 @@
 
             <li class="nav-item">
                 <a class="nav-link" href="{{ url_for('grading_center') }}">
-                    <i class="bi bi-clipboard-data"></i> Grades
+                    <i class="bi bi-clipboard-data"></i> {{ t('grades') }}
                 </a>
             </li>
 
             <li class="nav-item">
                 <a class="nav-link" href="{{ url_for('shared_library') }}">
-                    <i class="bi bi-folder-fill"></i> Library
+                    <i class="bi bi-folder-fill"></i> {{ t('library') }}
                 </a>
             </li>
 
             <li class="nav-item">
                 <a class="nav-link" href="{{ url_for('search') }}">
-                    <i class="bi bi-search"></i> Search
+                    <i class="bi bi-search"></i> {{ t('search') }}
                 </a>
             </li>
             
@@ -78,13 +78,13 @@
             
             <li class="nav-item">
                 <a class="nav-link" href="{{ url_for('about') }}">
-                    <i class="bi bi-info-circle-fill"></i> About
+                    <i class="bi bi-info-circle-fill"></i> {{ t('about') }}
                 </a>
             </li>
 
             <li class="nav-item">
                 <a class="nav-link" href="{{ url_for('help_page') }}">
-                    <i class="bi bi-question-circle-fill"></i> Help
+                    <i class="bi bi-question-circle-fill"></i> {{ t('help') }}
                 </a>
             </li>
             
@@ -98,18 +98,18 @@
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
                     <li>
                         <a class="dropdown-item" href="{{ url_for('dashboard') }}">
-                            <i class="bi bi-speedometer2"></i> Dashboard
+                            <i class="bi bi-speedometer2"></i> {{ t('dashboard') }}
                         </a>
                     </li>
                     <li>
                         <a class="dropdown-item" href="{{ url_for('analytics') }}">
-                            <i class="bi bi-graph-up-arrow"></i> Analytics
+                            <i class="bi bi-graph-up-arrow"></i> {{ t('analytics') }}
                         </a>
                     </li>
                     <li><hr class="dropdown-divider"></li>
                     <li>
                         <a class="dropdown-item text-danger" href="{{ url_for('logout') }}">
-                            <i class="bi bi-box-arrow-right"></i> Logout
+                            <i class="bi bi-box-arrow-right"></i> {{ t('logout') }}
                         </a>
                     </li>
                 </ul>
@@ -119,18 +119,33 @@
             
             <li class="nav-item">
                 <a class="nav-link" href="{{ url_for('login') }}">
-                    <i class="bi bi-box-arrow-in-right"></i> Login
+                    <i class="bi bi-box-arrow-in-right"></i> {{ t('login') }}
                 </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="{{ url_for('register') }}">
-                    <i class="bi bi-person-plus"></i> Register
+                    <i class="bi bi-person-plus"></i> {{ t('register') }}
                 </a>
             </li>
             
             {% endif %}
             
-            <li class="nav-item ms-3">
+            <!-- Language Toggle -->
+            <li class="nav-item">
+                <div class="btn-group" role="group">
+                    <a href="{{ url_for('change_language', lang='en') }}" 
+                       class="btn btn-sm {% if current_lang == 'en' %}btn-light{% else %}btn-outline-light{% endif %}">
+                        EN
+                    </a>
+                    <a href="{{ url_for('change_language', lang='ar') }}" 
+                       class="btn btn-sm {% if current_lang == 'ar' %}btn-light{% else %}btn-outline-light{% endif %}">
+                        ع
+                    </a>
+                </div>
+            </li>
+            
+            <!-- Dark Mode Toggle -->
+            <li class="nav-item {% if current_lang == 'ar' %}me-3{% else %}ms-3{% endif %}">
                 <button id="toggle-mode" class="btn btn-outline-light btn-sm">
                     <i class="bi bi-moon-stars"></i>
                 </button>
@@ -199,9 +214,18 @@
         transform: translateX(5px);
     }
     
+    [dir="rtl"] .dropdown-item:hover {
+        transform: translateX(-5px);
+    }
+    
     .dropdown-item i {
         width: 20px;
         margin-right: 8px;
+    }
+    
+    [dir="rtl"] .dropdown-item i {
+        margin-right: 0;
+        margin-left: 8px;
     }
     
     .dropdown-divider {
@@ -227,6 +251,40 @@
     .btn-outline-light:hover {
         background: white;
         color: #1abc9c;
+    }
+    
+    /* Language Toggle */
+    .btn-group .btn-sm {
+        padding: 5px 12px;
+        font-weight: 700;
+        border-radius: 6px;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-group .btn-light {
+        background: white;
+        color: #1abc9c;
+        border: 2px solid white;
+    }
+    
+    .btn-group .btn-outline-light {
+        border: 2px solid white;
+        background: transparent;
+    }
+    
+    .btn-group .btn-outline-light:hover {
+        background: rgba(255,255,255,0.2);
+        color: white;
+    }
+    
+    /* RTL Support */
+    [dir="rtl"] {
+        text-align: right;
+    }
+    
+    [dir="rtl"] .navbar-nav {
+        margin-right: 0 !important;
+        margin-left: auto !important;
     }
     
     @media (max-width: 991px) {

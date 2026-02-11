@@ -1,66 +1,137 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ current_lang }}" {% if current_lang == 'ar' %}dir="rtl"{% endif %}>
 <head>
     <meta charset="UTF-8">
-    <title>Vortex - Quiz</title>
+    <title>Vortex - {{ t('quiz') }}</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     
     <style>
-        body.light-mode { background: #f5f5f5; color: #333; }
-        body.dark-mode { background: #1e1e2f; color: #f0f0f0; }
+        body.light-mode { 
+            background: #f0f8ff; 
+            color: #333; 
+            transition: all 0.3s ease;
+        }
+        body.dark-mode { 
+            background: #1e1e2f; 
+            color: #f0f0f0; 
+            transition: all 0.3s ease;
+        }
+        
+        .page-title {
+            font-size: 3rem;
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 40px;
+            background: linear-gradient(90deg, #1abc9c, #3498db);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
         
         .quiz-card { 
             background: white; 
-            border-radius: 15px; 
-            padding: 25px; 
+            border-radius: 18px; 
+            padding: 30px; 
             margin-bottom: 25px; 
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1); 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border: none;
+            transition: all 0.3s ease;
         }
-        body.dark-mode .quiz-card { background: #2a2a40; color: #f0f0f0; }
+        
+        .quiz-card:hover {
+            box-shadow: 0 8px 25px rgba(26, 188, 156, 0.15);
+        }
+        
+        body.dark-mode .quiz-card { 
+            background: #2a2a40; 
+            color: #f0f0f0; 
+        }
         
         .question-type {
             display: inline-block;
-            padding: 5px 15px;
+            padding: 8px 20px;
             border-radius: 20px;
             font-size: 0.85rem;
-            font-weight: 600;
-            margin-bottom: 15px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
         
-        .type-mcq { background: #3498db; color: white; }
-        .type-true_false { background: #e74c3c; color: white; }
-        .type-fill_blank { background: #2ecc71; color: white; }
-        .type-matching { background: #9b59b6; color: white; }
+        .type-mcq { background: linear-gradient(135deg, #1abc9c, #3498db); color: white; }
+        .type-true_false { background: linear-gradient(135deg, #e74c3c, #c0392b); color: white; }
+        .type-fill_blank { background: linear-gradient(135deg, #43e97b, #38f9d7); color: white; }
+        .type-matching { background: linear-gradient(135deg, #9b59b6, #8e44ad); color: white; }
+        
+        .quiz-card h5 {
+            font-weight: 700;
+            color: #1abc9c;
+            margin-bottom: 25px;
+        }
+        
+        body.dark-mode .quiz-card h5 {
+            color: #43e97b;
+        }
         
         .option-label {
             display: block;
-            padding: 12px 20px;
-            margin: 8px 0;
-            border: 2px solid #ddd;
-            border-radius: 10px;
+            padding: 15px 20px;
+            margin: 10px 0;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.3s ease;
+            background: white;
         }
         
         .option-label:hover {
-            background: #f0f0f0;
-            border-color: #3498db;
+            background: #f0fdf4;
+            border-color: #1abc9c;
             transform: translateX(5px);
         }
         
+        [dir="rtl"] .option-label:hover {
+            transform: translateX(-5px);
+        }
+        
         body.dark-mode .option-label {
-            border-color: #555;
+            border-color: #3a3a50;
+            background: #1e1e2f;
         }
         
         body.dark-mode .option-label:hover {
-            background: #3a3a50;
-            border-color: #3498db;
+            background: #2a2a40;
+            border-color: #1abc9c;
         }
         
         .option-label input[type="radio"] {
-            margin-right: 10px;
-            transform: scale(1.2);
+            margin-right: 12px;
+            transform: scale(1.3);
+            cursor: pointer;
+        }
+        
+        [dir="rtl"] .option-label input[type="radio"] {
+            margin-right: 0;
+            margin-left: 12px;
+        }
+        
+        .form-control, .form-select {
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 12px;
+            transition: all 0.3s ease;
+        }
+        
+        .form-control:focus, .form-select:focus {
+            border-color: #1abc9c;
+            box-shadow: 0 0 0 3px rgba(26, 188, 156, 0.1);
+        }
+        
+        body.dark-mode .form-control,
+        body.dark-mode .form-select {
+            background: #1e1e2f;
+            border-color: #3a3a50;
+            color: #f0f0f0;
         }
         
         .matching-table {
@@ -68,27 +139,87 @@
             margin-top: 15px;
         }
         
+        .matching-table th {
+            padding: 15px;
+            background: linear-gradient(135deg, #1abc9c, #3498db);
+            color: white;
+            font-weight: 700;
+        }
+        
         .matching-table td {
-            padding: 10px;
+            padding: 12px;
             vertical-align: middle;
         }
         
         .list-a-item {
             background: #ecf0f1;
-            padding: 10px;
-            border-radius: 8px;
+            padding: 12px;
+            border-radius: 10px;
             margin: 5px 0;
-            font-weight: 500;
+            font-weight: 600;
+            color: #2c3e50;
         }
         
         body.dark-mode .list-a-item {
             background: #34495e;
+            color: #ecf0f1;
         }
         
         .progress { 
-            height: 30px; 
+            height: 35px; 
             margin-bottom: 30px; 
+            border-radius: 20px;
+            background: rgba(0,0,0,0.1);
+        }
+        
+        .progress-bar {
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 1rem;
+            transition: width 0.4s ease;
+        }
+        
+        .btn-success {
+            background: linear-gradient(135deg, #43e97b, #38f9d7);
+            border: none;
+            color: white;
+            font-weight: 700;
+            padding: 15px 50px;
             border-radius: 15px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-success:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(67, 233, 123, 0.3);
+            color: white;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #1abc9c, #3498db);
+            border: none;
+            color: white;
+            font-weight: 600;
+            padding: 12px 30px;
+            border-radius: 12px;
+        }
+        
+        .alert-info {
+            background: rgba(26, 188, 156, 0.1);
+            border: 2px solid #1abc9c;
+            border-radius: 12px;
+            color: #1abc9c;
+        }
+        
+        body.dark-mode .alert-info {
+            background: rgba(26, 188, 156, 0.2);
+            color: #43e97b;
+        }
+        
+        .alert-warning {
+            border-radius: 18px;
+            padding: 40px;
+            border: none;
         }
         
         footer { 
@@ -99,6 +230,24 @@
             text-align: center; 
         }
         body.dark-mode footer { background: #111; }
+        
+        footer strong {
+            color: #1abc9c;
+        }
+        
+        @media (max-width: 768px) {
+            .page-title {
+                font-size: 2rem;
+            }
+            
+            .quiz-card {
+                padding: 20px;
+            }
+            
+            .option-label {
+                padding: 12px 15px;
+            }
+        }
     </style>
 </head>
 
@@ -107,7 +256,7 @@
 {% include 'navbar.html' %}
 
 <div class="container mt-5">
-    <h1 class="text-center mb-4">Quiz Time</h1>
+    <h1 class="page-title">🎯 {{ t('quiz_time') }}</h1>
     
     {% if quiz and quiz|length > 0 %}
     
@@ -122,17 +271,17 @@
         <div class="quiz-card" data-question="{{ loop.index0 }}">
             <span class="question-type type-{{ q.type }}">
                 {% if q.type == 'mcq' %}
-                    Multiple Choice
+                    {{ t('multiple_choice') }}
                 {% elif q.type == 'true_false' %}
-                    True or False
+                    {{ t('true_or_false') }}
                 {% elif q.type == 'fill_blank' %}
-                    Fill in the Blank
+                    {{ t('fill_blank') }}
                 {% elif q.type == 'matching' %}
-                    Matching
+                    {{ t('matching') }}
                 {% endif %}
             </span>
             
-            <h5 class="mb-3">Question {{ loop.index }}: {{ q.q }}</h5>
+            <h5>{{ t('question_number', number=loop.index) }}: {{ q.q }}</h5>
             
             {% if q.type == 'mcq' %}
                 {% for option in q.options %}
@@ -145,26 +294,26 @@
             {% elif q.type == 'true_false' %}
                 <label class="option-label">
                     <input type="radio" name="answer_{{ outer_loop.index0 }}" value="true" required>
-                    <strong>True</strong>
+                    <strong>{{ t('true') }}</strong>
                 </label>
                 <label class="option-label">
                     <input type="radio" name="answer_{{ outer_loop.index0 }}" value="false" required>
-                    <strong>False</strong>
+                    <strong>{{ t('false') }}</strong>
                 </label>
             
             {% elif q.type == 'fill_blank' %}
                 <input type="text" name="answer_{{ outer_loop.index0 }}" class="form-control form-control-lg" 
-                       placeholder="Type your answer here..." required>
+                       placeholder="{{ t('type_answer_placeholder') }}" required>
             
             {% elif q.type == 'matching' %}
                 <div class="alert alert-info">
-                    <i class="bi bi-info-circle"></i> Match items from List A with List B
+                    <i class="bi bi-info-circle"></i> {{ t('match_instruction') }}
                 </div>
                 <table class="matching-table">
                     <thead>
                         <tr>
-                            <th style="width: 50%;">List A</th>
-                            <th style="width: 50%;">List B</th>
+                            <th style="width: 50%;">{{ t('list_a') }}</th>
+                            <th style="width: 50%;">{{ t('list_b') }}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -175,7 +324,7 @@
                             </td>
                             <td>
                                 <select name="answer_{{ outer_loop.index0 }}_{{ loop.index0 }}" class="form-select form-select-lg" required>
-                                    <option value="">Select answer</option>
+                                    <option value="">{{ t('select_answer') }}</option>
                                     {% for item_b in q.list_b %}
                                     <option value="{{ item_b }}">{{ item_b }}</option>
                                     {% endfor %}
@@ -190,8 +339,8 @@
         {% endfor %}
         
         <div class="text-center mb-5">
-            <button type="submit" class="btn btn-success btn-lg px-5 py-3">
-                <i class="bi bi-check-circle"></i> Submit Quiz
+            <button type="submit" class="btn btn-success btn-lg">
+                <i class="bi bi-check-circle"></i> {{ t('submit_quiz') }}
             </button>
         </div>
     </form>
@@ -199,10 +348,11 @@
     {% else %}
     
     <div class="alert alert-warning text-center">
-        <h4>No Quiz Available</h4>
-        <p>Please generate a summary first to create quiz questions.</p>
+        <i class="bi bi-exclamation-triangle" style="font-size: 3rem; color: #f39c12;"></i>
+        <h4 class="mt-3">{{ t('no_quiz_available') }}</h4>
+        <p>{{ t('generate_summary_first') }}</p>
         <a href="{{ url_for('home') }}" class="btn btn-primary mt-3">
-            <i class="bi bi-arrow-left"></i> Back to Home
+            <i class="bi bi-arrow-left"></i> {{ t('back_home') }}
         </a>
     </div>
     
@@ -211,8 +361,8 @@
 
 <footer>
     <div class="container text-center">
-        <p class="mb-1">Developed By <strong>Vortex Team</strong></p>
-        <p class="mb-0">University College Of Ranyah - Computer Science - Level 10</p>
+        <p class="mb-1">{{ t('developed_by') }} <strong>{{ t('team_name') }}</strong></p>
+        <p class="mb-0">💚 💙 {{ t('university') }} 💚 💙</p>
     </div>
 </footer>
 
@@ -280,7 +430,11 @@ if(form) {
 
         if (unanswered.length > 0) {
             e.preventDefault();
-            alert(`Please answer all questions.\nUnanswered: ${unanswered.join(', ')}`);
+            const lang = "{{ current_lang }}";
+            const message = lang === 'ar' 
+                ? `الرجاء الإجابة على جميع الأسئلة.\nلم يتم الإجابة على: ${unanswered.join(', ')}`
+                : `Please answer all questions.\nUnanswered: ${unanswered.join(', ')}`;
+            alert(message);
             questions[unanswered[0] - 1].scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
     });

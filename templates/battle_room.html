@@ -1,25 +1,26 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ get_locale() }}" dir="{{ 'rtl' if get_locale() == 'ar' else 'ltr' }}">
 <head>
     <meta charset="UTF-8">
-    <title>Vortex - Battle Room</title>
+    <title>{{ _('Vortex - Battle Room') }}</title>
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
-    
+
     <style>
         body.light-mode { background: #f5f5f5; color: #333; }
         body.dark-mode { background: #1e1e2f; color: #f0f0f0; }
-        
+
         .card { border-radius: 18px; margin-bottom: 20px; }
         body.dark-mode .card { background: #2a2a40; color: #f0f0f0; }
-        
+
         .battle-header {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             padding: 30px;
             border-radius: 18px 18px 0 0;
         }
-        
+
         .participant-badge {
             display: inline-block;
             padding: 5px 15px;
@@ -27,20 +28,21 @@
             border-radius: 20px;
             margin-right: 10px;
         }
-        
+
         .timer {
             font-size: 2rem;
             font-weight: bold;
             color: #FFD700;
         }
-        
-        footer { 
-            background: #1f2d3d; 
-            color: #ddd; 
-            padding: 25px 0; 
-            margin-top: 80px; 
-            text-align: center; 
+
+        footer {
+            background: #1f2d3d;
+            color: #ddd;
+            padding: 25px 0;
+            margin-top: 80px;
+            text-align: center;
         }
+
         body.dark-mode footer { background: #111; }
     </style>
 </head>
@@ -50,76 +52,99 @@
 {% include 'navbar.html' %}
 
 <div class="container mt-5">
+
     <div class="card shadow">
+
         <div class="battle-header">
             <h2 class="mb-3">{{ battle.title }}</h2>
-            
+
             <div class="d-flex justify-content-between align-items-center">
+
                 <div>
-                    <h6>Participants:</h6>
+                    <h6>{{ _('Participants:') }}</h6>
+
                     {% for participant in battle.participants %}
                     <span class="participant-badge">
                         {{ participant.user.username }}
+
                         {% if participant.completed %}
                         <i class="bi bi-check-circle-fill text-success"></i>
                         {% endif %}
                     </span>
                     {% endfor %}
                 </div>
-                
+
                 <div class="timer" id="timer">05:00</div>
+
             </div>
         </div>
 
         <div class="card-body p-4">
+
             {% if quiz and quiz|length > 0 %}
-            <h5 class="mb-4">Answer the Questions:</h5>
-            
+
+            <h5 class="mb-4">{{ _('Answer the Questions:') }}</h5>
+
             <form method="POST" action="{{ url_for('submit_battle', battle_id=battle.id) }}">
+
                 {% for q in quiz %}
                 <div class="card mb-3">
+
                     <div class="card-header bg-primary text-white">
-                        Question {{ loop.index }}
+                        {{ _('Question') }} {{ loop.index }}
                     </div>
+
                     <div class="card-body">
                         <p class="fw-bold">{{ q.q }}</p>
-                        <input type="text" 
-                               class="form-control" 
+
+                        <input type="text"
+                               class="form-control"
                                name="answer_{{ loop.index0 }}"
-                               placeholder="Type your answer..."
+                               placeholder="{{ _('Type your answer...') }}"
                                required>
                     </div>
+
                 </div>
                 {% endfor %}
 
                 <button type="submit" class="btn btn-success w-100 btn-lg mt-3">
-                    <i class="bi bi-send-fill"></i> Submit Battle
+                    <i class="bi bi-send-fill"></i> {{ _('Submit Battle') }}
                 </button>
+
             </form>
+
             {% else %}
+
             <div class="alert alert-warning text-center">
-                <h5>No Quiz Available</h5>
-                <p>Please generate a summary first to create quiz questions.</p>
+                <h5>{{ _('No Quiz Available') }}</h5>
+                <p>{{ _('Please generate a summary first to create quiz questions.') }}</p>
+
                 <a href="{{ url_for('home') }}" class="btn btn-primary mt-3">
-                    Go to Home
+                    {{ _('Go to Home') }}
                 </a>
             </div>
+
             {% endif %}
+
         </div>
     </div>
 
     <div class="card shadow mt-4 p-4">
-        <h5 class="mb-3">Current Standings</h5>
+
+        <h5 class="mb-3">{{ _('Current Standings') }}</h5>
+
         <table class="table">
             <thead>
                 <tr>
-                    <th>Rank</th>
-                    <th>Player</th>
-                    <th>Score</th>
-                    <th>Status</th>
+                    <th>{{ _('Rank') }}</th>
+                    <th>{{ _('Player') }}</th>
+                    <th>{{ _('Score') }}</th>
+                    <th>{{ _('Status') }}</th>
                 </tr>
             </thead>
+
             <tbody>
+
                 {% for participant in battle.participants|sort(attribute='score', reverse=true) %}
                 <tr>
                     <td>#{{ loop.index }}</td>
@@ -127,42 +152,47 @@
                     <td>{{ participant.score }}</td>
                     <td>
                         {% if participant.completed %}
-                        <span class="badge bg-success">Completed</span>
+                        <span class="badge bg-success">{{ _('Completed') }}</span>
                         {% else %}
-                        <span class="badge bg-warning">In Progress</span>
+                        <span class="badge bg-warning">{{ _('In Progress') }}</span>
                         {% endif %}
                     </td>
                 </tr>
                 {% endfor %}
+
             </tbody>
         </table>
+
     </div>
+
 </div>
 
 <footer>
     <div class="container text-center">
-        Developed by <strong>Vortex Team</strong> - Level 10 Students
+        {{ _('Developed by Vortex Team - Level 10 Students') }}
     </div>
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
 <script>
-    let timeLeft = 300;
-    const timerEl = document.getElementById('timer');
-    
-    const countdown = setInterval(() => {
-        const minutes = Math.floor(timeLeft / 60);
-        const seconds = timeLeft % 60;
-        
-        timerEl.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-        
-        if (timeLeft <= 0) {
-            clearInterval(countdown);
-            alert('Time is up!');
-        }
-        
-        timeLeft--;
-    }, 1000);
+let timeLeft = 300;
+const timerEl = document.getElementById('timer');
+
+const countdown = setInterval(() => {
+    const minutes = Math.floor(timeLeft / 60);
+    const seconds = timeLeft % 60;
+
+    timerEl.textContent =
+        `${minutes.toString().padStart(2,'0')}:${seconds.toString().padStart(2,'0')}`;
+
+    if (timeLeft <= 0) {
+        clearInterval(countdown);
+        alert("{{ _('Time is up!') }}");
+    }
+
+    timeLeft--;
+}, 1000);
 </script>
 
 </body>
