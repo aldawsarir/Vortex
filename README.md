@@ -131,17 +131,17 @@ Modular • Scalable • AI-driven
 
 ---
 
-## 🛠 Installation
-
-```bash
+🛠 Installation
 git clone https://github.com/aldawsarir/Vortex.git
 cd Vortex
 pip install -r requirements.txt
 python app.py
-Open:
+
+Then open:
 
 http://127.0.0.1:5000
 🌍 Future Work
+
 Multilingual summarization
 
 LMS integration
@@ -153,22 +153,26 @@ Cloud AI optimization
 Smart classroom deployment
 
 📚 Academic Contribution
+
 Vortex demonstrates how AI can:
 
-✔ Reduce cognitive overload
-✔ Enhance comprehension
-✔ Increase engagement
-✔ Support modern learning ecosystems
+Reduce cognitive overload
 
-Bridging traditional education with intelligent digital learning.
+Enhance comprehension
+
+Increase engagement
+
+Support modern learning ecosystems
+
+It bridges the gap between traditional education and intelligent digital learning.
 
 📜 License
+
 Academic research project – educational use permitted.
 
 ✨ Acknowledgment
+
 We dedicate this work to students, researchers, and educators seeking smarter ways to learn.
 
 “And say: My Lord, increase me in knowledge.”
 Quran 20:114
-
-<p align="center"> 🌟 Built with passion for AI & Education 🌟 </p> ```
