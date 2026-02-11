@@ -1,9 +1,16 @@
-# Vortex
+<h1 align="center">🌪 Vortex</h1>
 
-### AI-Powered Visual Search and Understanding Engine for Students and Researchers
+<p align="center">
+AI-Powered Visual Search & Understanding Engine for Students and Researchers
+</p>
 
-Vortex is an intelligent educational platform that transforms static academic documents into dynamic, visual, and interactive learning experiences.
-The system leverages Artificial Intelligence to summarize, visualize, and gamify educational content, helping students and researchers study faster, understand deeper, and retain knowledge more effectively.
+<p align="center">
+<img src="https://img.shields.io/badge/AI-Educational%20Platform-purple">
+<img src="https://img.shields.io/badge/Python-3.11-blue">
+<img src="https://img.shields.io/badge/Flask-Web%20App-green">
+<img src="https://img.shields.io/badge/Status-Graduation%20Project-gold">
+<img src="https://img.shields.io/badge/Accuracy-93.2%25-success">
+</p>
 
 ---
 
@@ -11,17 +18,17 @@ The system leverages Artificial Intelligence to summarize, visualize, and gamify
 
 **Bachelor of Computer Science – Taif University (2026)**
 
-**Team Members**
+| Team Members |
+|-------------|
+| Reem Abdullah Aldosari |
+| Haya Faraj Aldosari |
+| Maha Abdullah Alsubaie |
+| Rawan Nasser Aldawsari |
+| Badour Hamoud Alsubaie |
 
-* Reem Abdullah Aldosari
-* Haya Faraj Aldosari
-* Maha Abdullah Alsubaie
-* Rawan Nasser Aldawsari
-* Badour Hamoud Alsubaie
-
-**Supervisor:**
-Dr. Abir Osman Elfakki
-Department of Science and Technology
+**Supervisor:**  
+Dr. Abir Osman Elfakki  
+Department of Science and Technology  
 University College of Ranyah – Taif University
 
 ---
@@ -29,103 +36,98 @@ University College of Ranyah – Taif University
 ## 🚀 Project Vision
 
 Traditional academic resources are long, static, and difficult to navigate.
-Vortex introduces an AI-driven system that converts PDFs and slides into:
 
-* Smart summaries
-* Structured notes
-* Mind maps
-* Visual graphs
-* Interactive quizzes
-* Flashcards and gamified challenges
+Vortex converts PDFs and slides into:
 
-The goal is to transform learning from passive reading into an active, engaging, and efficient process.
+✅ Smart summaries  
+✅ Structured notes  
+✅ Mind maps  
+✅ Visual graphs  
+✅ Interactive quizzes  
+✅ Flashcards & gamified challenges  
+
+🎯 Goal: Transform passive reading into active learning.
 
 ---
 
 ## 🧠 Core Features
 
-### ✦ Intelligent Summarization
-
-Automatically condenses long academic documents into concise smart notes using NLP and transformer models.
-
-### ✦ Knowledge Visualization
-
-Generates tables, graphs, and mind maps to represent relationships between concepts.
-
-### ✦ Gamification Engine
-
-Includes:
-
-* Quiz Battles
-* Flashcards
-* Puzzle Mode
-* Daily Challenges
-
-Designed to improve engagement and retention.
-
-### ✦ Collaborative Learning
-
-Shared libraries, review tools, and grading support for group study.
-
-### ✦ Smart Search
-
-Fast content navigation inside uploaded materials.
+| Feature | Description |
+|--------|------------|
+| ✦ Intelligent Summarization | NLP-powered smart notes |
+| ✦ Visualization | Mind maps, tables, graphs |
+| ✦ Gamification Engine | Quiz battles & flashcards |
+| ✦ Collaborative Learning | Shared study tools |
+| ✦ Smart Search | Instant content navigation |
 
 ---
 
 ## ⚙️ Technology Stack
 
-**Backend**
+### Backend
 
-* Python 3.11
-* Flask Framework
-* Hugging Face Transformers
-* NLTK & SpaCy
-* SQLite
+- Python 3.11
+- Flask Framework
+- Hugging Face Transformers
+- NLTK & SpaCy
+- SQLite
 
-**Visualization**
+### Visualization
 
-* Matplotlib
-* NetworkX
+- Matplotlib
+- NetworkX
 
-**Frontend**
+### Frontend
 
-* HTML / CSS
-* Bootstrap
+- HTML / CSS
+- Bootstrap
 
-**Deployment**
+### Deployment
 
-* Flask local server
-* Render / Railway (cloud-ready)
+- Flask Local Server
+- Render / Railway
 
 ---
 
 ## 🧩 System Architecture
 
-The platform pipeline:
 
-Document Upload → NLP Processing → Summarization → Visualization → Gamification → Interactive Interface
 
-The architecture is modular, scalable, and designed for future integration with academic platforms.
+Document Upload
+↓
+NLP Processing
+↓
+Summarization Engine
+↓
+Visualization Module
+↓
+Gamification Engine
+↓
+Interactive Interface
+
+
+Modular • Scalable • AI-driven
 
 ---
 
-## 📊 Performance
+## 📊 Performance Metrics
 
-* Overall system accuracy: **93.2%**
-* Stable real-time response
-* High semantic preservation
-* Reliable redundancy filtering
+| Metric | Result |
+|-------|--------|
+| Overall Accuracy | **93.2%** |
+| Response Time | Stable |
+| Semantic Preservation | High |
+| Redundancy Filtering | Reliable |
 
-The evaluation confirms consistent transformation of academic documents into structured learning tools.
+✔ Verified across PDFs, slides, and research papers.
 
 ---
 
 ## 🔐 Ethics & Privacy
 
-* Uploaded files remain private
-* No data resale or external sharing
-* Designed with academic integrity in mind
+- 🔒 Uploaded files remain private
+- 🚫 No data resale
+- 🎓 Academic integrity preserved
 
 ---
 
@@ -136,48 +138,44 @@ git clone https://github.com/aldawsarir/Vortex.git
 cd Vortex
 pip install -r requirements.txt
 python app.py
-```
 
-Then open:
 
-```
+Open:
+
 http://127.0.0.1:5000
-```
 
----
+🌍 Future Work
 
-## 🌍 Future Work
+Multilingual summarization
 
-* Multilingual summarization
-* LMS integration
-* Real-time collaboration
-* Cloud AI optimization
-* Smart classroom deployment
+LMS integration
 
----
+Real-time collaboration
 
-## 📚 Academic Contribution
+Cloud AI optimization
+
+Smart classroom deployment
+
+📚 Academic Contribution
 
 Vortex demonstrates how AI can:
 
-* Reduce cognitive overload
-* Enhance comprehension
-* Increase engagement
-* Support modern learning ecosystems
+✔ Reduce cognitive overload
+✔ Enhance comprehension
+✔ Increase engagement
+✔ Support modern learning ecosystems
 
-It bridges the gap between traditional education and intelligent digital learning.
+Bridging traditional education with intelligent digital learning.
 
----
-
-## 📜 License
+📜 License
 
 Academic research project – educational use permitted.
 
----
-
-## ✨ Acknowledgment
+✨ Acknowledgment
 
 We dedicate this work to students, researchers, and educators seeking smarter ways to learn.
 
-> “And say: My Lord, increase me in knowledge.”
-> Quran 20:114
+“And say: My Lord, increase me in knowledge.”
+Quran 20:114
+
+<p align="center"> 🌟 Built with passion for AI & Education 🌟 </p>
