@@ -1,102 +1,142 @@
 <p align="center">
-  <img src="assets/banner1.png" width="100%">
+  <img src="assets/banner-flat2d.png" width="100%">
 </p>
 
-<h1 align="center">🌪 Vortex</h1>
+<h1 align="center">Vortex</h1>
 
 <p align="center">
-AI-Powered Visual Search & Understanding Engine for Students and Researchers
+  <strong>AI-Powered Visual Search & Understanding Engine</strong><br>
+  <span>For Students & Researchers</span>
 </p>
 
 <p align="center">
-<img src="https://img.shields.io/badge/AI-Educational%20Platform-purple">
-<img src="https://img.shields.io/badge/Python-3.11-blue">
-<img src="https://img.shields.io/badge/Flask-Web%20App-green">
-<img src="https://img.shields.io/badge/Status-Graduation%20Project-gold">
-<img src="https://img.shields.io/badge/Accuracy-93.2%25-success">
+  <img src="https://img.shields.io/badge/Category-Education%20AI-6C63FF">
+  <img src="https://img.shields.io/badge/Python-3.11-2D9CDB">
+  <img src="https://img.shields.io/badge/Framework-Flask-27AE60">
+  <img src="https://img.shields.io/badge/Status-Graduation%20Project-F2C94C">
+  <img src="https://img.shields.io/badge/Accuracy-93.2%25-00C853">
 </p>
 
----
+<hr>
 
-## 🎓 Graduation Project
+<h2>Graduation Project</h2>
 
-**Bachelor of Computer Science – Taif University (2026)**
+<p><strong>Bachelor of Computer Science – Taif University (2026)</strong></p>
 
-| Team Members |
-|-------------|
-| Reem Abdullah Aldosari |
-| Haya Faraj Aldosari |
-| Maha Abdullah Alsubaie |
-| Rawan Nasser Aldawsari |
-| Badour Hamoud Alsubaie |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Team Members</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td>Reem Abdullah Aldosari</td></tr>
+    <tr><td>Haya Faraj Aldosari</td></tr>
+    <tr><td>Maha Abdullah Alsubaie</td></tr>
+    <tr><td>Rawan Nasser Aldawsari</td></tr>
+    <tr><td>Badour Hamoud Alsubaie</td></tr>
+  </tbody>
+</table>
 
-**Supervisor:**  
-Dr. Abir Osman Elfakki  
-Department of Science and Technology  
-University College of Ranyah – Taif University
+<p><strong>Supervisor:</strong><br>
+Dr. Abir Osman Elfakki<br>
+Department of Science and Technology<br>
+University College of Ranyah – Taif University</p>
 
----
+<hr>
 
-## 🚀 Project Vision
+<h2>Project Vision</h2>
 
-Traditional academic resources are long, static, and difficult to navigate.
+<p>Traditional academic resources are long, static, and difficult to navigate.</p>
 
-Vortex converts PDFs and slides into:
+<p>Vortex converts PDFs and slides into:</p>
 
-✅ Smart summaries  
-✅ Structured notes  
-✅ Mind maps  
-✅ Visual graphs  
-✅ Interactive quizzes  
-✅ Flashcards & gamified challenges  
+<ul>
+  <li>Smart summaries</li>
+  <li>Structured notes</li>
+  <li>Mind maps</li>
+  <li>Visual graphs</li>
+  <li>Interactive quizzes</li>
+  <li>Flashcards & gamified challenges</li>
+</ul>
 
-🎯 Goal: Transform passive reading into active learning.
+<p><strong>Goal:</strong> Transform passive reading into active learning.</p>
 
----
+<hr>
 
-## 🧠 Core Features
+<h2>Core Features</h2>
 
-| Feature | Description |
-|--------|------------|
-| ✦ Intelligent Summarization | NLP-powered smart notes |
-| ✦ Visualization | Mind maps, tables, graphs |
-| ✦ Gamification Engine | Quiz battles & flashcards |
-| ✦ Collaborative Learning | Shared study tools |
-| ✦ Smart Search | Instant content navigation |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Feature</th>
+      <th align="left">Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Intelligent Summarization</td>
+      <td>NLP-powered smart notes</td>
+    </tr>
+    <tr>
+      <td>Visualization</td>
+      <td>Mind maps, tables, graphs</td>
+    </tr>
+    <tr>
+      <td>Gamification Engine</td>
+      <td>Quiz battles & flashcards</td>
+    </tr>
+    <tr>
+      <td>Collaborative Learning</td>
+      <td>Shared study tools</td>
+    </tr>
+    <tr>
+      <td>Smart Search</td>
+      <td>Instant content navigation</td>
+    </tr>
+  </tbody>
+</table>
 
----
+<hr>
 
-## ⚙️ Technology Stack
+<h2>Technology Stack</h2>
 
-### Backend
+<h3>Backend</h3>
 
-- Python 3.11
-- Flask Framework
-- Hugging Face Transformers
-- NLTK & SpaCy
-- SQLite
+<ul>
+  <li>Python 3.11</li>
+  <li>Flask Framework</li>
+  <li>Hugging Face Transformers</li>
+  <li>NLTK & SpaCy</li>
+  <li>SQLite</li>
+</ul>
 
-### Visualization
+<h3>Visualization</h3>
 
-- Matplotlib
-- NetworkX
+<ul>
+  <li>Matplotlib</li>
+  <li>NetworkX</li>
+</ul>
 
-### Frontend
+<h3>Frontend</h3>
 
-- HTML / CSS
-- Bootstrap
+<ul>
+  <li>HTML / CSS</li>
+  <li>Bootstrap</li>
+</ul>
 
-### Deployment
+<h3>Deployment</h3>
 
-- Flask Local Server
-- Render / Railway
+<ul>
+  <li>Flask Local Server</li>
+  <li>Render / Railway</li>
+</ul>
 
----
+<hr>
 
-## 🧩 System Architecture
+<h2>System Architecture</h2>
 
-
-
+<pre>
 Document Upload
 ↓
 NLP Processing
@@ -108,82 +148,60 @@ Visualization Module
 Gamification Engine
 ↓
 Interactive Interface
+</pre>
 
+<p><strong>Modular • Scalable • AI-driven</strong></p>
 
-Modular • Scalable • AI-driven
+<hr>
 
----
+<h2>Performance Metrics</h2>
 
-## 📊 Performance Metrics
+<table>
+  <thead>
+    <tr>
+      <th align="left">Metric</th>
+      <th align="left">Result</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Overall Accuracy</td>
+      <td><strong>93.2%</strong></td>
+    </tr>
+    <tr>
+      <td>Response Time</td>
+      <td>Stable</td>
+    </tr>
+    <tr>
+      <td>Semantic Preservation</td>
+      <td>High</td>
+    </tr>
+    <tr>
+      <td>Redundancy Filtering</td>
+      <td>Reliable</td>
+    </tr>
+  </tbody>
+</table>
 
-| Metric | Result |
-|-------|--------|
-| Overall Accuracy | **93.2%** |
-| Response Time | Stable |
-| Semantic Preservation | High |
-| Redundancy Filtering | Reliable |
+<p>Verified across PDFs, slides, and research papers.</p>
 
-✔ Verified across PDFs, slides, and research papers.
+<hr>
 
----
+<h2>Ethics & Privacy</h2>
 
-## 🔐 Ethics & Privacy
+<ul>
+  <li>Uploaded files remain private</li>
+  <li>No data resale</li>
+  <li>Academic integrity preserved</li>
+</ul>
 
-- 🔒 Uploaded files remain private
-- 🚫 No data resale
-- 🎓 Academic integrity preserved
+<hr>
 
----
-
-## 🛠 Installation
+<h2>Installation</h2>
 
 ```bash
 git clone https://github.com/aldawsarir/Vortex.git
 cd Vortex
 pip install -r requirements.txt
 python app.py
-```
-
-Then open:
-
-```
-http://127.0.0.1:5000
-```
-
----
-
-## 🌍 Future Work
-
-* Multilingual summarization
-* LMS integration
-* Real-time collaboration
-* Cloud AI optimization
-* Smart classroom deployment
-
----
-
-## 📚 Academic Contribution
-
-Vortex demonstrates how AI can:
-
-* Reduce cognitive overload
-* Enhance comprehension
-* Increase engagement
-* Support modern learning ecosystems
-
-It bridges the gap between traditional education and intelligent digital learning.
-
----
-
-## 📜 License
-
-Academic research project – educational use permitted.
-
----
-
-## ✨ Acknowledgment
-
-We dedicate this work to students, researchers, and educators seeking smarter ways to learn.
-
-> “And say: My Lord, increase me in knowledge.”
-> Quran 20:114
+<p>Then open:</p> <pre> http://127.0.0.1:5000 </pre> <hr> <h2>Future Work</h2> <ul> <li>Multilingual summarization</li> <li>LMS integration</li> <li>Real-time collaboration</li> <li>Cloud AI optimization</li> <li>Smart classroom deployment</li> </ul> <hr> <h2>Academic Contribution</h2> <p>Vortex demonstrates how AI can:</p> <ul> <li>Reduce cognitive overload</li> <li>Enhance comprehension</li> <li>Increase engagement</li> <li>Support modern learning ecosystems</li> </ul> <p>It bridges the gap between traditional education and intelligent digital learning.</p> <hr> <h2>License</h2> <p>Academic research project – educational use permitted.</p> <hr> <h2>Acknowledgment</h2> <p>We dedicate this work to students, researchers, and educators seeking smarter ways to learn.</p> <blockquote> <p>“And say: My Lord, increase me in knowledge.”<br> Quran 20:114</p> </blockquote> ```
