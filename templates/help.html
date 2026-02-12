@@ -2,46 +2,315 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Vortex - Help</title>
+    <title>Vortex - Help & Instructions</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     
     <style>
-        body.light-mode { background: #f5f5f5; color: #333; }
-        body.dark-mode { background: #1e1e2f; color: #f0f0f0; }
+        /* ========================================
+           Help Page - Pastel Illustration Theme
+           ======================================== */
         
-        .content { padding: 60px 20px; }
-        
-        h1 { 
-            font-size: 2.8rem; 
-            text-align: center; 
-            margin-bottom: 40px; 
+        :root {
+            --bg-lavender: #E8D5F2;
+            --bg-purple: #C4A7D7;
+            --teal: #5DBAA4;
+            --teal-light: #7DD3BD;
+            --yellow: #FFD166;
+            --pink: #FFB3BA;
+            --blue: #6BA3C8;
+            --navy: #4A6FA5;
+            --text: #2C2C54;
         }
         
-        .card { border-radius: 18px; margin-bottom: 20px; }
-        body.dark-mode .card { background: #2a2a40; color: #f0f0f0; }
+        * {
+            font-family: 'Poppins', 'Cairo', sans-serif;
+        }
+        
+        body.light-mode { 
+            background: linear-gradient(135deg, var(--bg-lavender) 0%, var(--bg-purple) 100%);
+            color: var(--text);
+            min-height: 100vh;
+        }
+        
+        body.dark-mode { 
+            background: linear-gradient(135deg, #4A3A5C 0%, #2C1E3F 100%);
+            color: #f0f0f0;
+        }
+        
+        .content { 
+            padding: 60px 20px; 
+            position: relative;
+        }
+        
+        /* Floating Decorative Elements */
+        .floating-help {
+            position: absolute;
+            font-size: 3rem;
+            opacity: 0.4;
+            animation: float 4s ease-in-out infinite;
+        }
+        
+        .help-1 { top: 10%; left: 5%; animation-delay: 0s; }
+        .help-2 { top: 30%; right: 8%; animation-delay: 1.5s; }
+        .help-3 { bottom: 20%; left: 10%; animation-delay: 3s; }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        h1 { 
+            font-size: 3rem; 
+            text-align: center; 
+            margin-bottom: 50px;
+            font-weight: 900;
+            background: linear-gradient(90deg, var(--teal), var(--blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            position: relative;
+        }
+        
+        h1::before {
+            content: '❓';
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            top: -50px;
+            font-size: 3rem;
+            animation: bounce 2s ease-in-out infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(-15px); }
+        }
+        
+        .card { 
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 25px;
+            border: 4px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 10px 35px rgba(108, 91, 123, 0.2);
+            margin-bottom: 25px;
+            transition: all 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 45px rgba(108, 91, 123, 0.3);
+        }
+        
+        body.dark-mode .card { 
+            background: rgba(42, 42, 64, 0.95);
+            border-color: rgba(93, 186, 164, 0.3);
+            color: #f0f0f0;
+        }
+        
+        .card h5 {
+            background: linear-gradient(90deg, var(--teal), var(--blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
+            font-size: 1.5rem;
+            margin-bottom: 30px;
+            padding-left: 40px;
+            position: relative;
+        }
+        
+        .card h5::before {
+            content: '📖';
+            position: absolute;
+            left: 0;
+            font-size: 1.8rem;
+        }
+        
+        .step-container {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: rgba(93, 186, 164, 0.05);
+            border-radius: 18px;
+            border-left: 5px solid var(--teal);
+            transition: all 0.3s ease;
+        }
+        
+        .step-container:hover {
+            background: rgba(93, 186, 164, 0.1);
+            transform: translateX(10px);
+        }
+        
+        body.dark-mode .step-container {
+            background: rgba(93, 186, 164, 0.1);
+        }
         
         .step-number {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            width: 40px;
-            height: 40px;
-            background: linear-gradient(90deg, #1abc9c, #3498db);
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--teal), var(--blue));
             color: white;
             border-radius: 50%;
-            font-weight: bold;
-            margin-right: 15px;
+            font-weight: 900;
+            font-size: 1.3rem;
+            margin-right: 20px;
+            box-shadow: 0 5px 15px rgba(93, 186, 164, 0.3);
+            transition: all 0.3s ease;
         }
         
-        footer { 
-            background: #1f2d3d; 
-            color: #ddd; 
-            padding: 25px 0; 
-            margin-top: 80px; 
-            text-align: center; 
+        .step-container:hover .step-number {
+            transform: scale(1.1) rotate(5deg);
         }
-        body.dark-mode footer { background: #111; }
+        
+        .step-container h6 {
+            color: var(--text);
+            font-weight: 800;
+            font-size: 1.2rem;
+            margin-bottom: 12px;
+        }
+        
+        body.dark-mode .step-container h6 {
+            color: var(--teal-light);
+        }
+        
+        .step-container p {
+            color: var(--text);
+            line-height: 1.8;
+            font-size: 1.05rem;
+        }
+        
+        body.dark-mode .step-container p {
+            color: #ddd;
+        }
+        
+        /* Tips Section */
+        .tips-card {
+            background: linear-gradient(135deg, rgba(255, 209, 102, 0.15), rgba(255, 179, 186, 0.15));
+        }
+        
+        body.dark-mode .tips-card {
+            background: linear-gradient(135deg, rgba(255, 209, 102, 0.1), rgba(255, 179, 186, 0.1));
+        }
+        
+        .tips-card h5::before {
+            content: '💡';
+        }
+        
+        .tips-card ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .tips-card li {
+            padding: 15px 20px;
+            margin-bottom: 12px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 15px;
+            border-left: 4px solid var(--yellow);
+            transition: all 0.3s ease;
+            font-size: 1.05rem;
+            position: relative;
+            padding-left: 55px;
+        }
+        
+        .tips-card li::before {
+            content: '✓';
+            position: absolute;
+            left: 20px;
+            background: linear-gradient(135deg, var(--yellow), #F4C542);
+            color: white;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 1.1rem;
+        }
+        
+        .tips-card li:hover {
+            transform: translateX(10px);
+            background: white;
+            box-shadow: 0 5px 15px rgba(255, 209, 102, 0.3);
+        }
+        
+        body.dark-mode .tips-card li {
+            background: rgba(42, 42, 64, 0.8);
+            color: #f0f0f0;
+        }
+        
+        body.dark-mode .tips-card li:hover {
+            background: rgba(42, 42, 64, 1);
+        }
+        
+        /* Button */
+        .btn-primary {
+            background: linear-gradient(135deg, var(--teal), var(--blue));
+            border: none;
+            border-radius: 18px;
+            padding: 15px 40px;
+            font-weight: 800;
+            font-size: 1.2rem;
+            color: white;
+            box-shadow: 0 8px 25px rgba(93, 186, 164, 0.35);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 35px rgba(93, 186, 164, 0.45);
+            color: white;
+        }
+        
+        /* Footer */
+        footer { 
+            background: linear-gradient(135deg, var(--navy), var(--blue));
+            color: white;
+            padding: 30px 0;
+            margin-top: 80px;
+            text-align: center;
+            box-shadow: 0 -5px 20px rgba(74, 111, 165, 0.3);
+        }
+        
+        footer strong {
+            color: var(--yellow);
+            font-weight: 800;
+        }
+        
+        body.dark-mode footer { 
+            background: linear-gradient(135deg, #1a1a2e, #0f0f1e);
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            h1::before {
+                top: -40px;
+                font-size: 2rem;
+            }
+            
+            .step-container {
+                padding: 15px;
+            }
+            
+            .step-number {
+                width: 40px;
+                height: 40px;
+                font-size: 1.1rem;
+                margin-right: 15px;
+            }
+            
+            .floating-help {
+                display: none;
+            }
+        }
     </style>
 </head>
 
@@ -49,66 +318,94 @@
 
 {% include 'navbar.html' %}
 
+<!-- Floating Decorative Elements -->
+<div class="floating-help help-1">📚</div>
+<div class="floating-help help-2">💡</div>
+<div class="floating-help help-3">✨</div>
+
 <div class="content">
     <div class="container">
-        <h1>Help and Instructions</h1>
+        <h1>Help & Instructions</h1>
 
-        <div class="card shadow p-4">
-            <h5 class="mb-4">How to Use Vortex</h5>
+        <!-- How to Use Section -->
+        <div class="card shadow p-5">
+            <h5>How to Use Vortex</h5>
 
-            <div class="mb-4">
-                <h6><span class="step-number">1</span>Upload or Paste Content</h6>
-                <p class="ms-5">
+            <div class="step-container">
+                <h6>
+                    <span class="step-number">1</span>
+                    Upload or Paste Content
+                </h6>
+                <p class="ms-5 ps-4">
                     Go to the home page and either paste your study material in the text area 
-                    or upload a file (PDF, DOCX, or PPTX).
+                    or upload a file (PDF, DOCX, or PPTX). Make sure your content is clear 
+                    and well-formatted for best results.
                 </p>
             </div>
 
-            <div class="mb-4">
-                <h6><span class="step-number">2</span>Generate Summary</h6>
-                <p class="ms-5">
+            <div class="step-container">
+                <h6>
+                    <span class="step-number">2</span>
+                    Generate Summary
+                </h6>
+                <p class="ms-5 ps-4">
                     Click the "Generate Summary and Quiz" button. Vortex will process your 
-                    content and create a concise summary.
+                    content using AI and create a concise, easy-to-understand summary in seconds.
                 </p>
             </div>
 
-            <div class="mb-4">
-                <h6><span class="step-number">3</span>Review Results</h6>
-                <p class="ms-5">
-                    View your summary, interactive flashcards, and mind map on the results page.
+            <div class="step-container">
+                <h6>
+                    <span class="step-number">3</span>
+                    Review Results
+                </h6>
+                <p class="ms-5 ps-4">
+                    View your summary, interactive flashcards, and mind map on the results page. 
+                    Explore different ways to learn and retain information.
                 </p>
             </div>
 
-            <div class="mb-4">
-                <h6><span class="step-number">4</span>Take the Quiz</h6>
-                <p class="ms-5">
-                    Click "Go to Quiz" to test your understanding with automatically generated questions.
+            <div class="step-container">
+                <h6>
+                    <span class="step-number">4</span>
+                    Take the Quiz
+                </h6>
+                <p class="ms-5 ps-4">
+                    Click "Start Quiz" to test your understanding with automatically generated questions. 
+                    Multiple choice, true/false, and fill-in-the-blank questions are included.
                 </p>
             </div>
 
-            <div class="mb-4">
-                <h6><span class="step-number">5</span>Check Your Score</h6>
-                <p class="ms-5">
+            <div class="step-container">
+                <h6>
+                    <span class="step-number">5</span>
+                    Check Your Score
+                </h6>
+                <p class="ms-5 ps-4">
                     After submitting the quiz, view your score and achievements on the 
-                    gamification page. Earn points and unlock new levels.
+                    gamification page. Earn points, unlock new levels, and track your progress!
                 </p>
             </div>
         </div>
 
-        <div class="card shadow p-4 mt-4">
-            <h5 class="mb-3">Tips</h5>
+        <!-- Tips Section -->
+        <div class="card tips-card shadow p-5 mt-4">
+            <h5>Pro Tips for Better Learning</h5>
             <ul>
-                <li>Use the Dark or Light Mode toggle for comfortable reading</li>
-                <li>Click on flashcards to flip and reveal answers</li>
-                <li>Complete quizzes to earn points and track your progress</li>
-                <li>Use the mind map to visualize key concepts</li>
-                <li>Upload clear, well-formatted documents for best results</li>
+                <li>Use the Dark or Light Mode toggle for comfortable reading in any environment</li>
+                <li>Click on flashcards to flip and reveal answers - great for quick review sessions</li>
+                <li>Complete quizzes regularly to earn points and track your learning progress</li>
+                <li>Use the mind map to visualize key concepts and understand relationships</li>
+                <li>Upload clear, well-formatted documents for the best AI processing results</li>
+                <li>Join quiz battles to compete with friends and make learning more fun</li>
+                <li>Check the leaderboard to see how you rank among other learners</li>
             </ul>
         </div>
 
-        <div class="text-center mt-4">
+        <!-- Back Button -->
+        <div class="text-center mt-5">
             <a href="{{ url_for('home') }}" class="btn btn-primary">
-                Back to Home
+                <i class="bi bi-house-door-fill"></i> Back to Home
             </a>
         </div>
     </div>
@@ -116,7 +413,8 @@
 
 <footer>
     <div class="container text-center">
-        Developed by <strong>Vortex Team</strong> - Level 10 Students
+        <p class="mb-1">Developed By <strong>Vortex Team</strong> 💜</p>
+        <p class="mb-0">🎓 University College Of Ranyah - Computer Science - Level 10 🎓</p>
     </div>
 </footer>
 

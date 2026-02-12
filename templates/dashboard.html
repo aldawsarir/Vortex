@@ -3,36 +3,381 @@
 <head>
     <meta charset="UTF-8">
     <title>Vortex - Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     
     <style>
-        body.light-mode { background: #f5f5f5; color: #333; }
-        body.dark-mode { background: #1e1e2f; color: #f0f0f0; }
+        /* ========================================
+           Dashboard - Pastel Illustration Theme
+           ======================================== */
         
-        .card { border-radius: 18px; margin-bottom: 20px; }
-        body.dark-mode .card { background: #2a2a40; color: #f0f0f0; }
-        
-        .stat-card { text-align: center; padding: 30px; }
-        .stat-number { font-size: 2.5rem; font-weight: 800; }
-        
-        .upload-item { 
-            border-bottom: 1px solid #ddd; 
-            padding: 15px 0; 
+        :root {
+            --bg-lavender: #E8D5F2;
+            --bg-purple: #C4A7D7;
+            --teal: #5DBAA4;
+            --teal-light: #7DD3BD;
+            --yellow: #FFD166;
+            --gold: #FFD700;
+            --pink: #FFB3BA;
+            --coral: #FF9AA2;
+            --blue: #6BA3C8;
+            --navy: #4A6FA5;
+            --text: #2C2C54;
         }
         
-        .upload-item:last-child { border-bottom: none; }
+        * {
+            font-family: 'Poppins', 'Cairo', sans-serif;
+        }
         
-        body.dark-mode .upload-item { border-color: #444; }
+        body.light-mode { 
+            background: linear-gradient(135deg, var(--bg-lavender) 0%, var(--bg-purple) 100%);
+            color: var(--text);
+            min-height: 100vh;
+        }
         
-        footer { 
-            background: #1f2d3d; 
-            color: #ddd; 
-            padding: 25px 0; 
-            margin-top: 80px; 
+        body.dark-mode { 
+            background: linear-gradient(135deg, #4A3A5C 0%, #2C1E3F 100%);
+            color: #f0f0f0;
+        }
+        
+        .container {
+            padding-top: 40px;
+            padding-bottom: 40px;
+        }
+        
+        /* Page Header */
+        .page-header {
+            margin-bottom: 45px;
+        }
+        
+        .page-header h1 {
+            font-size: 2.8rem;
+            font-weight: 900;
+            background: linear-gradient(90deg, var(--teal), var(--blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .card { 
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 25px;
+            border: 4px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 10px 35px rgba(108, 91, 123, 0.2);
+            margin-bottom: 30px;
+            transition: all 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 45px rgba(108, 91, 123, 0.3);
+        }
+        
+        body.dark-mode .card { 
+            background: rgba(42, 42, 64, 0.95);
+            border-color: rgba(93, 186, 164, 0.3);
+            color: #f0f0f0;
+        }
+        
+        .card h4 {
+            background: linear-gradient(90deg, var(--teal), var(--blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
+            margin-bottom: 30px;
+        }
+        
+        /* Stat Cards */
+        .stat-card { 
             text-align: center; 
+            padding: 40px 25px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
         }
-        body.dark-mode footer { background: #111; }
+        
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: pulse 3s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-10px) scale(1.02);
+        }
+        
+        .stat-card i {
+            margin-bottom: 20px;
+            transition: transform 0.3s ease;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .stat-card:hover i {
+            transform: scale(1.15) rotate(5deg);
+        }
+        
+        .stat-number { 
+            font-size: 3.5rem; 
+            font-weight: 900;
+            background: linear-gradient(90deg, var(--teal), var(--blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin: 15px 0 10px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .stat-label {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #777;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        body.dark-mode .stat-label {
+            color: #aaa;
+        }
+        
+        /* Upload Items */
+        .upload-item { 
+            border-bottom: 2px solid rgba(93, 186, 164, 0.15);
+            padding: 20px 0; 
+            transition: all 0.3s ease;
+        }
+        
+        .upload-item:last-child { 
+            border-bottom: none; 
+        }
+        
+        .upload-item:hover {
+            background: rgba(93, 186, 164, 0.05);
+            padding-left: 15px;
+            padding-right: 15px;
+            border-radius: 12px;
+        }
+        
+        body.dark-mode .upload-item { 
+            border-color: rgba(93, 186, 164, 0.2);
+        }
+        
+        body.dark-mode .upload-item:hover {
+            background: rgba(93, 186, 164, 0.1);
+        }
+        
+        .upload-item strong {
+            font-size: 1.15rem;
+            color: var(--teal);
+            font-weight: 800;
+        }
+        
+        body.dark-mode .upload-item strong {
+            color: var(--teal-light);
+        }
+        
+        /* Table */
+        .table {
+            border-radius: 15px;
+            overflow: hidden;
+        }
+        
+        .table thead {
+            background: linear-gradient(135deg, var(--teal), var(--blue));
+            color: white;
+        }
+        
+        .table thead th {
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.95rem;
+            letter-spacing: 0.5px;
+            padding: 18px;
+            border: none;
+        }
+        
+        .table tbody tr {
+            transition: all 0.3s ease;
+            border-bottom: 1px solid rgba(93, 186, 164, 0.1);
+        }
+        
+        .table tbody tr:hover {
+            background: rgba(93, 186, 164, 0.08);
+            transform: scale(1.01);
+        }
+        
+        .table tbody td {
+            padding: 18px;
+            vertical-align: middle;
+            font-weight: 600;
+        }
+        
+        body.dark-mode .table {
+            color: #f0f0f0;
+        }
+        
+        body.dark-mode .table tbody tr {
+            border-bottom-color: rgba(93, 186, 164, 0.2);
+        }
+        
+        body.dark-mode .table tbody tr:hover {
+            background: rgba(93, 186, 164, 0.15);
+        }
+        
+        /* Badges */
+        .badge {
+            padding: 8px 16px;
+            border-radius: 10px;
+            font-weight: 800;
+            font-size: 0.95rem;
+        }
+        
+        .bg-success {
+            background: linear-gradient(135deg, #43e97b, #38f9d7) !important;
+        }
+        
+        .bg-warning {
+            background: linear-gradient(135deg, var(--yellow), #F4C542) !important;
+            color: var(--text) !important;
+        }
+        
+        .bg-danger {
+            background: linear-gradient(135deg, var(--coral), var(--pink)) !important;
+        }
+        
+        /* Buttons */
+        .btn-primary {
+            background: linear-gradient(135deg, var(--teal), var(--blue));
+            border: none;
+            border-radius: 15px;
+            padding: 12px 30px;
+            font-weight: 800;
+            box-shadow: 0 6px 20px rgba(93, 186, 164, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(93, 186, 164, 0.4);
+        }
+        
+        .btn-info {
+            background: linear-gradient(135deg, #4facfe, #00f2fe);
+            border: none;
+            color: white;
+            font-weight: 700;
+        }
+        
+        .btn-info:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(79, 172, 254, 0.3);
+        }
+        
+        .btn-success {
+            background: linear-gradient(135deg, #43e97b, #38f9d7);
+            border: none;
+            font-weight: 700;
+        }
+        
+        .btn-outline-secondary {
+            border: 2px solid var(--teal);
+            color: var(--teal);
+            font-weight: 700;
+        }
+        
+        .btn-outline-secondary:hover {
+            background: linear-gradient(135deg, var(--teal), var(--blue));
+            border-color: transparent;
+            color: white;
+        }
+        
+        /* Empty States */
+        .empty-state {
+            text-align: center;
+            padding: 60px 30px;
+        }
+        
+        .empty-state i {
+            font-size: 5rem;
+            background: linear-gradient(135deg, var(--pink), var(--teal));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+        }
+        
+        .empty-state p {
+            font-size: 1.1rem;
+            color: var(--text);
+            font-weight: 600;
+        }
+        
+        body.dark-mode .empty-state p {
+            color: #ddd;
+        }
+        
+        /* Footer */
+        footer { 
+            background: linear-gradient(135deg, var(--navy), var(--blue));
+            color: white;
+            padding: 30px 0;
+            margin-top: 80px;
+            text-align: center;
+            box-shadow: 0 -5px 20px rgba(74, 111, 165, 0.3);
+        }
+        
+        footer strong {
+            color: var(--yellow);
+            font-weight: 800;
+        }
+        
+        body.dark-mode footer { 
+            background: linear-gradient(135deg, #1a1a2e, #0f0f1e);
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .page-header h1 {
+                font-size: 2rem;
+            }
+            
+            .stat-card {
+                padding: 30px 20px;
+                margin-bottom: 20px;
+            }
+            
+            .stat-number {
+                font-size: 2.8rem;
+            }
+            
+            .upload-item .btn {
+                margin-top: 10px;
+                width: 100%;
+            }
+            
+            .page-header {
+                flex-direction: column;
+                align-items: flex-start !important;
+            }
+            
+            .page-header .btn {
+                margin-top: 15px;
+                width: 100%;
+            }
+        }
     </style>
 </head>
 
@@ -42,123 +387,142 @@
 
 <div class="container mt-5">
 
-<div class="d-flex justify-content-between align-items-center mb-4">
-<h1>Welcome, {{ current_user.username }}</h1>
-<a href="{{ url_for('analytics') }}" class="btn btn-primary">
-<i class="bi bi-graph-up"></i> View Analytics
-</a>
+<!-- Page Header -->
+<div class="page-header d-flex justify-content-between align-items-center">
+    <h1>👋 Welcome, {{ current_user.username }}!</h1>
+    <a href="{{ url_for('analytics') }}" class="btn btn-primary">
+        <i class="bi bi-graph-up"></i> View Analytics
+    </a>
 </div>
 
-<div class="row mb-4">
+<!-- Stats Cards -->
+<div class="row mb-5">
+    <div class="col-md-3 col-sm-6 mb-3">
+        <div class="card stat-card shadow">
+            <i class="bi bi-trophy-fill" style="font-size: 4rem; color: var(--gold);"></i>
+            <div class="stat-number">{{ current_user.score }}</div>
+            <p class="stat-label">Total Points</p>
+        </div>
+    </div>
 
-<div class="col-md-3">
-<div class="card stat-card shadow">
-<i class="bi bi-trophy-fill" style="font-size: 3rem; color: #FFD700;"></i>
-<div class="stat-number">{{ current_user.score }}</div>
-<p class="text-muted">Total Points</p>
-</div>
-</div>
+    <div class="col-md-3 col-sm-6 mb-3">
+        <div class="card stat-card shadow">
+            <i class="bi bi-star-fill" style="font-size: 4rem; color: #FFA500;"></i>
+            <div class="stat-number">{{ current_user.level }}</div>
+            <p class="stat-label">Current Level</p>
+        </div>
+    </div>
 
-<div class="col-md-3">
-<div class="card stat-card shadow">
-<i class="bi bi-star-fill" style="font-size: 3rem; color: #FFA500;"></i>
-<div class="stat-number">{{ current_user.level }}</div>
-<p class="text-muted">Current Level</p>
-</div>
-</div>
+    <div class="col-md-3 col-sm-6 mb-3">
+        <div class="card stat-card shadow">
+            <i class="bi bi-file-earmark-text" style="font-size: 4rem; color: var(--teal);"></i>
+            <div class="stat-number">{{ uploads|length }}</div>
+            <p class="stat-label">Uploads</p>
+        </div>
+    </div>
 
-<div class="col-md-3">
-<div class="card stat-card shadow">
-<i class="bi bi-file-earmark-text" style="font-size: 3rem; color: #6C63FF;"></i>
-<div class="stat-number">{{ uploads|length }}</div>
-<p class="text-muted">Uploads</p>
-</div>
-</div>
-
-<div class="col-md-3">
-<div class="card stat-card shadow">
-<i class="bi bi-clipboard-check" style="font-size: 3rem; color: #28a745;"></i>
-<div class="stat-number">{{ quizzes|length }}</div>
-<p class="text-muted">Quizzes Taken</p>
-</div>
-</div>
-
-</div>
-
-<div class="card shadow p-4 mb-4">
-<h4 class="mb-3">Your Recent Uploads</h4>
-
-{% if uploads %}
-{% for upload in uploads %}
-<div class="upload-item">
-<div class="d-flex justify-content-between align-items-center">
-<div>
-<strong>{{ upload.filename }}</strong>
-<br>
-<small class="text-muted">{{ upload.uploaded_at.strftime('%Y-%m-%d %H:%M') }}</small>
-</div>
-<div>
-<a href="{{ url_for('visualize_upload', upload_id=upload.id) }}" class="btn btn-sm btn-info me-2">
-<i class="bi bi-bar-chart"></i> Visualize
-</a>
-<a href="{{ url_for('share_upload', upload_id=upload.id) }}" class="btn btn-sm btn-{{ 'success' if upload.is_shared else 'outline-secondary' }}">
-<i class="bi bi-share"></i> {{ 'Shared' if upload.is_shared else 'Share' }}
-</a>
-</div>
-</div>
-</div>
-{% endfor %}
-{% else %}
-<p class="text-muted">No uploads yet. Start by uploading a document.</p>
-{% endif %}
+    <div class="col-md-3 col-sm-6 mb-3">
+        <div class="card stat-card shadow">
+            <i class="bi bi-clipboard-check" style="font-size: 4rem; color: #43e97b;"></i>
+            <div class="stat-number">{{ quizzes|length }}</div>
+            <p class="stat-label">Quizzes Taken</p>
+        </div>
+    </div>
 </div>
 
-<div class="card shadow p-4">
-<h4 class="mb-3">Recent Quiz Results</h4>
+<!-- Recent Uploads -->
+<div class="card shadow p-5 mb-4">
+    <h4>
+        <i class="bi bi-cloud-upload"></i> Your Recent Uploads
+    </h4>
 
-{% if quizzes %}
-<table class="table table-hover">
-<thead class="table-light">
-<tr>
-<th>Score</th>
-<th>Total Questions</th>
-<th>Percentage</th>
-<th>Date</th>
-</tr>
-</thead>
-<tbody>
+    {% if uploads %}
+    {% for upload in uploads %}
+    <div class="upload-item">
+        <div class="d-flex justify-content-between align-items-center flex-wrap">
+            <div class="mb-2 mb-md-0">
+                <strong>📄 {{ upload.filename }}</strong>
+                <br>
+                <small class="text-muted">
+                    <i class="bi bi-calendar"></i> 
+                    {{ upload.uploaded_at.strftime('%Y-%m-%d %H:%M') }}
+                </small>
+            </div>
+            <div>
+                <a href="{{ url_for('visualize_upload', upload_id=upload.id) }}" 
+                   class="btn btn-sm btn-info me-2">
+                    <i class="bi bi-bar-chart"></i> Visualize
+                </a>
+                <a href="{{ url_for('share_upload', upload_id=upload.id) }}" 
+                   class="btn btn-sm btn-{{ 'success' if upload.is_shared else 'outline-secondary' }}">
+                    <i class="bi bi-share"></i> 
+                    {{ 'Shared' if upload.is_shared else 'Share' }}
+                </a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+    {% else %}
+    <div class="empty-state">
+        <i class="bi bi-inbox"></i>
+        <p>No uploads yet. Start by uploading a document!</p>
+    </div>
+    {% endif %}
+</div>
 
-{% for quiz in quizzes %}
-<tr>
-<td>{{ quiz.score }}</td>
-<td>{{ quiz.total_questions }}</td>
-<td>
-{% set percentage = ((quiz.score / (quiz.total_questions * 10)) * 100)|round(1) %}
-<span class="badge 
-{% if percentage >= 80 %}bg-success
-{% elif percentage >= 60 %}bg-warning
-{% else %}bg-danger
-{% endif %}">
-{{ percentage }}%
-</span>
-</td>
-<td>{{ quiz.completed_at.strftime('%Y-%m-%d') }}</td>
-</tr>
-{% endfor %}
+<!-- Recent Quiz Results -->
+<div class="card shadow p-5">
+    <h4>
+        <i class="bi bi-clipboard-check"></i> Recent Quiz Results
+    </h4>
 
-</tbody>
-</table>
-{% else %}
-<p class="text-muted">No quiz results yet. Take a quiz to see your progress.</p>
-{% endif %}
+    {% if quizzes %}
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>⭐ Score</th>
+                    <th>❓ Questions</th>
+                    <th>📊 Percentage</th>
+                    <th>📅 Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for quiz in quizzes %}
+                <tr>
+                    <td><strong>{{ quiz.score }}</strong></td>
+                    <td>{{ quiz.total_questions }}</td>
+                    <td>
+                        {% set percentage = ((quiz.score / (quiz.total_questions * 10)) * 100)|round(1) %}
+                        <span class="badge 
+                        {% if percentage >= 80 %}bg-success
+                        {% elif percentage >= 60 %}bg-warning
+                        {% else %}bg-danger
+                        {% endif %}">
+                            {{ percentage }}%
+                        </span>
+                    </td>
+                    <td>{{ quiz.completed_at.strftime('%Y-%m-%d') }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <i class="bi bi-clipboard-x"></i>
+        <p>No quiz results yet. Take a quiz to see your progress!</p>
+    </div>
+    {% endif %}
 </div>
 
 </div>
 
 <footer>
-<div class="container text-center">
-Developed by <strong>Vortex Team</strong> - Level 10 Students
-</div>
+    <div class="container text-center">
+        <p class="mb-1">Developed By <strong>Vortex Team</strong> 💜</p>
+        <p class="mb-0">🎓 University College Of Ranyah - Computer Science - Level 10 🎓</p>
+    </div>
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>

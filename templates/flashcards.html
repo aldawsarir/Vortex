@@ -1,74 +1,453 @@
 <!DOCTYPE html>
-<html lang="{{ current_lang }}" {% if current_lang == 'ar' %}dir="rtl"{% endif %}>
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Vortex - {{ t('flashcards') }}</title>
-
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
-
-<style>
-body.light-mode{background:#f0f8ff;color:#333;}
-body.dark-mode{background:#1e1e2f;color:#f0f0f0;}
-
-.progress-container{position:sticky;top:0;z-index:1000;background:inherit;padding:20px 0;margin-bottom:30px;}
-
-.progress{height:35px;border-radius:20px;background:rgba(0,0,0,0.1);overflow:hidden;}
-.progress-bar{background:linear-gradient(90deg,#667eea 0%,#764ba2 100%);border-radius:20px;font-weight:700;font-size:1rem;}
-
-.flashcard-container{perspective:1500px;width:100%;max-width:700px;height:450px;margin:0 auto 40px;cursor:pointer;}
-.flashcard{width:100%;height:100%;position:relative;transition:transform .6s;transform-style:preserve-3d;}
-.flashcard.flipped{transform:rotateY(180deg);}
-
-.flashcard-face{
-position:absolute;width:100%;height:100%;
-backface-visibility:hidden;border-radius:25px;
-display:flex;flex-direction:column;
-align-items:center;justify-content:center;
-padding:40px;box-shadow:0 10px 40px rgba(0,0,0,.2);
-}
-
-.flashcard-front{background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:white;}
-.flashcard-back{background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);color:white;transform:rotateY(180deg);}
-
-.flashcard-label{font-size:1rem;font-weight:600;margin-bottom:20px;text-transform:uppercase;letter-spacing:2px;}
-.flashcard-text{font-size:2rem;font-weight:700;text-align:center;}
-
-.flashcard-hint{position:absolute;bottom:30px;font-size:.9rem;opacity:.8;}
-
-.action-buttons{display:flex;gap:20px;justify-content:center;margin-bottom:30px;}
-
-.btn-know{
-background:linear-gradient(135deg,#43e97b 0%,#38f9d7 100%);
-color:white;border:none;padding:15px 40px;
-border-radius:15px;font-weight:700;
-}
-
-.btn-dont-know{
-background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);
-color:white;border:none;padding:15px 40px;
-border-radius:15px;font-weight:700;
-}
-
-.card-counter{text-align:center;font-size:1.2rem;font-weight:600;margin-bottom:30px;}
-
-.results-container{display:none;text-align:center;padding:50px 20px;}
-.results-container.show{display:block;}
-
-.score-circle{
-width:250px;height:250px;border-radius:50%;
-background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);
-display:flex;flex-direction:column;
-align-items:center;justify-content:center;
-margin:0 auto 40px;
-}
-
-.score-number{font-size:4rem;font-weight:900;color:white;}
-.score-label{font-size:1.2rem;color:white;}
-
-footer{background:#1f2d3d;color:#ddd;padding:30px 0;margin-top:80px;text-align:center;}
-body.dark-mode footer{background:#111;}
-</style>
+    <meta charset="UTF-8">
+    <title>Vortex - Flashcards</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <style>
+        /* ========================================
+           Flashcards - Pastel Illustration Theme
+           ======================================== */
+        
+        :root {
+            --bg-lavender: #E8D5F2;
+            --bg-purple: #C4A7D7;
+            --teal: #5DBAA4;
+            --teal-light: #7DD3BD;
+            --yellow: #FFD166;
+            --pink: #FFB3BA;
+            --coral: #FF9AA2;
+            --blue: #6BA3C8;
+            --navy: #4A6FA5;
+            --text: #2C2C54;
+        }
+        
+        * {
+            font-family: 'Poppins', 'Cairo', sans-serif;
+        }
+        
+        body.light-mode { 
+            background: linear-gradient(135deg, var(--bg-lavender) 0%, var(--bg-purple) 100%);
+            color: var(--text);
+            min-height: 100vh;
+        }
+        
+        body.dark-mode { 
+            background: linear-gradient(135deg, #4A3A5C 0%, #2C1E3F 100%);
+            color: #f0f0f0;
+        }
+        
+        /* Progress Container */
+        .progress-container {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: linear-gradient(135deg, var(--bg-lavender) 0%, var(--bg-purple) 100%);
+            padding: 25px 0;
+            margin-bottom: 40px;
+            backdrop-filter: blur(10px);
+        }
+        
+        body.dark-mode .progress-container {
+            background: linear-gradient(135deg, #4A3A5C 0%, #2C1E3F 100%);
+        }
+        
+        .progress-container h4 {
+            font-weight: 900;
+            font-size: 2rem;
+            background: linear-gradient(90deg, var(--teal), var(--blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .progress {
+            height: 40px;
+            border-radius: 25px;
+            background: rgba(93, 186, 164, 0.15);
+            overflow: hidden;
+            border: 3px solid rgba(93, 186, 164, 0.3);
+        }
+        
+        .progress-bar {
+            background: linear-gradient(90deg, var(--teal), var(--blue));
+            border-radius: 25px;
+            font-weight: 800;
+            font-size: 1.1rem;
+            transition: width 0.6s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(93, 186, 164, 0.3);
+        }
+        
+        /* Flashcard Container */
+        .flashcard-container {
+            perspective: 1500px;
+            width: 100%;
+            max-width: 750px;
+            height: 500px;
+            margin: 0 auto 50px;
+            cursor: pointer;
+        }
+        
+        .flashcard {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transition: transform 0.6s cubic-bezier(0.4, 0.0, 0.2, 1);
+            transform-style: preserve-3d;
+        }
+        
+        .flashcard.flipped {
+            transform: rotateY(180deg);
+        }
+        
+        .flashcard-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 50px;
+            box-shadow: 0 15px 50px rgba(108, 91, 123, 0.3);
+            transition: all 0.3s ease;
+            border: 5px solid rgba(255, 255, 255, 0.4);
+        }
+        
+        .flashcard-face:hover {
+            box-shadow: 0 20px 60px rgba(108, 91, 123, 0.4);
+            transform: scale(1.02);
+        }
+        
+        .flashcard-front {
+            background: linear-gradient(135deg, var(--teal), var(--blue));
+            color: white;
+        }
+        
+        .flashcard-back {
+            background: linear-gradient(135deg, var(--pink), var(--coral));
+            color: white;
+            transform: rotateY(180deg);
+        }
+        
+        .flashcard-label {
+            font-size: 1.1rem;
+            font-weight: 800;
+            opacity: 0.95;
+            margin-bottom: 25px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            background: rgba(255, 255, 255, 0.25);
+            padding: 10px 25px;
+            border-radius: 15px;
+        }
+        
+        .flashcard-text {
+            font-size: 2.3rem;
+            font-weight: 800;
+            text-align: center;
+            line-height: 1.5;
+            text-shadow: 0 4px 15px rgba(0,0,0,0.15);
+        }
+        
+        .flashcard-hint {
+            position: absolute;
+            bottom: 35px;
+            font-size: 1rem;
+            font-weight: 700;
+            opacity: 0.85;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 8px 20px;
+            border-radius: 20px;
+            animation: pulse-hint 2s ease-in-out infinite;
+        }
+        
+        @keyframes pulse-hint {
+            0%, 100% { opacity: 0.7; }
+            50% { opacity: 1; }
+        }
+        
+        /* Card Counter */
+        .card-counter {
+            text-align: center;
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 35px;
+            color: var(--text);
+        }
+        
+        body.dark-mode .card-counter {
+            color: #f0f0f0;
+        }
+        
+        .card-counter span {
+            background: linear-gradient(90deg, var(--teal), var(--blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 2rem;
+            font-weight: 900;
+        }
+        
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 25px;
+            justify-content: center;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+        
+        .btn-know {
+            background: linear-gradient(135deg, #43e97b, #38f9d7);
+            color: white;
+            border: none;
+            padding: 18px 50px;
+            border-radius: 20px;
+            font-weight: 800;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(67, 233, 123, 0.35);
+            border: 3px solid rgba(255, 255, 255, 0.4);
+        }
+        
+        .btn-know:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 35px rgba(67, 233, 123, 0.5);
+            color: white;
+        }
+        
+        .btn-dont-know {
+            background: linear-gradient(135deg, var(--coral), var(--pink));
+            color: white;
+            border: none;
+            padding: 18px 50px;
+            border-radius: 20px;
+            font-weight: 800;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(255, 154, 162, 0.35);
+            border: 3px solid rgba(255, 255, 255, 0.4);
+        }
+        
+        .btn-dont-know:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 35px rgba(255, 154, 162, 0.5);
+            color: white;
+        }
+        
+        /* Results Section */
+        .results-container {
+            display: none;
+            text-align: center;
+            padding: 60px 20px;
+        }
+        
+        .results-container.show {
+            display: block;
+            animation: fadeIn 0.7s ease;
+        }
+        
+        .results-container h1 {
+            font-size: 3rem;
+            font-weight: 900;
+            background: linear-gradient(90deg, var(--teal), var(--blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 50px;
+        }
+        
+        .score-circle {
+            width: 280px;
+            height: 280px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--teal), var(--blue));
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 50px;
+            box-shadow: 0 20px 60px rgba(93, 186, 164, 0.4);
+            border: 8px solid rgba(255, 255, 255, 0.4);
+            animation: pulse-score 2s ease-in-out infinite;
+        }
+        
+        @keyframes pulse-score {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .score-number {
+            font-size: 5rem;
+            font-weight: 900;
+            color: white;
+            text-shadow: 0 5px 20px rgba(0,0,0,0.2);
+        }
+        
+        .score-label {
+            font-size: 1.4rem;
+            color: white;
+            font-weight: 800;
+            opacity: 0.95;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 25px;
+            margin: 50px 0;
+            max-width: 1000px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .stat-box {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 25px;
+            padding: 35px;
+            box-shadow: 0 8px 25px rgba(108, 91, 123, 0.2);
+            border: 4px solid rgba(255, 255, 255, 0.6);
+            transition: all 0.3s ease;
+        }
+        
+        .stat-box:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 40px rgba(108, 91, 123, 0.3);
+        }
+        
+        body.dark-mode .stat-box {
+            background: rgba(42, 42, 64, 0.95);
+            border-color: rgba(93, 186, 164, 0.3);
+        }
+        
+        .stat-value {
+            font-size: 3rem;
+            font-weight: 900;
+            background: linear-gradient(90deg, var(--teal), var(--blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .stat-label {
+            font-size: 1.1rem;
+            color: var(--text);
+            margin-top: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        body.dark-mode .stat-label {
+            color: #aaa;
+        }
+        
+        /* Buttons */
+        .btn-primary {
+            background: linear-gradient(135deg, var(--teal), var(--blue));
+            border: none;
+            border-radius: 18px;
+            padding: 16px 45px;
+            font-weight: 800;
+            font-size: 1.2rem;
+            box-shadow: 0 8px 25px rgba(93, 186, 164, 0.35);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 35px rgba(93, 186, 164, 0.45);
+        }
+        
+        .btn-secondary {
+            background: linear-gradient(135deg, var(--pink), var(--coral));
+            border: none;
+            border-radius: 18px;
+            padding: 16px 45px;
+            font-weight: 800;
+            font-size: 1.2rem;
+            box-shadow: 0 8px 25px rgba(255, 179, 186, 0.35);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-secondary:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 35px rgba(255, 179, 186, 0.45);
+        }
+        
+        /* Footer */
+        footer {
+            background: linear-gradient(135deg, var(--navy), var(--blue));
+            color: white;
+            padding: 30px 0;
+            margin-top: 80px;
+            text-align: center;
+            box-shadow: 0 -5px 20px rgba(74, 111, 165, 0.3);
+        }
+        
+        footer strong {
+            color: var(--yellow);
+            font-weight: 800;
+        }
+        
+        body.dark-mode footer {
+            background: linear-gradient(135deg, #1a1a2e, #0f0f1e);
+        }
+        
+        .flashcards-section {
+            display: block;
+        }
+        
+        .flashcards-section.hide {
+            display: none;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .flashcard-container {
+                height: 400px;
+            }
+            
+            .flashcard-text {
+                font-size: 1.8rem;
+            }
+            
+            .score-circle {
+                width: 220px;
+                height: 220px;
+            }
+            
+            .score-number {
+                font-size: 3.5rem;
+            }
+            
+            .btn-know, .btn-dont-know {
+                padding: 15px 35px;
+                font-size: 1.1rem;
+                width: 100%;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+    </style>
 </head>
 
 <body class="light-mode">
@@ -77,107 +456,185 @@ body.dark-mode footer{background:#111;}
 
 <div class="container mt-5">
 
+<!-- Progress Bar -->
 <div class="progress-container">
-<h4 class="text-center mb-3">{{ t('flashcards_review') }}</h4>
-<div class="progress">
-<div id="progress-bar" class="progress-bar" style="width:0%">0%</div>
-</div>
+    <h4 class="text-center mb-3">
+        🎴 Flashcards Review
+    </h4>
+    <div class="progress">
+        <div id="progress-bar" class="progress-bar" role="progressbar" style="width: 0%">0%</div>
+    </div>
 </div>
 
+<!-- Flashcards Section -->
 <div class="flashcards-section" id="flashcards-section">
 
-<div class="card-counter">
-{{ t('card') }} <span id="current-card">1</span>
-{{ t('of') }}
-<span id="total-cards">{{ quiz|length }}</span>
+    <div class="card-counter">
+        Card <span id="current-card">1</span> of <span id="total-cards">{{ quiz|length }}</span>
+    </div>
+
+    <div class="flashcard-container" id="flashcard-container">
+        <div class="flashcard" id="flashcard">
+            <!-- Front Face -->
+            <div class="flashcard-face flashcard-front">
+                <div class="flashcard-label">❓ Question</div>
+                <div class="flashcard-text" id="question-text"></div>
+                <div class="flashcard-hint">
+                    <i class="bi bi-arrow-repeat"></i> Click to flip
+                </div>
+            </div>
+            <!-- Back Face -->
+            <div class="flashcard-face flashcard-back">
+                <div class="flashcard-label">✅ Answer</div>
+                <div class="flashcard-text" id="answer-text"></div>
+                <div class="flashcard-hint">
+                    <i class="bi bi-arrow-repeat"></i> Click to flip back
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="action-buttons">
+        <button class="btn btn-dont-know" id="btn-dont-know">
+            <i class="bi bi-x-circle-fill"></i> I Don't Know
+        </button>
+        <button class="btn btn-know" id="btn-know">
+            <i class="bi bi-check-circle-fill"></i> I Know It
+        </button>
+    </div>
 </div>
 
-<div class="flashcard-container" id="flashcard-container">
-<div class="flashcard" id="flashcard">
-
-<div class="flashcard-face flashcard-front">
-<div class="flashcard-label">{{ t('question') }}</div>
-<div class="flashcard-text" id="question-text"></div>
-<div class="flashcard-hint">{{ t('click_flip') }}</div>
-</div>
-
-<div class="flashcard-face flashcard-back">
-<div class="flashcard-label">{{ t('answer') }}</div>
-<div class="flashcard-text" id="answer-text"></div>
-<div class="flashcard-hint">{{ t('click_flip_back') }}</div>
-</div>
-
-</div>
-</div>
-
-<div class="action-buttons">
-<button class="btn btn-dont-know" id="btn-dont-know">
-<i class="bi bi-x-circle"></i> {{ t('dont_know') }}
-</button>
-
-<button class="btn btn-know" id="btn-know">
-<i class="bi bi-check-circle"></i> {{ t('know_it') }}
-</button>
-</div>
-
-</div>
-
+<!-- Results Section -->
 <div class="results-container" id="results-section">
 
-<h1 class="mb-4">{{ t('final_results') }}</h1>
+    <h1>🎉 Final Results</h1>
 
-<div class="score-circle">
-<div class="score-number" id="final-score">0</div>
-<div class="score-label">{{ t('points') }}</div>
-</div>
+    <div class="score-circle">
+        <div class="score-number" id="final-score">0</div>
+        <div class="score-label">Points</div>
+    </div>
 
-<div class="mt-5">
-<a href="{{ url_for('quiz_page') }}" class="btn btn-primary btn-lg me-3">
-{{ t('go_quiz') }}
-</a>
-<a href="{{ url_for('home') }}" class="btn btn-secondary btn-lg">
-{{ t('home') }}
-</a>
-</div>
+    <div class="stats-grid">
+        <div class="stat-box">
+            <div class="stat-value" id="known-count">0</div>
+            <div class="stat-label">✅ Known</div>
+        </div>
 
+        <div class="stat-box">
+            <div class="stat-value" id="unknown-count">0</div>
+            <div class="stat-label">❌ Unknown</div>
+        </div>
+
+        <div class="stat-box">
+            <div class="stat-value" id="accuracy">0%</div>
+            <div class="stat-label">📊 Success Rate</div>
+        </div>
+
+        <div class="stat-box">
+            <div class="stat-value" id="total-cards-result">0</div>
+            <div class="stat-label">🎴 Total Cards</div>
+        </div>
+    </div>
+
+    <div class="mt-5">
+        <a href="{{ url_for('quiz_page') }}" class="btn btn-primary btn-lg me-3">
+            <i class="bi bi-card-checklist"></i> Go to Quiz
+        </a>
+        <a href="{{ url_for('home') }}" class="btn btn-secondary btn-lg">
+            <i class="bi bi-house-door-fill"></i> Home
+        </a>
+    </div>
 </div>
 
 </div>
 
 <footer>
-<div class="container text-center">
-{{ t('developed_by') }} <strong>{{ t('team_name') }}</strong>
-</div>
+    <div class="container text-center">
+        <p class="mb-1">Developed By <strong>Vortex Team</strong> 💜</p>
+        <p class="mb-0">🎓 University College Of Ranyah - Computer Science - Level 10 🎓</p>
+    </div>
 </footer>
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <script>
 const quizData = {{ quiz|tojson }};
-let currentIndex=0,known=0,unknown=0,total=quizData.length;
+let currentIndex = 0;
+let knownCount = 0;
+let unknownCount = 0;
+let totalCards = quizData.length;
 
-const flashcard=document.getElementById('flashcard');
-const q=document.getElementById('question-text');
-const a=document.getElementById('answer-text');
-const progress=document.getElementById('progress-bar');
+const flashcard = document.getElementById('flashcard');
+const flashcardContainer = document.getElementById('flashcard-container');
+const questionText = document.getElementById('question-text');
+const answerText = document.getElementById('answer-text');
+const currentCardEl = document.getElementById('current-card');
+const totalCardsEl = document.getElementById('total-cards');
+const progressBar = document.getElementById('progress-bar');
+const btnKnow = document.getElementById('btn-know');
+const btnDontKnow = document.getElementById('btn-dont-know');
+const flashcardsSection = document.getElementById('flashcards-section');
+const resultsSection = document.getElementById('results-section');
 
-document.getElementById('flashcard-container').onclick=()=>flashcard.classList.toggle('flipped');
+totalCardsEl.textContent = totalCards;
+loadCard(currentIndex);
 
-function load(i){
-if(i>=total){show();return;}
-q.textContent=quizData[i].q;
-a.textContent=quizData[i].a;
-progress.style.width=Math.round(i/total*100)+'%';
+flashcardContainer.addEventListener('click', () => {
+    flashcard.classList.toggle('flipped');
+});
+
+function loadCard(index) {
+    if (index >= totalCards) {
+        showResults();
+        return;
+    }
+
+    const card = quizData[index];
+    questionText.textContent = card.q;
+    answerText.textContent = card.a;
+    currentCardEl.textContent = index + 1;
+
+    flashcard.classList.remove('flipped');
+    updateProgress();
 }
 
-function show(){
-document.getElementById('flashcards-section').style.display='none';
-document.getElementById('results-section').classList.add('show');
-document.getElementById('final-score').textContent=known*10;
+function updateProgress() {
+    const percent = Math.round((currentIndex / totalCards) * 100);
+    progressBar.style.width = percent + '%';
+    progressBar.textContent = percent + '%';
 }
 
-document.getElementById('btn-know').onclick=()=>{known++;load(++currentIndex);}
-document.getElementById('btn-dont-know').onclick=()=>{unknown++;load(++currentIndex);}
+btnKnow.addEventListener('click', () => {
+    knownCount++;
+    nextCard();
+});
 
-load(0);
+btnDontKnow.addEventListener('click', () => {
+    unknownCount++;
+    nextCard();
+});
+
+function nextCard() {
+    currentIndex++;
+    loadCard(currentIndex);
+}
+
+function showResults() {
+    flashcardsSection.classList.add('hide');
+    resultsSection.classList.add('show');
+
+    const score = knownCount * 10;
+    const accuracy = totalCards > 0 ? Math.round((knownCount / totalCards) * 100) : 0;
+
+    document.getElementById('final-score').textContent = score;
+    document.getElementById('known-count').textContent = knownCount;
+    document.getElementById('unknown-count').textContent = unknownCount;
+    document.getElementById('accuracy').textContent = accuracy + '%';
+    document.getElementById('total-cards-result').textContent = totalCards;
+    
+    // Update progress bar to 100%
+    progressBar.style.width = '100%';
+    progressBar.textContent = '100%';
+}
 </script>
 
 </body>

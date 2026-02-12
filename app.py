@@ -14,20 +14,20 @@ from utils.visualize import create_mindmap
 from utils.visualization import create_bar_chart, create_pie_chart, analyze_quiz_performance
 from utils.analytics import calculate_user_stats, generate_performance_report
 from utils.ocr import extract_text_from_image
-from translations import get_translation
 
 # ================= Configuration =================
-ALLOWED_EXTENSIONS = {'pdf', 'docx', 'pptx'}
+ALLOWED_EXTENSIONS = {'pdf', 'docx', 'pptx', 'txt'}
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 UPLOAD_FOLDER = os.path.join(BASE_DIR, 'uploads')
 STATIC_FOLDER = os.path.join(BASE_DIR, 'static')
 TEMPLATES_FOLDER = os.path.join(BASE_DIR, 'templates')
 
 app = Flask(__name__, static_folder=STATIC_FOLDER, template_folder=TEMPLATES_FOLDER)
-app.secret_key = "vortex-secret-key-2026"
+app.secret_key = "vortex-secret-key-2026-pastel-theme"
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///vortex.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max file size
 
 # Initialize extensions
 db.init_app(app)
@@ -47,28 +47,6 @@ with app.app_context():
 def load_user(user_id):
     return User.query.get(int(user_id))
 
-# ================= Language Support =================
-@app.before_request
-def set_language():
-    """Set language from session or default to English"""
-    if 'language' not in session:
-        session['language'] = 'en'
-
-@app.route('/change-language/<lang>')
-def change_language(lang):
-    """Change language"""
-    if lang in ['en', 'ar']:
-        session['language'] = lang
-    return redirect(request.referrer or url_for('home'))
-
-@app.context_processor
-def inject_translation():
-    """Make translation function available in templates"""
-    lang = session.get('language', 'en')
-    def t(key):
-        return get_translation(lang, key)
-    return dict(t=t, current_lang=lang)
-
 # ================= Helper Functions =================
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
@@ -77,9 +55,22 @@ def allowed_file(filename):
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
-        username = request.form.get('username')
-        email = request.form.get('email')
-        password = request.form.get('password')
+        username = request.form.get('username', '').strip()
+        email = request.form.get('email', '').strip()
+        password = request.form.get('password', '')
+        
+        # Validation
+        if not username or not email or not password:
+            flash('All fields are required', 'danger')
+            return redirect(url_for('register'))
+        
+        if len(username) < 3:
+            flash('Username must be at least 3 characters', 'danger')
+            return redirect(url_for('register'))
+        
+        if len(password) < 6:
+            flash('Password must be at least 6 characters', 'danger')
+            return redirect(url_for('register'))
         
         if User.query.filter_by(username=username).first():
             flash('Username already exists', 'danger')
@@ -92,25 +83,33 @@ def register():
         hashed_password = generate_password_hash(password, method='pbkdf2:sha256')
         new_user = User(username=username, email=email, password=hashed_password)
         
-        db.session.add(new_user)
-        db.session.commit()
-        
-        flash('Registration successful! Please login.', 'success')
-        return redirect(url_for('login'))
+        try:
+            db.session.add(new_user)
+            db.session.commit()
+            flash('Registration successful! Please login.', 'success')
+            return redirect(url_for('login'))
+        except Exception as e:
+            db.session.rollback()
+            flash('Registration failed. Please try again.', 'danger')
+            print(f"❌ Registration error: {e}")
     
     return render_template('register.html')
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        username = request.form.get('username')
-        password = request.form.get('password')
+        username = request.form.get('username', '').strip()
+        password = request.form.get('password', '')
+        
+        if not username or not password:
+            flash('Please enter both username and password', 'danger')
+            return redirect(url_for('login'))
         
         user = User.query.filter_by(username=username).first()
         
         if user and check_password_hash(user.password, password):
             login_user(user)
-            flash('Login successful!', 'success')
+            flash(f'Welcome back, {user.username}!', 'success')
             return redirect(url_for('home'))
         else:
             flash('Invalid username or password', 'danger')
@@ -120,8 +119,9 @@ def login():
 @app.route('/logout')
 @login_required
 def logout():
+    username = current_user.username
     logout_user()
-    flash('You have been logged out', 'info')
+    flash(f'Goodbye, {username}! See you soon.', 'info')
     return redirect(url_for('login'))
 
 # ================= Main Routes =================
@@ -152,31 +152,40 @@ def summarize():
     file = request.files.get('file')
     filename_to_save = 'Text Input'
     
-    # قراءة النص من الـ form
+    # Read text from form
     form_text = request.form.get('text', '').strip()
     if form_text:
         text = form_text
         print(f"📝 Text from form: {len(text)} chars")
 
-    # قراءة الملف
+    # Read file
     if file and file.filename:
         filename = secure_filename(file.filename)
         filename_to_save = filename
         
         if not allowed_file(filename):
-            flash("Invalid file type. Allowed: PDF, DOCX, PPTX", 'danger')
+            flash("❌ Invalid file type. Allowed: PDF, DOCX, PPTX, TXT", 'danger')
             return redirect(url_for('home'))
         
         filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-        file.save(filepath)
+        try:
+            file.save(filepath)
+        except Exception as e:
+            flash(f"Error saving file: {str(e)}", 'danger')
+            return redirect(url_for('home'))
+            
         ext = filename.rsplit('.', 1)[1].lower()
-
         print(f"📁 File uploaded: {filename}")
 
         try:
             file_text = ""
             
-            if ext == 'pdf':
+            if ext == 'txt':
+                with open(filepath, 'r', encoding='utf-8') as f:
+                    file_text = f.read()[:5000]
+                print(f"✅ TXT extracted: {len(file_text)} chars")
+            
+            elif ext == 'pdf':
                 import PyPDF2
                 with open(filepath, 'rb') as f:
                     reader = PyPDF2.PdfReader(f)
@@ -228,24 +237,27 @@ def summarize():
             flash(f"Error reading file: {str(e)}", 'danger')
             return redirect(url_for('home'))
     
+    # Validate text
     if not text or len(text.strip()) < 20:
         print("❌ No text or text too short")
-        flash("Please provide text or upload a file with sufficient content", 'warning')
+        flash("⚠️ Please provide text or upload a file with sufficient content (at least 20 characters)", 'warning')
         return redirect(url_for('home'))
 
+    # Limit text length
     if len(text) > 5000:
         text = text[:5000]
-        flash("Text was truncated to 5000 characters for better performance", 'info')
+        flash("ℹ️ Text was truncated to 5000 characters for better performance", 'info')
 
     print(f"📊 Final text length: {len(text)} chars")
 
+    # Process text
     try:
         cleaned_text = preprocess_text(text)
         print(f"✅ Cleaned text: {len(cleaned_text)} chars")
         
         if len(cleaned_text) < 50:
             print("❌ Text too short after cleaning")
-            flash("Text is too short. Please provide more content.", 'warning')
+            flash("⚠️ Text is too short after processing. Please provide more content.", 'warning')
             return redirect(url_for('home'))
         
         summary = summarize_text(cleaned_text)
@@ -253,7 +265,7 @@ def summarize():
         
         if not summary or len(summary.strip()) < 10:
             print("❌ Summary too short")
-            flash("Could not generate summary.", 'warning')
+            flash("⚠️ Could not generate a meaningful summary. Please provide more content.", 'warning')
             return redirect(url_for('home'))
         
         quiz = generate_quiz(summary)
@@ -261,9 +273,10 @@ def summarize():
         
         if not quiz or len(quiz) == 0:
             print("❌ No quiz generated")
-            flash("Could not generate quiz.", 'warning')
+            flash("⚠️ Could not generate quiz questions. Please try different content.", 'warning')
             return redirect(url_for('home'))
         
+        # Save to database
         upload = Upload(
             filename=filename_to_save,
             summary=summary,
@@ -272,10 +285,12 @@ def summarize():
         db.session.add(upload)
         db.session.commit()
         
+        # Save to session
         session['summary'] = summary
         session['quiz'] = quiz
         session['score'] = 0
 
+        # Create mindmap - optimized
         try:
             words = summary.split()
             important_words = [
@@ -296,22 +311,24 @@ def summarize():
             create_mindmap(important_words)
             print(f"✅ Mindmap created with words: {important_words}")
         except Exception as e:
-            print(f"⚠️ Mindmap failed: {e}")
+            print(f"⚠️ Mindmap creation failed: {e}")
         
-        print("🎉 SUCCESS!")
+        print("🎉 SUCCESS! Redirecting to results...")
+        flash('✨ Summary and quiz generated successfully!', 'success')
         return render_template('result.html', summary=summary, quiz=quiz)
         
     except Exception as e:
-        print(f"❌ Error: {str(e)}")
+        print(f"❌ Processing error: {str(e)}")
         import traceback
         traceback.print_exc()
-        flash(f"Error: {str(e)}", 'danger')
+        flash(f"❌ Error processing content: {str(e)}", 'danger')
         return redirect(url_for('home'))
 
 @app.route('/quiz', methods=['GET', 'POST'])
 @login_required
 def quiz_page():
     if 'quiz' not in session:
+        flash('Please generate a summary first', 'warning')
         return redirect(url_for('home'))
     
     quiz = session['quiz']
@@ -322,21 +339,25 @@ def quiz_page():
         for i, q in enumerate(quiz):
             q_type = q.get('type', 'fill_blank')
             
+            # MCQ
             if q_type == 'mcq':
                 user_answer = request.form.get(f'answer_{i}', '').strip()
                 if user_answer.lower() == q['a'].lower():
                     score += 10
             
+            # True/False
             elif q_type == 'true_false':
                 user_answer = request.form.get(f'answer_{i}', '').strip().lower()
                 if user_answer == q['a'].lower():
                     score += 10
             
+            # Fill Blank
             elif q_type == 'fill_blank':
                 user_answer = request.form.get(f'answer_{i}', '').strip()
                 if user_answer.lower() == q['a'].lower():
                     score += 10
             
+            # Matching
             elif q_type == 'matching':
                 correct_matches = 0
                 for j in range(len(q.get('list_a', []))):
@@ -349,23 +370,31 @@ def quiz_page():
                     match_score = int((correct_matches / len(q['list_a'])) * 10)
                     score += match_score
         
-        quiz_result = QuizResult(
-            score=score,
-            total_questions=len(quiz),
-            user_id=current_user.id
-        )
-        db.session.add(quiz_result)
-        
-        current_user.score += score
-        current_user.level = (current_user.score // 100) + 1
-        db.session.commit()
-        
-        session['score'] = score
-        return redirect(url_for('gamification'))
+        # Save quiz result
+        try:
+            quiz_result = QuizResult(
+                score=score,
+                total_questions=len(quiz),
+                user_id=current_user.id
+            )
+            db.session.add(quiz_result)
+            
+            # Update user score
+            current_user.score += score
+            current_user.level = (current_user.score // 100) + 1
+            db.session.commit()
+            
+            session['score'] = score
+            flash(f'🎉 Quiz completed! You scored {score} points!', 'success')
+            return redirect(url_for('gamification'))
+        except Exception as e:
+            db.session.rollback()
+            flash('Error saving quiz results', 'danger')
+            print(f"❌ Quiz save error: {e}")
     
     return render_template('quiz.html', quiz=quiz)
 
-# ================= ✨ FLASHCARDS ROUTES ✨ =================
+# ================= Flashcards Routes =================
 @app.route('/flashcards')
 @login_required
 def flashcards():
@@ -386,18 +415,24 @@ def submit_flashcards():
     total_cards = len(session['quiz'])
     score = known_count * 10
     
-    quiz_result = QuizResult(
-        score=score,
-        total_questions=total_cards,
-        user_id=current_user.id
-    )
-    db.session.add(quiz_result)
+    try:
+        quiz_result = QuizResult(
+            score=score,
+            total_questions=total_cards,
+            user_id=current_user.id
+        )
+        db.session.add(quiz_result)
+        
+        current_user.score += score
+        current_user.level = (current_user.score // 100) + 1
+        db.session.commit()
+        
+        flash(f'🎴 Flashcards completed! You scored {score} points!', 'success')
+    except Exception as e:
+        db.session.rollback()
+        flash('Error saving flashcard results', 'danger')
+        print(f"❌ Flashcard save error: {e}")
     
-    current_user.score += score
-    current_user.level = (current_user.score // 100) + 1
-    db.session.commit()
-    
-    flash(f'Flashcards completed! You scored {score} points!', 'success')
     return redirect(url_for('gamification'))
 
 # ================= Gamification Routes =================
@@ -426,7 +461,10 @@ def share_upload(upload_id):
     if upload.user_id == current_user.id:
         upload.is_shared = not upload.is_shared
         db.session.commit()
-        flash('Upload sharing status updated', 'success')
+        status = 'shared' if upload.is_shared else 'unshared'
+        flash(f'✅ Upload {status} successfully', 'success')
+    else:
+        flash('❌ You can only share your own uploads', 'danger')
     return redirect(url_for('dashboard'))
 
 @app.route('/daily-challenge')
@@ -459,22 +497,30 @@ def quiz_battles():
 def create_battle():
     title = request.form.get('title', 'Quick Battle')
     
-    battle = QuizBattle(title=title)
-    db.session.add(battle)
-    db.session.commit()
-    
-    participant = BattleParticipant(battle_id=battle.id, user_id=current_user.id)
-    db.session.add(participant)
-    db.session.commit()
-    
-    flash('Battle created successfully!', 'success')
-    return redirect(url_for('battle_room', battle_id=battle.id))
+    try:
+        battle = QuizBattle(title=title)
+        db.session.add(battle)
+        db.session.commit()
+        
+        # Add creator as first participant
+        participant = BattleParticipant(battle_id=battle.id, user_id=current_user.id)
+        db.session.add(participant)
+        db.session.commit()
+        
+        flash('⚔️ Battle created successfully!', 'success')
+        return redirect(url_for('battle_room', battle_id=battle.id))
+    except Exception as e:
+        db.session.rollback()
+        flash('Error creating battle', 'danger')
+        print(f"❌ Battle creation error: {e}")
+        return redirect(url_for('quiz_battles'))
 
 @app.route('/battle/<int:battle_id>')
 @login_required
 def battle_room(battle_id):
     battle = QuizBattle.query.get_or_404(battle_id)
     
+    # Check if user is participant
     participant = BattleParticipant.query.filter_by(
         battle_id=battle_id, 
         user_id=current_user.id
@@ -512,6 +558,7 @@ def submit_battle(battle_id):
     
     db.session.commit()
     
+    # Check if all participants completed
     battle = QuizBattle.query.get(battle_id)
     all_completed = all(p.completed for p in battle.participants)
     
@@ -521,7 +568,7 @@ def submit_battle(battle_id):
         battle.status = 'completed'
         db.session.commit()
     
-    flash(f'Battle submitted! Your score: {score}', 'success')
+    flash(f'⚔️ Battle submitted! Your score: {score}', 'success')
     return redirect(url_for('quiz_battles'))
 
 # ================= Puzzle Mode Routes =================
@@ -558,7 +605,7 @@ def submit_puzzle(puzzle_id):
     user_words = user_answer.lower().split()
     
     correct = sum(1 for w in user_words if w in original_words)
-    score = int((correct / len(original_words)) * 100)
+    score = int((correct / len(original_words)) * 100) if original_words else 0
     
     puzzle.score = score
     puzzle.completed = True
@@ -568,7 +615,7 @@ def submit_puzzle(puzzle_id):
     
     db.session.commit()
     
-    flash(f'Puzzle completed! Score: {score}%', 'success')
+    flash(f'🧩 Puzzle completed! Score: {score}%', 'success')
     return redirect(url_for('gamification'))
 
 # ================= Grading Center Routes =================
@@ -595,7 +642,7 @@ def review_upload(upload_id):
     
     if request.method == 'POST':
         rating = int(request.form.get('rating', 3))
-        comment = request.form.get('comment', '')
+        comment = request.form.get('comment', '').strip()
         
         review = Review(
             upload_id=upload_id,
@@ -606,8 +653,8 @@ def review_upload(upload_id):
         db.session.add(review)
         db.session.commit()
         
-        flash('Review submitted successfully!', 'success')
-        return redirect(url_for('shared_library'))
+        flash('⭐ Review submitted successfully!', 'success')
+        return redirect(url_for('review_upload', upload_id=upload_id))
     
     reviews = Review.query.filter_by(upload_id=upload_id).all()
     avg_rating = sum(r.rating for r in reviews) / len(reviews) if reviews else 0
@@ -621,7 +668,7 @@ def review_upload(upload_id):
 @app.route('/search')
 @login_required
 def search():
-    query = request.args.get('q', '')
+    query = request.args.get('q', '').strip()
     
     if not query:
         return render_template('search.html', results=[], query='')
@@ -648,19 +695,7 @@ def export_upload(upload_id, format):
             headers={'Content-Disposition': f'attachment;filename={upload.filename}.txt'}
         )
     
-    elif format == 'pdf':
-        buffer = BytesIO()
-        buffer.write(upload.summary.encode('utf-8'))
-        buffer.seek(0)
-        
-        return send_file(
-            buffer,
-            as_attachment=True,
-            download_name=f'{upload.filename}.txt',
-            mimetype='text/plain'
-        )
-    
-    flash('Export format not supported yet', 'warning')
+    flash('⚠️ Export format not supported yet', 'warning')
     return redirect(url_for('dashboard'))
 
 # ================= Analytics Routes =================
@@ -687,6 +722,7 @@ def visualize_upload(upload_id):
     
     keywords = extract_keywords(upload.summary)
     keyword_freq = {kw: upload.summary.lower().count(kw) for kw in keywords}
+    
     chart_path = create_bar_chart(
         list(keyword_freq.keys()),
         list(keyword_freq.values()),
@@ -698,36 +734,6 @@ def visualize_upload(upload_id):
                          chart=chart_path,
                          keywords=keywords)
 
-# ================= OCR Route =================
-@app.route('/ocr-upload', methods=['POST'])
-@login_required
-def ocr_upload():
-    file = request.files.get('file')
-    
-    if not file:
-        flash('No file uploaded', 'warning')
-        return redirect(url_for('home'))
-    
-    filename = secure_filename(file.filename)
-    filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-    file.save(filepath)
-    
-    text = extract_text_from_image(filepath)
-    
-    if text:
-        flash('Text extracted successfully!', 'success')
-        cleaned_text = preprocess_text(text)
-        summary = summarize_text(cleaned_text)
-        quiz = generate_quiz(summary)
-        
-        session['summary'] = summary
-        session['quiz'] = quiz
-        
-        return render_template('result.html', summary=summary, quiz=quiz)
-    else:
-        flash('Could not extract text from image', 'danger')
-        return redirect(url_for('home'))
-
 # ================= Admin Routes =================
 @app.route('/admin/login', methods=['GET', 'POST'])
 def admin_login():
@@ -737,16 +743,17 @@ def admin_login():
         
         if username == 'admin' and password == 'vortex2026':
             session['is_admin'] = True
-            flash('Admin login successful!', 'success')
-            return redirect(url_for('admin_dashboard'))
+            flash('👨‍💼 Admin login successful!', 'success')
+            return redirect(url_for('admin_panel'))
         else:
-            flash('Invalid admin credentials', 'danger')
+            flash('❌ Invalid admin credentials', 'danger')
     
     return render_template('admin_login.html')
 
-@app.route('/admin/dashboard')
-def admin_dashboard():
+@app.route('/admin/panel')
+def admin_panel():
     if not session.get('is_admin'):
+        flash('❌ Admin access required', 'danger')
         return redirect(url_for('admin_login'))
     
     total_users = User.query.count()
@@ -757,7 +764,7 @@ def admin_dashboard():
     recent_users = User.query.order_by(User.created_at.desc()).limit(10).all()
     recent_uploads = Upload.query.order_by(Upload.uploaded_at.desc()).limit(10).all()
     
-    return render_template('admin_dashboard.html',
+    return render_template('admin_panel.html',
                          total_users=total_users,
                          total_uploads=total_uploads,
                          total_quizzes=total_quizzes,
@@ -768,7 +775,7 @@ def admin_dashboard():
 @app.route('/admin/logout')
 def admin_logout():
     session.pop('is_admin', None)
-    flash('Admin logged out', 'info')
+    flash('👋 Admin logged out', 'info')
     return redirect(url_for('home'))
 
 @app.route('/admin/users')
@@ -785,6 +792,7 @@ def admin_delete_user(user_id):
         return redirect(url_for('admin_login'))
     
     user = User.query.get_or_404(user_id)
+    username = user.username
     
     Upload.query.filter_by(user_id=user_id).delete()
     QuizResult.query.filter_by(user_id=user_id).delete()
@@ -792,13 +800,36 @@ def admin_delete_user(user_id):
     db.session.delete(user)
     db.session.commit()
     
-    flash(f'User {user.username} deleted successfully', 'success')
+    flash(f'✅ User {username} deleted successfully', 'success')
     return redirect(url_for('admin_users'))
+
+# ================= Error Handlers =================
+@app.errorhandler(404)
+def not_found_error(error):
+    return render_template('404.html'), 404
+
+@app.errorhandler(500)
+def internal_error(error):
+    db.session.rollback()
+    return render_template('500.html'), 500
 
 # ================= Run Server =================
 if __name__ == '__main__':
-    print("🚀 Vortex is running...")
-    print("📚 Flashcards feature enabled!")
-    print("✨ File processing optimized!")
-    print("🌍 Arabic/English language support enabled!")
+    print("=" * 60)
+    print("🚀 VORTEX - AI-Powered Learning Platform")
+    print("=" * 60)
+    print("✨ Pastel Illustration Theme Enabled")
+    print("📚 All Features Active:")
+    print("   • Smart Summarization")
+    print("   • Interactive Quizzes")
+    print("   • Flashcards System")
+    print("   • Gamification")
+    print("   • Quiz Battles")
+    print("   • Analytics Dashboard")
+    print("   • Shared Library")
+    print("   • Admin Panel")
+    print("=" * 60)
+    print("🌐 Server running on: http://localhost:5000")
+    print("💜 Developed by Vortex Team - Level 10")
+    print("=" * 60)
     app.run(host="0.0.0.0", port=5000, debug=True)

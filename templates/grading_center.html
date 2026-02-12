@@ -3,42 +3,343 @@
 <head>
     <meta charset="UTF-8">
     <title>Vortex - Grading Center</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     
     <style>
-        body.light-mode { background: #f5f5f5; color: #333; }
-        body.dark-mode { background: #1e1e2f; color: #f0f0f0; }
+        /* ========================================
+           Grading Center - Pastel Illustration Theme
+           ======================================== */
         
-        .card { border-radius: 18px; margin-bottom: 20px; }
-        body.dark-mode .card { background: #2a2a40; color: #f0f0f0; }
+        :root {
+            --bg-lavender: #E8D5F2;
+            --bg-purple: #C4A7D7;
+            --teal: #5DBAA4;
+            --teal-light: #7DD3BD;
+            --yellow: #FFD166;
+            --pink: #FFB3BA;
+            --coral: #FF9AA2;
+            --blue: #6BA3C8;
+            --navy: #4A6FA5;
+            --text: #2C2C54;
+        }
         
+        * {
+            font-family: 'Poppins', 'Cairo', sans-serif;
+        }
+        
+        body.light-mode { 
+            background: linear-gradient(135deg, var(--bg-lavender) 0%, var(--bg-purple) 100%);
+            color: var(--text);
+            min-height: 100vh;
+        }
+        
+        body.dark-mode { 
+            background: linear-gradient(135deg, #4A3A5C 0%, #2C1E3F 100%);
+            color: #f0f0f0;
+        }
+        
+        .container {
+            padding-top: 40px;
+            padding-bottom: 40px;
+        }
+        
+        h1 {
+            font-size: 3rem;
+            font-weight: 900;
+            background: linear-gradient(90deg, var(--teal), var(--blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 40px;
+            position: relative;
+            padding-left: 60px;
+        }
+        
+        h1::before {
+            content: '📊';
+            position: absolute;
+            left: 0;
+            font-size: 3rem;
+        }
+        
+        .card { 
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 25px;
+            border: 4px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 10px 35px rgba(108, 91, 123, 0.2);
+            margin-bottom: 30px;
+            transition: all 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 45px rgba(108, 91, 123, 0.3);
+        }
+        
+        body.dark-mode .card { 
+            background: rgba(42, 42, 64, 0.95);
+            border-color: rgba(93, 186, 164, 0.3);
+            color: #f0f0f0;
+        }
+        
+        .card h5 {
+            background: linear-gradient(90deg, var(--teal), var(--blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
+            font-size: 1.6rem;
+            margin-bottom: 30px;
+        }
+        
+        /* Stat Cards */
         .stat-card {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, var(--teal), var(--blue));
             color: white;
-            padding: 30px;
-            border-radius: 18px;
+            padding: 35px 25px;
+            border-radius: 25px;
             text-align: center;
+            box-shadow: 0 10px 30px rgba(93, 186, 164, 0.3);
+            transition: all 0.3s ease;
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%);
+            animation: pulse 3s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 15px 40px rgba(93, 186, 164, 0.4);
+        }
+        
+        .stat-card:nth-child(2) {
+            background: linear-gradient(135deg, var(--pink), var(--coral));
+            box-shadow: 0 10px 30px rgba(255, 179, 186, 0.3);
+        }
+        
+        .stat-card:nth-child(3) {
+            background: linear-gradient(135deg, var(--yellow), #F4C542);
+            box-shadow: 0 10px 30px rgba(255, 209, 102, 0.3);
+        }
+        
+        .stat-card h6 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            opacity: 0.95;
+            position: relative;
+            z-index: 1;
         }
         
         .stat-number {
-            font-size: 3rem;
+            font-size: 3.5rem;
+            font-weight: 900;
+            text-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Table */
+        .table {
+            border-radius: 15px;
+            overflow: hidden;
+        }
+        
+        .table thead {
+            background: linear-gradient(135deg, var(--teal), var(--blue));
+            color: white;
+        }
+        
+        .table thead th {
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.95rem;
+            letter-spacing: 0.5px;
+            padding: 18px;
+            border: none;
+        }
+        
+        .table tbody tr {
+            transition: all 0.3s ease;
+            border-bottom: 1px solid rgba(93, 186, 164, 0.1);
+        }
+        
+        .table tbody tr:hover {
+            background: rgba(93, 186, 164, 0.08);
+            transform: scale(1.01);
+        }
+        
+        .table tbody td {
+            padding: 18px;
+            vertical-align: middle;
+        }
+        
+        body.dark-mode .table {
+            color: #f0f0f0;
+        }
+        
+        body.dark-mode .table tbody tr {
+            border-bottom-color: rgba(93, 186, 164, 0.2);
+        }
+        
+        body.dark-mode .table tbody tr:hover {
+            background: rgba(93, 186, 164, 0.15);
+        }
+        
+        /* Progress Bars */
+        .progress {
+            height: 32px;
+            border-radius: 15px;
+            background: rgba(93, 186, 164, 0.15);
+            overflow: hidden;
+        }
+        
+        .progress-bar {
+            font-weight: 800;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 15px;
+            transition: width 0.6s ease;
+        }
+        
+        .bg-success {
+            background: linear-gradient(90deg, #43e97b, #38f9d7) !important;
+        }
+        
+        .bg-warning {
+            background: linear-gradient(90deg, var(--yellow), #F4C542) !important;
+            color: var(--text) !important;
+        }
+        
+        .bg-danger {
+            background: linear-gradient(90deg, var(--coral), var(--pink)) !important;
+        }
+        
+        /* Grade Badges */
+        .grade-badge {
+            font-size: 1.3rem;
+            font-weight: 900;
+            padding: 12px 24px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+        }
+        
+        .bg-primary {
+            background: linear-gradient(135deg, var(--teal), var(--blue)) !important;
+        }
+        
+        .bg-info {
+            background: linear-gradient(135deg, #4facfe, #00f2fe) !important;
+        }
+        
+        /* Empty State */
+        .empty-state {
+            padding: 80px 30px;
+            text-align: center;
+        }
+        
+        .empty-state i {
+            font-size: 6rem;
+            background: linear-gradient(135deg, var(--pink), var(--coral));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 25px;
+        }
+        
+        .empty-state h5 {
+            color: var(--text);
+            font-weight: 800;
+            margin: 20px 0 15px;
+        }
+        
+        body.dark-mode .empty-state h5 {
+            color: var(--teal-light);
+        }
+        
+        /* Chart Container */
+        #performanceChart {
+            max-height: 400px;
+        }
+        
+        /* Button */
+        .btn-primary {
+            background: linear-gradient(135deg, var(--teal), var(--blue));
+            border: none;
+            border-radius: 18px;
+            padding: 14px 35px;
+            font-weight: 800;
+            font-size: 1.1rem;
+            box-shadow: 0 8px 25px rgba(93, 186, 164, 0.35);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(93, 186, 164, 0.45);
+        }
+        
+        /* Footer */
+        footer { 
+            background: linear-gradient(135deg, var(--navy), var(--blue));
+            color: white;
+            padding: 30px 0;
+            margin-top: 80px;
+            text-align: center;
+            box-shadow: 0 -5px 20px rgba(74, 111, 165, 0.3);
+        }
+        
+        footer strong {
+            color: var(--yellow);
             font-weight: 800;
         }
         
-        .grade-badge {
-            font-size: 1.2rem;
-            padding: 10px 20px;
+        body.dark-mode footer { 
+            background: linear-gradient(135deg, #1a1a2e, #0f0f1e);
         }
         
-        footer { 
-            background: #1f2d3d; 
-            color: #ddd; 
-            padding: 25px 0; 
-            margin-top: 80px; 
-            text-align: center; 
+        /* Responsive */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.2rem;
+                padding-left: 50px;
+            }
+            
+            h1::before {
+                font-size: 2.2rem;
+            }
+            
+            .stat-card {
+                margin-bottom: 20px;
+            }
+            
+            .stat-number {
+                font-size: 2.8rem;
+            }
+            
+            .grade-badge {
+                font-size: 1.1rem;
+                padding: 10px 20px;
+            }
         }
-        body.dark-mode footer { background: #111; }
     </style>
 </head>
 
@@ -47,26 +348,27 @@
 {% include 'navbar.html' %}
 
 <div class="container mt-5">
-    <h1 class="mb-4">Grading Center</h1>
+    <h1>Grading Center</h1>
 
-    <div class="row mb-4">
-        <div class="col-md-4">
+    <!-- Stats Row -->
+    <div class="row mb-5">
+        <div class="col-md-4 mb-3">
             <div class="stat-card shadow">
-                <h6>Total Quizzes</h6>
+                <h6>📚 Total Quizzes</h6>
                 <div class="stat-number">{{ total_quizzes }}</div>
             </div>
         </div>
 
-        <div class="col-md-4">
+        <div class="col-md-4 mb-3">
             <div class="stat-card shadow">
-                <h6>Average Score</h6>
+                <h6>📈 Average Score</h6>
                 <div class="stat-number">{{ avg_score|round(1) }}%</div>
             </div>
         </div>
 
-        <div class="col-md-4">
+        <div class="col-md-4 mb-3">
             <div class="stat-card shadow">
-                <h6>Grade</h6>
+                <h6>🏆 Grade</h6>
                 <div class="stat-number">
                     {% if avg_score >= 90 %}A+
                     {% elif avg_score >= 80 %}A
@@ -79,32 +381,35 @@
         </div>
     </div>
 
-    <div class="card shadow p-4">
-        <h5 class="mb-4">Quiz History</h5>
+    <!-- Quiz History Table -->
+    <div class="card shadow p-5">
+        <h5>
+            <i class="bi bi-clock-history"></i> Quiz History
+        </h5>
 
         {% if results %}
         <div class="table-responsive">
             <table class="table table-hover">
-                <thead class="table-dark">
+                <thead>
                     <tr>
                         <th>#</th>
-                        <th>Date</th>
-                        <th>Score</th>
-                        <th>Total Questions</th>
-                        <th>Percentage</th>
-                        <th>Grade</th>
+                        <th>📅 Date</th>
+                        <th>⭐ Score</th>
+                        <th>❓ Questions</th>
+                        <th>📊 Percentage</th>
+                        <th>🎯 Grade</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for result in results %}
                     {% set percentage = ((result.score / (result.total_questions * 10)) * 100)|round(1) %}
                     <tr>
-                        <td>{{ loop.index }}</td>
+                        <td><strong>{{ loop.index }}</strong></td>
                         <td>{{ result.completed_at.strftime('%Y-%m-%d %H:%M') }}</td>
-                        <td>{{ result.score }}</td>
+                        <td><strong>{{ result.score }}</strong></td>
                         <td>{{ result.total_questions }}</td>
                         <td>
-                            <div class="progress" style="height: 25px;">
+                            <div class="progress">
                                 <div class="progress-bar 
                                     {% if percentage >= 80 %}bg-success
                                     {% elif percentage >= 60 %}bg-warning
@@ -138,31 +443,39 @@
             </table>
         </div>
         {% else %}
-        <div class="text-center p-5">
-            <i class="bi bi-clipboard-x" style="font-size: 4rem; color: #ccc;"></i>
-            <h5 class="mt-3">No Quiz Results Yet</h5>
-            <p class="text-muted">Take a quiz to see your grades here.</p>
+        <div class="empty-state">
+            <i class="bi bi-clipboard-x"></i>
+            <h5>No Quiz Results Yet</h5>
+            <p class="text-muted" style="font-size: 1.1rem;">Take a quiz to see your grades here and track your progress!</p>
             <a href="{{ url_for('home') }}" class="btn btn-primary mt-3">
-                Start Learning
+                <i class="bi bi-rocket-takeoff"></i> Start Learning
             </a>
         </div>
         {% endif %}
     </div>
 
-    <div class="card shadow p-4 mt-4">
-        <h5 class="mb-3">Performance Trend</h5>
+    <!-- Performance Chart -->
+    {% if results %}
+    <div class="card shadow p-5 mt-4">
+        <h5>
+            <i class="bi bi-graph-up-arrow"></i> Performance Trend
+        </h5>
         <canvas id="performanceChart"></canvas>
     </div>
+    {% endif %}
 </div>
 
 <footer>
     <div class="container text-center">
-        Developed by <strong>Vortex Team</strong> - Level 10 Students
+        <p class="mb-1">Developed By <strong>Vortex Team</strong> 💜</p>
+        <p class="mb-0">🎓 University College Of Ranyah - Computer Science - Level 10 🎓</p>
     </div>
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+{% if results %}
 <script>
 const ctx = document.getElementById('performanceChart').getContext('2d');
 
@@ -185,29 +498,81 @@ new Chart(ctx, {
         datasets: [{
             label: 'Quiz Scores (%)',
             data: data,
-            borderColor: '#6C63FF',
-            backgroundColor: 'rgba(108, 99, 255, 0.1)',
+            borderColor: '#5DBAA4',
+            backgroundColor: 'rgba(93, 186, 164, 0.15)',
+            borderWidth: 3,
             tension: 0.4,
-            fill: true
+            fill: true,
+            pointBackgroundColor: '#5DBAA4',
+            pointBorderColor: '#fff',
+            pointBorderWidth: 3,
+            pointRadius: 6,
+            pointHoverRadius: 8
         }]
     },
     options: {
         responsive: true,
+        maintainAspectRatio: true,
         plugins: {
             legend: {
                 display: true,
-                position: 'top'
+                position: 'top',
+                labels: {
+                    font: {
+                        size: 14,
+                        weight: '700',
+                        family: 'Poppins'
+                    },
+                    color: '#2C2C54',
+                    padding: 20
+                }
+            },
+            tooltip: {
+                backgroundColor: 'rgba(93, 186, 164, 0.95)',
+                titleFont: {
+                    size: 14,
+                    weight: '700'
+                },
+                bodyFont: {
+                    size: 13
+                },
+                padding: 12,
+                borderColor: '#5DBAA4',
+                borderWidth: 2
             }
         },
         scales: {
             y: {
                 beginAtZero: true,
-                max: 100
+                max: 100,
+                ticks: {
+                    font: {
+                        size: 12,
+                        weight: '600'
+                    },
+                    color: '#6C5B7B'
+                },
+                grid: {
+                    color: 'rgba(93, 186, 164, 0.1)'
+                }
+            },
+            x: {
+                ticks: {
+                    font: {
+                        size: 12,
+                        weight: '600'
+                    },
+                    color: '#6C5B7B'
+                },
+                grid: {
+                    color: 'rgba(93, 186, 164, 0.1)'
+                }
             }
         }
     }
 });
 </script>
+{% endif %}
 
 </body>
 </html>

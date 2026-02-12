@@ -1,89 +1,337 @@
 <!DOCTYPE html>
-<html lang="{{ current_lang }}" {% if current_lang == 'ar' %}dir="rtl"{% endif %}>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Vortex | Smart Learning</title>
 
     <!-- PWA Manifest -->
     <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
-    <meta name="theme-color" content="#000000">
+    <meta name="theme-color" content="#5DBAA4">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     
     <style>
-        body.light-mode { background: #f0f8ff; color: #333; transition: all 0.3s ease; }
-        body.dark-mode { background: #1e1e2f; color: #f0f0f0; transition: all 0.3s ease; }
+        /* ========================================
+           Vortex - Pastel Illustration Theme
+           Inspired by Study Illustrations
+           ======================================== */
         
-        .hero { padding: 80px 0; }
-        .hero-title { font-size: 3.2rem; font-weight: 800; color: #1f2d3d; }
-        .hero-title span { 
-            background: linear-gradient(90deg, #1abc9c, #3498db); 
-            -webkit-background-clip: text; 
-            -webkit-text-fill-color: transparent; 
+        :root {
+            --bg-lavender: #E8D5F2;
+            --bg-purple: #C4A7D7;
+            --teal: #5DBAA4;
+            --teal-light: #7DD3BD;
+            --yellow: #FFD166;
+            --pink: #FFB3BA;
+            --coral: #FF9AA2;
+            --blue: #6BA3C8;
+            --navy: #4A6FA5;
+            --white: #FFFFFF;
+            --text: #2C2C54;
+            --text-light: #6C5B7B;
         }
+        
+        * {
+            font-family: 'Poppins', 'Cairo', sans-serif;
+        }
+        
+        body.light-mode { 
+            background: linear-gradient(135deg, var(--bg-lavender) 0%, var(--bg-purple) 100%);
+            color: var(--text);
+            transition: all 0.3s ease;
+            min-height: 100vh;
+        }
+        
+        body.dark-mode { 
+            background: linear-gradient(135deg, #4A3A5C 0%, #2C1E3F 100%);
+            color: #f0f0f0;
+            transition: all 0.3s ease;
+        }
+        
+        /* Hero Section */
+        .hero { 
+            padding: 80px 0;
+            position: relative;
+        }
+        
+        .hero-title { 
+            font-size: 3.5rem; 
+            font-weight: 900; 
+            color: var(--text);
+            line-height: 1.2;
+            margin-bottom: 25px;
+        }
+        
+        .hero-title span { 
+            background: linear-gradient(90deg, var(--teal), var(--blue)); 
+            -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent;
+            position: relative;
+        }
+        
+        .hero-title span::after {
+            content: '💡';
+            position: absolute;
+            top: -30px;
+            right: -40px;
+            font-size: 2rem;
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+        }
+        
         body.dark-mode .hero-title { color: #f0f0f0; }
         
-        .hero-text { font-size: 1.2rem; color: #555; margin-top: 20px; }
+        .hero-text { 
+            font-size: 1.25rem; 
+            color: var(--text-light);
+            margin-top: 20px;
+            line-height: 1.8;
+        }
+        
         body.dark-mode .hero-text { color: #ddd; }
         
         .hero-img { 
             max-width: 100%; 
-            border-radius: 20px; 
-            box-shadow: 0 20px 40px rgba(0,0,0,0.15); 
-            transition: transform 0.3s ease;
+            border-radius: 30px;
+            box-shadow: 0 20px 50px rgba(108, 91, 123, 0.3);
+            transition: all 0.4s ease;
+            border: 5px solid rgba(255, 255, 255, 0.5);
         }
         
-        .card { border-radius: 18px; }
-        body.dark-mode .card { background: #2a2a40; color: #f0f0f0; }
-        
-        .form-label {
-            font-weight: 600;
+        .hero-img:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 30px 60px rgba(108, 91, 123, 0.4);
         }
         
-        body.dark-mode .form-control {
-            background: #1e1e2f;
-            border-color: #444;
+        /* Cards */
+        .card { 
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 25px;
+            border: 4px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 10px 35px rgba(108, 91, 123, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 45px rgba(108, 91, 123, 0.3);
+        }
+        
+        body.dark-mode .card { 
+            background: rgba(42, 42, 64, 0.95);
+            border-color: rgba(93, 186, 164, 0.3);
             color: #f0f0f0;
         }
         
-        .btn-vortex { 
-            background: linear-gradient(90deg, #1abc9c, #3498db); 
-            color: #fff; 
-            border: none; 
-            font-size: 1.1rem; 
-            font-weight: 600;
-            padding: 12px 30px;
-            border-radius: 12px;
-            transition: all 0.3s ease;
+        .card h4 {
+            background: linear-gradient(90deg, var(--teal), var(--blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
+            position: relative;
+            padding-left: 35px;
         }
-        .btn-vortex:hover { 
-            opacity: 0.9; 
-            color: white;
+        
+        .card h4::before {
+            content: '📚';
+            position: absolute;
+            left: 0;
+            font-size: 1.5rem;
+        }
+        
+        /* Form Elements */
+        .form-label {
+            font-weight: 700;
+            color: var(--teal);
+            margin-bottom: 12px;
+            font-size: 1.05rem;
+        }
+        
+        body.dark-mode .form-label {
+            color: var(--teal-light);
+        }
+        
+        .form-control {
+            border: 3px solid rgba(93, 186, 164, 0.3);
+            border-radius: 18px;
+            padding: 15px 20px;
+            background: rgba(255, 255, 255, 0.9);
+            transition: all 0.3s ease;
+            font-size: 1rem;
+        }
+        
+        .form-control:focus {
+            border-color: var(--teal);
+            box-shadow: 0 0 0 0.25rem rgba(93, 186, 164, 0.25);
+            background: white;
             transform: translateY(-2px);
         }
         
-        footer { 
-            background: #1f2d3d; 
-            color: #ddd; 
-            padding: 25px 0; 
-            margin-top: 80px; 
-            text-align: center; 
+        body.dark-mode .form-control {
+            background: rgba(30, 30, 47, 0.9);
+            border-color: rgba(93, 186, 164, 0.4);
+            color: #f0f0f0;
         }
-        body.dark-mode footer { background: #111; color: #eee; }
+        
+        textarea.form-control {
+            resize: vertical;
+        }
+        
+        /* Buttons */
+        .btn-vortex { 
+            background: linear-gradient(135deg, var(--teal), var(--teal-light));
+            color: white;
+            border: none;
+            font-size: 1.2rem;
+            font-weight: 800;
+            padding: 16px 35px;
+            border-radius: 18px;
+            box-shadow: 0 8px 25px rgba(93, 186, 164, 0.35);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn-vortex::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.2);
+            transition: left 0.5s ease;
+        }
+        
+        .btn-vortex:hover::before {
+            left: 100%;
+        }
+        
+        .btn-vortex:hover { 
+            transform: translateY(-4px);
+            box-shadow: 0 12px 35px rgba(93, 186, 164, 0.45);
+            color: white;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--teal), var(--blue));
+            border: none;
+            border-radius: 15px;
+            padding: 12px 30px;
+            font-weight: 700;
+            box-shadow: 0 5px 15px rgba(93, 186, 164, 0.3);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(93, 186, 164, 0.4);
+        }
+        
+        .btn-outline-primary {
+            border: 3px solid var(--teal);
+            color: var(--teal);
+            border-radius: 15px;
+            padding: 12px 30px;
+            font-weight: 700;
+            background: transparent;
+        }
+        
+        .btn-outline-primary:hover {
+            background: linear-gradient(135deg, var(--teal), var(--blue));
+            border-color: transparent;
+            color: white;
+            transform: translateY(-3px);
+        }
+        
+        /* Locked Section */
+        .locked-section {
+            position: relative;
+            padding: 60px 30px;
+        }
+        
+        .locked-section i {
+            font-size: 5rem;
+            background: linear-gradient(135deg, var(--pink), var(--coral));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        
+        .locked-section h4 {
+            color: var(--text);
+            font-weight: 800;
+            margin-top: 25px;
+        }
+        
+        /* Footer */
+        footer { 
+            background: linear-gradient(135deg, var(--navy), var(--blue));
+            color: white;
+            padding: 30px 0;
+            margin-top: 80px;
+            text-align: center;
+            box-shadow: 0 -5px 20px rgba(74, 111, 165, 0.3);
+        }
         
         footer strong {
-            color: #1abc9c;
+            color: var(--yellow);
+            font-weight: 800;
         }
         
-        /* RTL Support */
-        [dir="rtl"] .hero-title,
-        [dir="rtl"] .hero-text {
-            text-align: right;
+        body.dark-mode footer { 
+            background: linear-gradient(135deg, #1a1a2e, #0f0f1e);
         }
         
-        [dir="rtl"] .text-center {
-            text-align: center !important;
+        /* Decorative Elements */
+        .floating-notes {
+            position: absolute;
+            font-size: 2rem;
+            opacity: 0.6;
+            animation: float 4s ease-in-out infinite;
+        }
+        
+        .note-1 { top: 10%; left: 5%; animation-delay: 0s; }
+        .note-2 { top: 20%; right: 8%; animation-delay: 1s; }
+        .note-3 { bottom: 15%; left: 10%; animation-delay: 2s; }
+        
+        /* Small Screens */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            .hero-title span::after {
+                display: none;
+            }
+            
+            .hero-text {
+                font-size: 1.1rem;
+            }
+            
+            .hero {
+                padding: 50px 0;
+            }
+            
+            .card {
+                border-width: 3px;
+            }
+            
+            .floating-notes {
+                display: none;
+            }
         }
     </style>
 </head>
@@ -92,15 +340,22 @@
 
 {% include 'navbar.html' %}
 
+<!-- Decorative Floating Elements -->
+<div class="floating-notes note-1">📝</div>
+<div class="floating-notes note-2">📚</div>
+<div class="floating-notes note-3">✏️</div>
+
 <section class="hero">
     <div class="container">
         <div class="row align-items-center">
             <div class="col-md-6 mb-4">
                 <h1 class="hero-title">
-                    {{ t('learn_smarter') }} <span>Vortex</span>
+                    Learn Smarter with <span>Vortex</span>
                 </h1>
                 <p class="hero-text">
-                    {{ t('hero_description') }}
+                    🎨 Vortex transforms your study materials into summaries, quizzes,
+                    flashcards and mind maps using smart AI tools making learning
+                    easier, faster and more fun! ✨
                 </p>
             </div>
             
@@ -114,36 +369,46 @@
     </div>
 </section>
 
-<div class="container">
-    <div class="card shadow-lg p-4">
+<div class="container mb-5">
+    <div class="card shadow-lg p-5">
         {% if current_user.is_authenticated %}
-        <h4 class="mb-3 text-center">{{ t('upload_material') }}</h4>
+        <h4 class="mb-4 text-center">Upload Your Study Material</h4>
 
         <form method="POST" action="{{ url_for('summarize') }}" enctype="multipart/form-data">
-            <div class="mb-3">
-                <label class="form-label">{{ t('paste_text') }}</label>
-                <textarea name="text" class="form-control" rows="5"
-                          placeholder="{{ t('paste_placeholder') }}"></textarea>
+            <div class="mb-4">
+                <label class="form-label">
+                    ✍️ Paste Your Text
+                </label>
+                <textarea name="text" class="form-control" rows="6"
+                          placeholder="Paste your notes or text here..."></textarea>
             </div>
 
-            <div class="mb-3">
-                <label class="form-label">{{ t('or_upload') }}</label>
+            <div class="mb-4">
+                <label class="form-label">
+                    📂 Or Upload Document
+                </label>
                 <input type="file" name="file" class="form-control" accept=".pdf,.docx,.pptx">
-                <small class="text-muted">{{ t('file_support') }}</small>
+                <small class="text-muted">📄 PDF, DOCX, PPTX supported</small>
             </div>
 
             <button type="submit" class="btn btn-vortex w-100">
-                🚀 {{ t('generate_btn') }}
+                <i class="bi bi-magic"></i> Generate Summary and Quiz
             </button>
         </form>
 
         {% else %}
-        <div class="text-center p-5">
-            <i class="bi bi-lock-fill" style="font-size: 4rem; color: #ccc;"></i>
-            <h4 class="mt-3">{{ t('login_required') }}</h4>
-            <p class="text-muted">{{ t('login_message') }}</p>
-            <a href="{{ url_for('login') }}" class="btn btn-primary me-2">{{ t('login') }}</a>
-            <a href="{{ url_for('register') }}" class="btn btn-outline-primary">{{ t('register') }}</a>
+        <div class="locked-section text-center">
+            <i class="bi bi-lock-fill"></i>
+            <h4 class="mt-3">Login Required</h4>
+            <p class="text-muted" style="font-size: 1.1rem;">Please login or register to start using Vortex</p>
+            <div class="mt-4">
+                <a href="{{ url_for('login') }}" class="btn btn-primary me-2">
+                    <i class="bi bi-box-arrow-in-right"></i> Login
+                </a>
+                <a href="{{ url_for('register') }}" class="btn btn-outline-primary">
+                    <i class="bi bi-person-plus"></i> Register
+                </a>
+            </div>
         </div>
         {% endif %}
     </div>
@@ -151,8 +416,8 @@
 
 <footer>
     <div class="container text-center">
-        <p class="mb-1">{{ t('developed_by') }} <strong>{{ t('team_name') }}</strong></p>
-        <p class="mb-0">💚 💙 {{ t('university') }} 💚 💙</p>
+        <p class="mb-1">Developed By <strong>Vortex Team</strong> 💜</p>
+        <p class="mb-0">🎓 University College Of Ranyah - Computer Science - Level 10 🎓</p>
     </div>
 </footer>
 
@@ -160,12 +425,14 @@
 
 <script>
 const heroImg = document.getElementById('hero-image');
-heroImg.addEventListener('mouseover', () => {
-    heroImg.src = "{{ url_for('static', filename='images/1.jpg') }}";
-});
-heroImg.addEventListener('mouseout', () => {
-    heroImg.src = "{{ url_for('static', filename='images/3.png') }}";
-});
+if (heroImg) {
+    heroImg.addEventListener('mouseover', () => {
+        heroImg.src = "{{ url_for('static', filename='images/1.jpg') }}";
+    });
+    heroImg.addEventListener('mouseout', () => {
+        heroImg.src = "{{ url_for('static', filename='images/3.png') }}";
+    });
+}
 </script>
 
 </body>

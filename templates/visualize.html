@@ -2,35 +2,308 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vortex - Visualizations</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     
     <style>
-        body.light-mode { background: #f5f5f5; color: #333; }
-        body.dark-mode { background: #1e1e2f; color: #f0f0f0; }
+        /* ========================================
+           Visualizations - Pastel Illustration Theme
+           ======================================== */
         
-        .card { border-radius: 18px; margin-bottom: 20px; }
-        body.dark-mode .card { background: #2a2a40; color: #f0f0f0; }
+        :root {
+            --bg-lavender: #E8D5F2;
+            --bg-purple: #C4A7D7;
+            --teal: #5DBAA4;
+            --teal-light: #7DD3BD;
+            --yellow: #FFD166;
+            --gold: #FFD700;
+            --pink: #FFB3BA;
+            --coral: #FF9AA2;
+            --blue: #6BA3C8;
+            --navy: #4A6FA5;
+            --text: #2C2C54;
+        }
+        
+        * {
+            font-family: 'Poppins', 'Cairo', sans-serif;
+        }
+        
+        body.light-mode { 
+            background: linear-gradient(135deg, var(--bg-lavender) 0%, var(--bg-purple) 100%);
+            color: var(--text);
+            min-height: 100vh;
+        }
+        
+        body.dark-mode { 
+            background: linear-gradient(135deg, #4A3A5C 0%, #2C1E3F 100%);
+            color: #f0f0f0;
+        }
+        
+        .container {
+            padding-top: 40px;
+            padding-bottom: 40px;
+        }
+        
+        /* Page Title */
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 900;
+            margin-bottom: 50px;
+            background: linear-gradient(90deg, var(--teal), var(--blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            position: relative;
+            padding-left: 70px;
+        }
+        
+        h1::before {
+            content: '📊';
+            position: absolute;
+            left: 0;
+            font-size: 4rem;
+        }
+        
+        /* Cards */
+        .card { 
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 25px;
+            border: 4px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 10px 35px rgba(108, 91, 123, 0.2);
+            margin-bottom: 30px;
+            transition: all 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 45px rgba(108, 91, 123, 0.3);
+        }
+        
+        body.dark-mode .card { 
+            background: rgba(42, 42, 64, 0.95);
+            border-color: rgba(93, 186, 164, 0.3);
+            color: #f0f0f0;
+        }
+        
+        .card h5 {
+            background: linear-gradient(90deg, var(--teal), var(--blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
+            font-size: 1.8rem;
+            margin-bottom: 25px;
+        }
+        
+        .card p {
+            font-weight: 600;
+            line-height: 1.8;
+            font-size: 1.05rem;
+        }
+        
+        /* Document Info */
+        .doc-info {
+            padding: 30px;
+            background: linear-gradient(135deg, rgba(93, 186, 164, 0.1), rgba(107, 163, 200, 0.1));
+            border-radius: 20px;
+            border-left: 5px solid var(--teal);
+        }
+        
+        body.dark-mode .doc-info {
+            background: linear-gradient(135deg, rgba(93, 186, 164, 0.15), rgba(107, 163, 200, 0.15));
+        }
+        
+        .doc-info h5 {
+            font-size: 1.5rem;
+            color: var(--teal);
+        }
+        
+        body.dark-mode .doc-info h5 {
+            color: var(--teal-light);
+        }
+        
+        /* Keyword Tags */
+        .keywords-container {
+            padding: 20px;
+            background: rgba(93, 186, 164, 0.05);
+            border-radius: 20px;
+            min-height: 100px;
+        }
+        
+        body.dark-mode .keywords-container {
+            background: rgba(93, 186, 164, 0.08);
+        }
         
         .keyword-tag {
             display: inline-block;
-            padding: 8px 15px;
-            margin: 5px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 12px 25px;
+            margin: 8px;
+            background: linear-gradient(135deg, var(--teal), var(--blue));
             color: white;
-            border-radius: 20px;
-            font-weight: 500;
+            border-radius: 25px;
+            font-weight: 800;
+            font-size: 1rem;
+            box-shadow: 0 5px 15px rgba(93, 186, 164, 0.3);
+            transition: all 0.3s ease;
+            border: 3px solid rgba(255, 255, 255, 0.3);
         }
         
-        footer { 
-            background: #1f2d3d; 
-            color: #ddd; 
-            padding: 25px 0; 
-            margin-top: 80px; 
-            text-align: center; 
+        .keyword-tag:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 10px 25px rgba(93, 186, 164, 0.4);
         }
-        body.dark-mode footer { background: #111; }
+        
+        .keyword-tag:nth-child(3n+1) {
+            background: linear-gradient(135deg, var(--pink), var(--coral));
+            box-shadow: 0 5px 15px rgba(255, 179, 186, 0.3);
+        }
+        
+        .keyword-tag:nth-child(3n+2) {
+            background: linear-gradient(135deg, #4facfe, #00f2fe);
+            box-shadow: 0 5px 15px rgba(79, 172, 254, 0.3);
+        }
+        
+        .keyword-tag:nth-child(3n+1):hover {
+            box-shadow: 0 10px 25px rgba(255, 179, 186, 0.4);
+        }
+        
+        .keyword-tag:nth-child(3n+2):hover {
+            box-shadow: 0 10px 25px rgba(79, 172, 254, 0.4);
+        }
+        
+        /* Chart Container */
+        .chart-container {
+            padding: 30px;
+            background: white;
+            border-radius: 20px;
+            border: 3px solid rgba(93, 186, 164, 0.2);
+        }
+        
+        body.dark-mode .chart-container {
+            background: rgba(30, 30, 47, 0.9);
+            border-color: rgba(93, 186, 164, 0.3);
+        }
+        
+        .chart-container img {
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(108, 91, 123, 0.2);
+        }
+        
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 80px 40px;
+        }
+        
+        .empty-state i {
+            font-size: 6rem;
+            background: linear-gradient(135deg, var(--pink), var(--teal));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+        
+        .empty-state p {
+            font-weight: 700;
+            font-size: 1.2rem;
+            margin-top: 20px;
+        }
+        
+        /* Summary Section */
+        .summary-section {
+            padding: 30px;
+            background: linear-gradient(135deg, rgba(255, 209, 102, 0.08), rgba(244, 197, 66, 0.08));
+            border-radius: 20px;
+            border-left: 5px solid var(--yellow);
+        }
+        
+        body.dark-mode .summary-section {
+            background: linear-gradient(135deg, rgba(255, 209, 102, 0.12), rgba(244, 197, 66, 0.12));
+        }
+        
+        /* Buttons */
+        .btn {
+            border-radius: 15px;
+            font-weight: 800;
+            padding: 14px 35px;
+            transition: all 0.3s ease;
+            border: none;
+            font-size: 1.05rem;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+        }
+        
+        .btn-secondary {
+            background: linear-gradient(135deg, var(--pink), var(--coral));
+            color: white;
+            box-shadow: 0 5px 15px rgba(255, 179, 186, 0.3);
+        }
+        
+        .btn-secondary:hover {
+            box-shadow: 0 8px 25px rgba(255, 179, 186, 0.4);
+            color: white;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--teal), var(--blue));
+            color: white;
+            box-shadow: 0 5px 15px rgba(93, 186, 164, 0.3);
+        }
+        
+        .btn-primary:hover {
+            box-shadow: 0 8px 25px rgba(93, 186, 164, 0.4);
+        }
+        
+        /* Footer */
+        footer { 
+            background: linear-gradient(135deg, var(--navy), var(--blue));
+            color: white;
+            padding: 30px 0;
+            margin-top: 80px;
+            text-align: center;
+            box-shadow: 0 -5px 20px rgba(74, 111, 165, 0.3);
+        }
+        
+        footer strong {
+            color: var(--yellow);
+            font-weight: 800;
+        }
+        
+        body.dark-mode footer { 
+            background: linear-gradient(135deg, #1a1a2e, #0f0f1e);
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+                padding-left: 60px;
+            }
+            
+            h1::before {
+                font-size: 3rem;
+            }
+            
+            .keyword-tag {
+                padding: 10px 20px;
+                margin: 6px;
+                font-size: 0.9rem;
+            }
+            
+            .btn {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+        }
     </style>
 </head>
 
@@ -39,44 +312,72 @@
 {% include 'navbar.html' %}
 
 <div class="container mt-5">
-    <h1 class="mb-4">Content Visualization</h1>
+    <h1>Content Visualization</h1>
 
+    <!-- Document Info Card -->
     <div class="card shadow p-4 mb-4">
-        <h5 class="mb-3">Document: {{ upload.filename }}</h5>
-        <p class="text-muted">Uploaded: {{ upload.uploaded_at.strftime('%Y-%m-%d %H:%M') }}</p>
-    </div>
-
-    <div class="card shadow p-4 mb-4">
-        <h5 class="mb-3">Key Concepts</h5>
-        <div class="keywords-container">
-            {% for keyword in keywords %}
-            <span class="keyword-tag">{{ keyword }}</span>
-            {% endfor %}
+        <div class="doc-info">
+            <h5>
+                <i class="bi bi-file-earmark-text-fill"></i> {{ upload.filename }}
+            </h5>
+            <p class="text-muted mb-0" style="font-weight: 700;">
+                <i class="bi bi-calendar-check"></i> 
+                Uploaded: {{ upload.uploaded_at.strftime('%Y-%m-%d %H:%M') }}
+            </p>
         </div>
     </div>
 
-    <div class="card shadow p-4 mb-4">
-        <h5 class="mb-3">Keyword Frequency Analysis</h5>
+    <!-- Keywords Card -->
+    <div class="card shadow p-5 mb-4">
+        <h5>
+            <i class="bi bi-tags-fill"></i> Key Concepts
+        </h5>
+        <div class="keywords-container">
+            {% if keywords %}
+                {% for keyword in keywords %}
+                <span class="keyword-tag">{{ keyword }}</span>
+                {% endfor %}
+            {% else %}
+                <p class="text-muted text-center mb-0" style="font-weight: 700;">
+                    No keywords extracted yet
+                </p>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Chart Card -->
+    <div class="card shadow p-5 mb-4">
+        <h5>
+            <i class="bi bi-bar-chart-fill"></i> Keyword Frequency Analysis
+        </h5>
         {% if chart %}
-        <img src="/{{ chart }}" class="img-fluid rounded" alt="Keyword Chart">
+        <div class="chart-container">
+            <img src="/{{ chart }}" class="img-fluid" alt="Keyword Chart">
+        </div>
         {% else %}
-        <div class="text-center p-5">
-            <i class="bi bi-bar-chart" style="font-size: 4rem; color: #ccc;"></i>
-            <p class="mt-3 text-muted">No visualization available</p>
+        <div class="empty-state">
+            <i class="bi bi-bar-chart"></i>
+            <p class="text-muted">No visualization available</p>
         </div>
         {% endif %}
     </div>
 
-    <div class="card shadow p-4 mb-4">
-        <h5 class="mb-3">Summary</h5>
-        <p>{{ upload.summary }}</p>
+    <!-- Summary Card -->
+    <div class="card shadow p-5 mb-4">
+        <h5>
+            <i class="bi bi-file-text-fill"></i> Summary
+        </h5>
+        <div class="summary-section">
+            <p class="mb-0">{{ upload.summary }}</p>
+        </div>
     </div>
 
-    <div class="text-center mb-4">
-        <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">
-            <i class="bi bi-arrow-left"></i> Back to Dashboard
+    <!-- Action Buttons -->
+    <div class="text-center mb-5">
+        <a href="{{ url_for('dashboard') }}" class="btn btn-secondary btn-lg">
+            <i class="bi bi-arrow-left-circle"></i> Back to Dashboard
         </a>
-        <a href="{{ url_for('export_upload', upload_id=upload.id, format='txt') }}" class="btn btn-primary">
+        <a href="{{ url_for('export_upload', upload_id=upload.id, format='txt') }}" class="btn btn-primary btn-lg">
             <i class="bi bi-download"></i> Export as Text
         </a>
     </div>
@@ -84,7 +385,8 @@
 
 <footer>
     <div class="container text-center">
-        Developed by <strong>Vortex Team</strong> - Level 10 Students
+        <p class="mb-1">Developed By <strong>Vortex Team</strong> 💜</p>
+        <p class="mb-0">🎓 University College Of Ranyah - Computer Science - Level 10 🎓</p>
     </div>
 </footer>
 

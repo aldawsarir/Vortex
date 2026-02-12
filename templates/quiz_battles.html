@@ -1,137 +1,287 @@
 <!DOCTYPE html>
-<html lang="{{ current_lang }}" {% if current_lang == 'ar' %}dir="rtl"{% endif %}>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Vortex - {{ t('quiz_battles') }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vortex - Quiz Battles</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     
     <style>
+        /* ========================================
+           Quiz Battles - Pastel Illustration Theme
+           ======================================== */
+        
+        :root {
+            --bg-lavender: #E8D5F2;
+            --bg-purple: #C4A7D7;
+            --teal: #5DBAA4;
+            --teal-light: #7DD3BD;
+            --yellow: #FFD166;
+            --pink: #FFB3BA;
+            --coral: #FF9AA2;
+            --blue: #6BA3C8;
+            --navy: #4A6FA5;
+            --text: #2C2C54;
+        }
+        
+        * {
+            font-family: 'Poppins', 'Cairo', sans-serif;
+        }
+        
         body.light-mode { 
-            background: #f0f8ff; 
-            color: #333; 
-            transition: all 0.3s ease;
+            background: linear-gradient(135deg, var(--bg-lavender) 0%, var(--bg-purple) 100%);
+            color: var(--text);
+            min-height: 100vh;
         }
+        
         body.dark-mode { 
-            background: #1e1e2f; 
-            color: #f0f0f0; 
-            transition: all 0.3s ease;
+            background: linear-gradient(135deg, #4A3A5C 0%, #2C1E3F 100%);
+            color: #f0f0f0;
         }
         
+        .container {
+            padding-top: 40px;
+            padding-bottom: 40px;
+        }
+        
+        /* Page Header */
         .page-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 40px;
+            margin-bottom: 45px;
         }
         
-        .page-title {
-            font-size: 2.5rem;
-            font-weight: 800;
-            background: linear-gradient(90deg, #1abc9c, #3498db);
+        .page-header h1 {
+            font-size: 3.5rem;
+            font-weight: 900;
+            background: linear-gradient(90deg, var(--teal), var(--blue));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            margin: 0;
+            position: relative;
+            padding-left: 70px;
+        }
+        
+        .page-header h1::before {
+            content: '⚔️';
+            position: absolute;
+            left: 0;
+            font-size: 4rem;
         }
         
         .card { 
-            border-radius: 18px; 
-            margin-bottom: 20px; 
-            border: none;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
-        body.dark-mode .card { 
-            background: #2a2a40; 
-            color: #f0f0f0; 
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 25px;
+            border: 4px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 10px 35px rgba(108, 91, 123, 0.2);
+            margin-bottom: 30px;
+            transition: all 0.3s ease;
         }
         
+        body.dark-mode .card { 
+            background: rgba(42, 42, 64, 0.95);
+            border-color: rgba(93, 186, 164, 0.3);
+            color: #f0f0f0;
+        }
+        
+        /* Battle Cards */
         .battle-card {
-            transition: all 0.3s ease;
             cursor: pointer;
-            height: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .battle-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(93, 186, 164, 0.1) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .battle-card:hover::before {
+            opacity: 1;
         }
         
         .battle-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 12px 30px rgba(26, 188, 156, 0.2);
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 50px rgba(108, 91, 123, 0.35);
+            border-color: var(--teal);
         }
         
         .battle-card h5 {
-            font-weight: 700;
-            color: #1abc9c;
+            background: linear-gradient(90deg, var(--teal), var(--blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 900;
+            font-size: 1.5rem;
             margin-bottom: 20px;
         }
         
-        body.dark-mode .battle-card h5 {
-            color: #43e97b;
-        }
-        
-        .battle-info {
-            display: flex;
-            align-items: center;
+        .battle-card .battle-info {
+            padding: 15px 20px;
+            background: rgba(93, 186, 164, 0.08);
+            border-radius: 12px;
             margin-bottom: 15px;
-            color: #666;
+            border-left: 4px solid var(--teal);
         }
         
-        body.dark-mode .battle-info {
-            color: #aaa;
+        body.dark-mode .battle-card .battle-info {
+            background: rgba(93, 186, 164, 0.12);
         }
         
-        .battle-info i {
+        .battle-card .battle-info i {
+            color: var(--teal);
             font-size: 1.2rem;
             margin-right: 10px;
-            color: #1abc9c;
         }
         
-        [dir="rtl"] .battle-info i {
-            margin-right: 0;
-            margin-left: 10px;
+        .battle-card .battle-info strong {
+            font-size: 1.3rem;
+            color: var(--teal);
         }
         
-        .btn {
-            border-radius: 12px;
-            padding: 12px 30px;
-            font-weight: 600;
+        body.dark-mode .battle-card .battle-info strong {
+            color: var(--teal-light);
+        }
+        
+        /* Empty State */
+        .empty-state {
+            padding: 80px 40px;
+            text-align: center;
+        }
+        
+        .empty-state i {
+            font-size: 6rem;
+            background: linear-gradient(135deg, var(--pink), var(--teal));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 25px;
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+        
+        .empty-state h5 {
+            color: var(--text);
+            font-weight: 800;
+            margin: 20px 0 15px;
+        }
+        
+        body.dark-mode .empty-state h5 {
+            color: var(--teal-light);
+        }
+        
+        /* Buttons */
+        .btn-primary {
+            background: linear-gradient(135deg, var(--teal), var(--blue));
+            border: none;
+            border-radius: 15px;
+            padding: 14px 35px;
+            font-weight: 800;
+            font-size: 1.1rem;
+            box-shadow: 0 6px 20px rgba(93, 186, 164, 0.3);
             transition: all 0.3s ease;
         }
         
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-        }
-        
-        .btn-primary {
-            background: linear-gradient(135deg, #1abc9c, #3498db);
-            border: none;
-            color: white;
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(93, 186, 164, 0.4);
         }
         
         .btn-success {
             background: linear-gradient(135deg, #43e97b, #38f9d7);
             border: none;
-            color: white;
+            font-weight: 800;
+            padding: 14px 30px;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(67, 233, 123, 0.3);
+        }
+        
+        .btn-success:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(67, 233, 123, 0.4);
         }
         
         .btn-secondary {
-            background: linear-gradient(135deg, #667eea, #764ba2);
+            background: linear-gradient(135deg, #95a5a6, #7f8c8d);
             border: none;
-            color: white;
+            font-weight: 700;
         }
         
-        .empty-state {
-            text-align: center;
-            padding: 60px 20px;
-        }
-        
-        .empty-state i {
-            font-size: 5rem;
-            color: #ccc;
-            margin-bottom: 20px;
-        }
-        
-        .modal-content {
+        /* Alert */
+        .alert {
             border-radius: 18px;
             border: none;
+            font-weight: 700;
+            padding: 18px 25px;
+            animation: slideDown 0.4s ease-out;
+        }
+        
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .alert-success {
+            background: linear-gradient(135deg, rgba(67, 233, 123, 0.2), rgba(56, 249, 215, 0.2));
+            color: #27ae60;
+            border-left: 5px solid #2ecc71;
+        }
+        
+        .alert-danger {
+            background: linear-gradient(135deg, rgba(255, 154, 162, 0.2), rgba(255, 179, 186, 0.2));
+            color: #c0392b;
+            border-left: 5px solid #e74c3c;
+        }
+        
+        .alert-info {
+            background: linear-gradient(135deg, rgba(93, 186, 164, 0.2), rgba(125, 211, 189, 0.2));
+            color: #16a085;
+            border-left: 5px solid var(--teal);
+        }
+        
+        /* Modal */
+        .modal-content {
+            border-radius: 25px;
+            border: none;
+            overflow: hidden;
+        }
+        
+        .modal-header {
+            background: linear-gradient(135deg, var(--teal), var(--blue));
+            color: white;
+            border: none;
+            padding: 25px 30px;
+        }
+        
+        .modal-title {
+            font-weight: 900;
+            font-size: 1.5rem;
+        }
+        
+        .modal-body {
+            padding: 30px;
+        }
+        
+        .modal-footer {
+            border: none;
+            padding: 20px 30px;
+            background: rgba(93, 186, 164, 0.05);
         }
         
         body.dark-mode .modal-content {
@@ -139,56 +289,79 @@
             color: #f0f0f0;
         }
         
-        .modal-header {
-            background: linear-gradient(135deg, #1abc9c, #3498db);
-            color: white;
-            border-radius: 18px 18px 0 0;
-            border: none;
+        body.dark-mode .modal-footer {
+            background: rgba(93, 186, 164, 0.1);
         }
         
-        .modal-header .btn-close {
-            filter: brightness(0) invert(1);
+        .form-label {
+            font-weight: 700;
+            color: var(--teal);
+            margin-bottom: 10px;
+            font-size: 1.05rem;
+        }
+        
+        body.dark-mode .form-label {
+            color: var(--teal-light);
         }
         
         .form-control {
-            border: 2px solid #e2e8f0;
-            border-radius: 10px;
-            padding: 12px;
+            border: 3px solid rgba(93, 186, 164, 0.3);
+            border-radius: 15px;
+            padding: 14px 18px;
+            font-size: 1rem;
             transition: all 0.3s ease;
+            font-weight: 600;
         }
         
         .form-control:focus {
-            border-color: #1abc9c;
-            box-shadow: 0 0 0 3px rgba(26, 188, 156, 0.1);
+            border-color: var(--teal);
+            box-shadow: 0 0 0 0.25rem rgba(93, 186, 164, 0.25);
         }
         
         body.dark-mode .form-control {
-            background: #1e1e2f;
-            border-color: #3a3a50;
+            background: rgba(30, 30, 47, 0.9);
+            border-color: rgba(93, 186, 164, 0.4);
             color: #f0f0f0;
         }
         
+        /* Footer */
         footer { 
-            background: #1f2d3d; 
-            color: #ddd; 
-            padding: 25px 0; 
-            margin-top: 80px; 
-            text-align: center; 
+            background: linear-gradient(135deg, var(--navy), var(--blue));
+            color: white;
+            padding: 30px 0;
+            margin-top: 80px;
+            text-align: center;
+            box-shadow: 0 -5px 20px rgba(74, 111, 165, 0.3);
         }
-        body.dark-mode footer { background: #111; }
         
         footer strong {
-            color: #1abc9c;
+            color: var(--yellow);
+            font-weight: 800;
         }
         
+        body.dark-mode footer { 
+            background: linear-gradient(135deg, #1a1a2e, #0f0f1e);
+        }
+        
+        /* Responsive */
         @media (max-width: 768px) {
-            .page-header {
-                flex-direction: column;
-                gap: 20px;
+            .page-header h1 {
+                font-size: 2.5rem;
+                padding-left: 60px;
             }
             
-            .page-title {
-                font-size: 2rem;
+            .page-header h1::before {
+                font-size: 3rem;
+            }
+            
+            .page-header {
+                flex-direction: column;
+                align-items: flex-start !important;
+            }
+            
+            .page-header .btn {
+                margin-top: 15px;
+                width: 100%;
             }
         }
     </style>
@@ -199,10 +372,10 @@
 {% include 'navbar.html' %}
 
 <div class="container mt-5">
-    <div class="page-header">
-        <h1 class="page-title">⚔️ {{ t('quiz_battles') }}</h1>
+    <div class="page-header d-flex justify-content-between align-items-center">
+        <h1>Quiz Battles</h1>
         <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createBattleModal">
-            <i class="bi bi-plus-circle"></i> {{ t('create_battle') }}
+            <i class="bi bi-plus-circle"></i> Create Battle
         </button>
     </div>
 
@@ -210,6 +383,7 @@
         {% if messages %}
             {% for category, message in messages %}
             <div class="alert alert-{{ category }} alert-dismissible fade show">
+                <i class="bi bi-{{ 'check-circle-fill' if category == 'success' else 'exclamation-triangle-fill' if category == 'danger' else 'info-circle-fill' }}"></i>
                 {{ message }}
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
@@ -223,20 +397,22 @@
             <div class="col-md-4 mb-4">
                 <div class="card battle-card shadow p-4"
                      onclick="window.location.href='{{ url_for('battle_room', battle_id=battle.id) }}'">
-                    <h5>{{ battle.title }}</h5>
+                    <h5>⚔️ {{ battle.title }}</h5>
                     
                     <div class="battle-info">
                         <i class="bi bi-people-fill"></i>
-                        <strong>{{ battle.participants|length }}</strong> {{ t('players') }}
+                        <strong>{{ battle.participants|length }}</strong> Players
                     </div>
                     
-                    <div class="battle-info">
-                        <i class="bi bi-clock-fill"></i>
-                        <small>{{ t('created') }}: {{ battle.created_at.strftime('%Y-%m-%d %H:%M') }}</small>
+                    <div class="mb-3">
+                        <small class="text-muted" style="font-weight: 600;">
+                            <i class="bi bi-calendar"></i> 
+                            Created: {{ battle.created_at.strftime('%Y-%m-%d %H:%M') }}
+                        </small>
                     </div>
                     
-                    <button class="btn btn-success w-100">
-                        <i class="bi bi-play-fill"></i> {{ t('join_battle') }}
+                    <button class="btn btn-success w-100" onclick="event.stopPropagation();">
+                        <i class="bi bi-play-fill"></i> Join Battle
                     </button>
                 </div>
             </div>
@@ -245,8 +421,10 @@
             <div class="col-12">
                 <div class="card shadow empty-state">
                     <i class="bi bi-trophy"></i>
-                    <h5>{{ t('no_active_battles') }}</h5>
-                    <p class="text-muted">{{ t('create_battle_instruction') }}</p>
+                    <h5>No Active Battles</h5>
+                    <p class="text-muted" style="font-weight: 600; font-size: 1.1rem;">
+                        Create a new battle to challenge others!
+                    </p>
                 </div>
             </div>
         {% endif %}
@@ -255,26 +433,34 @@
 
 <!-- Create Battle Modal -->
 <div class="modal fade" id="createBattleModal" tabindex="-1">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">{{ t('create_quiz_battle') }}</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                <h5 class="modal-title">
+                    <i class="bi bi-plus-circle"></i> Create Quiz Battle
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
             </div>
             <form method="POST" action="{{ url_for('create_battle') }}">
                 <div class="modal-body">
                     <div class="mb-3">
-                        <label class="form-label">{{ t('battle_title') }}</label>
-                        <input type="text" name="title" class="form-control" 
-                               placeholder="{{ t('battle_title_placeholder') }}" required>
+                        <label class="form-label">
+                            <i class="bi bi-trophy"></i> Battle Title
+                        </label>
+                        <input type="text" 
+                               name="title" 
+                               class="form-control" 
+                               placeholder="Quick Battle Challenge"
+                               required
+                               autofocus>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                        {{ t('cancel') }}
+                        <i class="bi bi-x-circle"></i> Cancel
                     </button>
                     <button type="submit" class="btn btn-primary">
-                        {{ t('create') }}
+                        <i class="bi bi-check-circle"></i> Create
                     </button>
                 </div>
             </form>
@@ -284,8 +470,8 @@
 
 <footer>
     <div class="container text-center">
-        <p class="mb-1">{{ t('developed_by') }} <strong>{{ t('team_name') }}</strong></p>
-        <p class="mb-0">💚 💙 {{ t('university') }} 💚 💙</p>
+        <p class="mb-1">Developed By <strong>Vortex Team</strong> 💜</p>
+        <p class="mb-0">🎓 University College Of Ranyah - Computer Science - Level 10 🎓</p>
     </div>
 </footer>
 

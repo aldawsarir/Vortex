@@ -3,46 +3,345 @@
 <head>
     <meta charset="UTF-8">
     <title>Vortex - Daily Challenge</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     
     <style>
-        body.light-mode { background: #f5f5f5; color: #333; }
-        body.dark-mode { background: #1e1e2f; color: #f0f0f0; }
+        /* ========================================
+           Daily Challenge - Pastel Illustration Theme
+           ======================================== */
         
-        .card { border-radius: 18px; }
-        body.dark-mode .card { background: #2a2a40; color: #f0f0f0; }
+        :root {
+            --bg-lavender: #E8D5F2;
+            --bg-purple: #C4A7D7;
+            --teal: #5DBAA4;
+            --teal-light: #7DD3BD;
+            --yellow: #FFD166;
+            --gold: #FFD700;
+            --pink: #FFB3BA;
+            --coral: #FF9AA2;
+            --blue: #6BA3C8;
+            --navy: #4A6FA5;
+            --text: #2C2C54;
+        }
         
-        .challenge-header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 40px;
-            border-radius: 18px 18px 0 0;
+        * {
+            font-family: 'Poppins', 'Cairo', sans-serif;
+        }
+        
+        body.light-mode { 
+            background: linear-gradient(135deg, var(--bg-lavender) 0%, var(--bg-purple) 100%);
+            color: var(--text);
+            min-height: 100vh;
+        }
+        
+        body.dark-mode { 
+            background: linear-gradient(135deg, #4A3A5C 0%, #2C1E3F 100%);
+            color: #f0f0f0;
+        }
+        
+        .container {
+            padding-top: 40px;
+            padding-bottom: 40px;
+        }
+        
+        /* Page Title */
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 900;
             text-align: center;
+            margin-bottom: 50px;
+            background: linear-gradient(90deg, var(--teal), var(--blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            position: relative;
+            padding-top: 60px;
+        }
+        
+        h1::before {
+            content: '🎯';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 4rem;
+            animation: bounce 2s ease-in-out infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(-15px); }
+        }
+        
+        .card { 
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 25px;
+            border: 4px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 10px 35px rgba(108, 91, 123, 0.2);
+            overflow: hidden;
+        }
+        
+        body.dark-mode .card { 
+            background: rgba(42, 42, 64, 0.95);
+            border-color: rgba(93, 186, 164, 0.3);
+            color: #f0f0f0;
+        }
+        
+        /* Challenge Header */
+        .challenge-header {
+            background: linear-gradient(135deg, var(--teal), var(--blue));
+            color: white;
+            padding: 50px 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .challenge-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%);
+            animation: pulse 3s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.1); opacity: 0.8; }
         }
         
         .challenge-icon {
-            font-size: 5rem;
-            margin-bottom: 20px;
+            font-size: 6rem;
+            margin-bottom: 25px;
+            animation: float 3s ease-in-out infinite;
+            position: relative;
+            z-index: 1;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        .challenge-header h2 {
+            font-weight: 900;
+            font-size: 2.5rem;
+            text-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            margin-bottom: 25px;
+            position: relative;
+            z-index: 1;
         }
         
         .points-badge {
-            background: #FFD700;
-            color: #333;
-            padding: 10px 20px;
+            background: var(--gold);
+            color: var(--text);
+            padding: 12px 30px;
             border-radius: 50px;
-            font-weight: bold;
-            font-size: 1.2rem;
+            font-weight: 900;
+            font-size: 1.3rem;
+            display: inline-block;
+            box-shadow: 0 6px 20px rgba(255, 215, 0, 0.4);
+            position: relative;
+            z-index: 1;
+            animation: sparkle 2s ease-in-out infinite;
         }
         
-        footer { 
-            background: #1f2d3d; 
-            color: #ddd; 
-            padding: 25px 0; 
-            margin-top: 80px; 
-            text-align: center; 
+        @keyframes sparkle {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
         }
-        body.dark-mode footer { background: #111; }
+        
+        /* Card Body */
+        .card h5 {
+            background: linear-gradient(90deg, var(--teal), var(--blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
+            font-size: 1.8rem;
+        }
+        
+        .lead {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text);
+            line-height: 1.8;
+        }
+        
+        body.dark-mode .lead {
+            color: #ddd;
+        }
+        
+        /* Feature Boxes */
+        .feature-box {
+            padding: 30px 20px;
+            transition: all 0.3s ease;
+            border-radius: 20px;
+        }
+        
+        .feature-box:hover {
+            background: rgba(93, 186, 164, 0.08);
+            transform: translateY(-8px);
+        }
+        
+        body.dark-mode .feature-box:hover {
+            background: rgba(93, 186, 164, 0.12);
+        }
+        
+        .feature-box i {
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        .feature-box:nth-child(1) i { animation-delay: 0s; }
+        .feature-box:nth-child(2) i { animation-delay: 0.5s; }
+        .feature-box:nth-child(3) i { animation-delay: 1s; }
+        
+        .feature-box h6 {
+            font-weight: 800;
+            font-size: 1.1rem;
+            color: var(--text);
+            margin-top: 15px;
+        }
+        
+        body.dark-mode .feature-box h6 {
+            color: #f0f0f0;
+        }
+        
+        /* Progress Card */
+        .progress-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 25px;
+            border: 4px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 10px 35px rgba(108, 91, 123, 0.2);
+            padding: 35px;
+            margin-top: 30px;
+        }
+        
+        body.dark-mode .progress-card {
+            background: rgba(42, 42, 64, 0.95);
+            border-color: rgba(93, 186, 164, 0.3);
+        }
+        
+        .progress-card h5 {
+            background: linear-gradient(90deg, var(--teal), var(--blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
+            margin-bottom: 25px;
+        }
+        
+        .progress {
+            height: 40px;
+            border-radius: 25px;
+            background: rgba(93, 186, 164, 0.15);
+            overflow: hidden;
+            border: 3px solid rgba(93, 186, 164, 0.3);
+        }
+        
+        .progress-bar {
+            background: linear-gradient(90deg, var(--teal), var(--blue));
+            border-radius: 25px;
+            font-weight: 800;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(93, 186, 164, 0.3);
+        }
+        
+        /* Button */
+        .btn-primary {
+            background: linear-gradient(135deg, var(--teal), var(--blue));
+            border: none;
+            border-radius: 18px;
+            padding: 18px 50px;
+            font-weight: 800;
+            font-size: 1.3rem;
+            box-shadow: 0 8px 25px rgba(93, 186, 164, 0.35);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 35px rgba(93, 186, 164, 0.45);
+        }
+        
+        /* Empty State */
+        .empty-state {
+            padding: 80px 40px;
+            text-align: center;
+        }
+        
+        .empty-state i {
+            font-size: 6rem;
+            background: linear-gradient(135deg, var(--pink), var(--coral));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 25px;
+        }
+        
+        .empty-state h5 {
+            color: var(--text);
+            font-weight: 800;
+            margin: 20px 0 15px;
+        }
+        
+        body.dark-mode .empty-state h5 {
+            color: var(--teal-light);
+        }
+        
+        /* Footer */
+        footer { 
+            background: linear-gradient(135deg, var(--navy), var(--blue));
+            color: white;
+            padding: 30px 0;
+            margin-top: 80px;
+            text-align: center;
+            box-shadow: 0 -5px 20px rgba(74, 111, 165, 0.3);
+        }
+        
+        footer strong {
+            color: var(--yellow);
+            font-weight: 800;
+        }
+        
+        body.dark-mode footer { 
+            background: linear-gradient(135deg, #1a1a2e, #0f0f1e);
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+                padding-top: 50px;
+            }
+            
+            h1::before {
+                font-size: 3rem;
+            }
+            
+            .challenge-header {
+                padding: 40px 25px;
+            }
+            
+            .challenge-header h2 {
+                font-size: 2rem;
+            }
+            
+            .challenge-icon {
+                font-size: 4rem;
+            }
+            
+            .feature-box {
+                margin-bottom: 20px;
+            }
+        }
     </style>
 </head>
 
@@ -51,45 +350,57 @@
 {% include 'navbar.html' %}
 
 <div class="container mt-5">
-    <h1 class="text-center mb-4">Daily Challenge</h1>
+    <h1>Daily Challenge</h1>
 
     {% if challenge %}
     <div class="card shadow">
+        <!-- Challenge Header -->
         <div class="challenge-header">
-            <div class="challenge-icon"></div>
-            <h2 class="mb-3">{{ challenge.title }}</h2>
+            <div class="challenge-icon">🎯</div>
+            <h2>{{ challenge.title }}</h2>
             <div class="points-badge">
                 <i class="bi bi-star-fill"></i> {{ challenge.points }} Points
             </div>
         </div>
 
+        <!-- Challenge Body -->
         <div class="card-body p-5">
-            <h5 class="mb-4">Challenge Description</h5>
+            <h5 class="mb-4">
+                <i class="bi bi-info-circle"></i> Challenge Description
+            </h5>
             <p class="lead">{{ challenge.description }}</p>
 
-            <hr class="my-4">
+            <hr class="my-5" style="border-color: rgba(93, 186, 164, 0.2);">
 
+            <!-- Features -->
             <div class="row text-center">
                 <div class="col-md-4">
-                    <i class="bi bi-calendar-check" style="font-size: 3rem; color: #6C63FF;"></i>
-                    <h6 class="mt-2">Daily</h6>
-                    <p class="text-muted small">Resets every 24 hours</p>
+                    <div class="feature-box">
+                        <i class="bi bi-calendar-check" style="font-size: 4rem; color: var(--teal);"></i>
+                        <h6 class="mt-3">📅 Daily</h6>
+                        <p class="text-muted small">Resets every 24 hours</p>
+                    </div>
                 </div>
 
                 <div class="col-md-4">
-                    <i class="bi bi-trophy" style="font-size: 3rem; color: #FFD700;"></i>
-                    <h6 class="mt-2">Rewards</h6>
-                    <p class="text-muted small">Earn bonus points</p>
+                    <div class="feature-box">
+                        <i class="bi bi-trophy" style="font-size: 4rem; color: var(--gold);"></i>
+                        <h6 class="mt-3">🏆 Rewards</h6>
+                        <p class="text-muted small">Earn bonus points</p>
+                    </div>
                 </div>
 
                 <div class="col-md-4">
-                    <i class="bi bi-graph-up-arrow" style="font-size: 3rem; color: #28a745;"></i>
-                    <h6 class="mt-2">Level Up</h6>
-                    <p class="text-muted small">Progress faster</p>
+                    <div class="feature-box">
+                        <i class="bi bi-graph-up-arrow" style="font-size: 4rem; color: #43e97b;"></i>
+                        <h6 class="mt-3">📈 Level Up</h6>
+                        <p class="text-muted small">Progress faster</p>
+                    </div>
                 </div>
             </div>
 
-            <div class="text-center mt-4">
+            <!-- Start Button -->
+            <div class="text-center mt-5">
                 <a href="{{ url_for('home') }}" class="btn btn-primary btn-lg">
                     <i class="bi bi-play-fill"></i> Start Challenge
                 </a>
@@ -97,27 +408,39 @@
         </div>
     </div>
 
-    <div class="card shadow mt-4 p-4">
-        <h5 class="mb-3">Your Progress</h5>
-        <div class="progress mb-2" style="height: 30px;">
-            <div class="progress-bar bg-success" role="progressbar" style="width: 65%">
+    <!-- Progress Card -->
+    <div class="progress-card">
+        <h5>
+            <i class="bi bi-bar-chart-line"></i> Your Progress
+        </h5>
+        <div class="progress mb-3">
+            <div class="progress-bar" role="progressbar" style="width: 65%">
                 65% Completed
             </div>
         </div>
-        <p class="text-muted small">Keep going. You are doing great.</p>
+        <p class="text-muted" style="font-weight: 600; font-size: 1rem;">
+            <i class="bi bi-hand-thumbs-up"></i> Keep going! You are doing great.
+        </p>
     </div>
+    
     {% else %}
-    <div class="card shadow p-5 text-center">
-        <i class="bi bi-exclamation-circle" style="font-size: 4rem; color: #ccc;"></i>
-        <h5 class="mt-3">No Challenge Available Today</h5>
-        <p class="text-muted">Check back tomorrow for new challenges.</p>
+    <!-- Empty State -->
+    <div class="card shadow">
+        <div class="empty-state">
+            <i class="bi bi-exclamation-circle"></i>
+            <h5>No Challenge Available Today</h5>
+            <p class="text-muted" style="font-size: 1.1rem; font-weight: 600;">
+                Check back tomorrow for new challenges!
+            </p>
+        </div>
     </div>
     {% endif %}
 </div>
 
 <footer>
     <div class="container text-center">
-        Developed by <strong>Vortex Team</strong> - Level 10 Students
+        <p class="mb-1">Developed By <strong>Vortex Team</strong> 💜</p>
+        <p class="mb-0">🎓 University College Of Ranyah - Computer Science - Level 10 🎓</p>
     </div>
 </footer>
 

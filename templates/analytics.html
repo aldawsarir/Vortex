@@ -1,59 +1,370 @@
 <!DOCTYPE html>
-<html lang="{{ get_locale() }}" dir="{{ 'rtl' if get_locale() == 'ar' else 'ltr' }}">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ _('Vortex - Analytics') }}</title>
-
+    <title>Vortex - Analytics</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
-
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    
     <style>
-        body.light-mode { background: #f5f5f5; color: #333; }
-        body.dark-mode { background: #1e1e2f; color: #f0f0f0; }
-
-        .card { border-radius: 18px; margin-bottom: 20px; }
-        body.dark-mode .card { background: #2a2a40; color: #f0f0f0; }
-
-        .stat-card {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 25px;
-            border-radius: 15px;
-            text-align: center;
-            transition: transform 0.3s;
+        /* ========================================
+           Analytics - Pastel Illustration Theme
+           ======================================== */
+        
+        :root {
+            --bg-lavender: #E8D5F2;
+            --bg-purple: #C4A7D7;
+            --teal: #5DBAA4;
+            --teal-light: #7DD3BD;
+            --yellow: #FFD166;
+            --gold: #FFD700;
+            --pink: #FFB3BA;
+            --coral: #FF9AA2;
+            --blue: #6BA3C8;
+            --navy: #4A6FA5;
+            --text: #2C2C54;
         }
-
-        .stat-card:hover { transform: translateY(-5px); }
-
-        .stat-number {
-            font-size: 2.5rem;
+        
+        * {
+            font-family: 'Poppins', 'Cairo', sans-serif;
+        }
+        
+        body.light-mode { 
+            background: linear-gradient(135deg, var(--bg-lavender) 0%, var(--bg-purple) 100%);
+            color: var(--text);
+            min-height: 100vh;
+        }
+        
+        body.dark-mode { 
+            background: linear-gradient(135deg, #4A3A5C 0%, #2C1E3F 100%);
+            color: #f0f0f0;
+        }
+        
+        .container {
+            padding-top: 40px;
+            padding-bottom: 40px;
+        }
+        
+        /* Page Title */
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 900;
+            margin-bottom: 50px;
+            background: linear-gradient(90deg, var(--teal), var(--blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            position: relative;
+            padding-left: 70px;
+        }
+        
+        h1::before {
+            content: '📊';
+            position: absolute;
+            left: 0;
+            font-size: 4rem;
+        }
+        
+        .card { 
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 25px;
+            border: 4px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 10px 35px rgba(108, 91, 123, 0.2);
+            margin-bottom: 30px;
+            transition: all 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 45px rgba(108, 91, 123, 0.3);
+        }
+        
+        body.dark-mode .card { 
+            background: rgba(42, 42, 64, 0.95);
+            border-color: rgba(93, 186, 164, 0.3);
+            color: #f0f0f0;
+        }
+        
+        .card h5 {
+            background: linear-gradient(90deg, var(--teal), var(--blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
             font-weight: 800;
-            margin: 10px 0;
+            font-size: 1.8rem;
+            margin-bottom: 25px;
         }
-
+        
+        /* Stat Cards */
+        .stat-card {
+            background: linear-gradient(135deg, var(--teal), var(--blue));
+            color: white;
+            padding: 35px 25px;
+            border-radius: 25px;
+            text-align: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(93, 186, 164, 0.3);
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%);
+            animation: pulse 3s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 15px 40px rgba(93, 186, 164, 0.4);
+        }
+        
+        .stat-card i {
+            position: relative;
+            z-index: 1;
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .stat-card:nth-child(2) {
+            background: linear-gradient(135deg, var(--pink), var(--coral));
+            box-shadow: 0 10px 30px rgba(255, 179, 186, 0.3);
+        }
+        
+        .stat-card:nth-child(3) {
+            background: linear-gradient(135deg, #4facfe, #00f2fe);
+            box-shadow: 0 10px 30px rgba(79, 172, 254, 0.3);
+        }
+        
+        .stat-card:nth-child(4) {
+            background: linear-gradient(135deg, #43e97b, #38f9d7);
+            box-shadow: 0 10px 30px rgba(67, 233, 123, 0.3);
+        }
+        
+        .stat-number {
+            font-size: 3.5rem;
+            font-weight: 900;
+            margin: 15px 0;
+            text-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
         .stat-label {
-            font-size: 0.9rem;
-            opacity: 0.9;
+            font-size: 1rem;
+            font-weight: 700;
+            opacity: 0.95;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            z-index: 1;
         }
-
-        .performance-chart {
-            background: white;
+        
+        /* Table */
+        .table {
             border-radius: 15px;
-            padding: 20px;
+            overflow: hidden;
         }
-
-        body.dark-mode .performance-chart { background: #2a2a40; }
-
-        footer {
-            background: #1f2d3d;
-            color: #ddd;
-            padding: 25px 0;
+        
+        .table tr {
+            transition: all 0.3s ease;
+            border-bottom: 1px solid rgba(93, 186, 164, 0.1);
+        }
+        
+        .table tr:hover {
+            background: rgba(93, 186, 164, 0.08);
+        }
+        
+        .table td {
+            padding: 18px;
+            font-weight: 600;
+        }
+        
+        body.dark-mode .table tr {
+            border-bottom-color: rgba(93, 186, 164, 0.2);
+        }
+        
+        body.dark-mode .table tr:hover {
+            background: rgba(93, 186, 164, 0.15);
+        }
+        
+        .table thead {
+            background: linear-gradient(135deg, var(--teal), var(--blue));
+            color: white;
+        }
+        
+        .table thead th {
+            font-weight: 800;
+            text-transform: uppercase;
+            font-size: 0.95rem;
+            letter-spacing: 0.5px;
+            padding: 18px;
+            border: none;
+        }
+        
+        .table tbody td {
+            font-weight: 700;
+        }
+        
+        /* Progress Bars */
+        .progress {
+            height: 32px;
+            border-radius: 15px;
+            background: rgba(93, 186, 164, 0.15);
+            overflow: hidden;
+        }
+        
+        .progress-bar {
+            font-weight: 800;
+            border-radius: 15px;
+            transition: width 0.6s ease;
+        }
+        
+        .bg-success {
+            background: linear-gradient(90deg, #43e97b, #38f9d7) !important;
+        }
+        
+        .bg-warning {
+            background: linear-gradient(90deg, var(--yellow), #F4C542) !important;
+        }
+        
+        .bg-danger {
+            background: linear-gradient(90deg, var(--coral), var(--pink)) !important;
+        }
+        
+        /* Performance Chart */
+        .performance-chart {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 25px;
+        }
+        
+        body.dark-mode .performance-chart {
+            background: rgba(42, 42, 64, 0.95);
+        }
+        
+        /* Empty State */
+        .empty-state {
+            padding: 60px 30px;
+            text-align: center;
+        }
+        
+        .empty-state i {
+            font-size: 5rem;
+            background: linear-gradient(135deg, var(--pink), var(--teal));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        /* Achievements */
+        .achievement-box {
+            padding: 30px 20px;
+            transition: all 0.3s ease;
+            border-radius: 20px;
+        }
+        
+        .achievement-box:hover {
+            background: rgba(93, 186, 164, 0.08);
+            transform: translateY(-8px);
+        }
+        
+        body.dark-mode .achievement-box:hover {
+            background: rgba(93, 186, 164, 0.12);
+        }
+        
+        .achievement-box i {
+            background: linear-gradient(135deg, var(--gold), #FFA500);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        .achievement-box:nth-child(2) i {
+            background: linear-gradient(135deg, var(--teal), var(--blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation-delay: 0.5s;
+        }
+        
+        .achievement-box:nth-child(3) i {
+            background: linear-gradient(135deg, var(--coral), var(--pink));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation-delay: 1s;
+        }
+        
+        .achievement-box:nth-child(4) i {
+            background: linear-gradient(135deg, #43e97b, #38f9d7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation-delay: 1.5s;
+        }
+        
+        .achievement-box p {
+            font-weight: 800;
+            font-size: 1.1rem;
+            color: var(--text);
+            margin-top: 15px;
+        }
+        
+        body.dark-mode .achievement-box p {
+            color: #f0f0f0;
+        }
+        
+        /* Footer */
+        footer { 
+            background: linear-gradient(135deg, var(--navy), var(--blue));
+            color: white;
+            padding: 30px 0;
             margin-top: 80px;
             text-align: center;
+            box-shadow: 0 -5px 20px rgba(74, 111, 165, 0.3);
         }
-
-        body.dark-mode footer { background: #111; }
+        
+        footer strong {
+            color: var(--yellow);
+            font-weight: 800;
+        }
+        
+        body.dark-mode footer { 
+            background: linear-gradient(135deg, #1a1a2e, #0f0f1e);
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+                padding-left: 60px;
+            }
+            
+            h1::before {
+                font-size: 3rem;
+            }
+            
+            .stat-card {
+                margin-bottom: 20px;
+            }
+            
+            .stat-number {
+                font-size: 2.8rem;
+            }
+        }
     </style>
 </head>
 
@@ -62,123 +373,140 @@
 {% include 'navbar.html' %}
 
 <div class="container mt-5">
+    <h1>Learning Analytics</h1>
 
-    <h1 class="mb-4">{{ _('Learning Analytics') }}</h1>
-
-    <div class="row mb-4">
-
-        <div class="col-md-3 mb-3">
+    <!-- Stat Cards -->
+    <div class="row mb-5">
+        <div class="col-md-3 col-sm-6 mb-3">
             <div class="stat-card shadow">
-                <i class="bi bi-trophy-fill" style="font-size: 2rem;"></i>
+                <i class="bi bi-trophy-fill" style="font-size: 3rem;"></i>
                 <div class="stat-number">{{ stats.total_score }}</div>
-                <div class="stat-label">{{ _('Total Points') }}</div>
+                <div class="stat-label">Total Points</div>
             </div>
         </div>
 
-        <div class="col-md-3 mb-3">
-            <div class="stat-card shadow" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
-                <i class="bi bi-graph-up" style="font-size: 2rem;"></i>
+        <div class="col-md-3 col-sm-6 mb-3">
+            <div class="stat-card shadow">
+                <i class="bi bi-graph-up" style="font-size: 3rem;"></i>
                 <div class="stat-number">{{ stats.level }}</div>
-                <div class="stat-label">{{ _('Current Level') }}</div>
+                <div class="stat-label">Current Level</div>
             </div>
         </div>
 
-        <div class="col-md-3 mb-3">
-            <div class="stat-card shadow" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
-                <i class="bi bi-bullseye" style="font-size: 2rem;"></i>
+        <div class="col-md-3 col-sm-6 mb-3">
+            <div class="stat-card shadow">
+                <i class="bi bi-bullseye" style="font-size: 3rem;"></i>
                 <div class="stat-number">{{ stats.accuracy }}%</div>
-                <div class="stat-label">{{ _('Accuracy') }}</div>
+                <div class="stat-label">Accuracy</div>
             </div>
         </div>
 
-        <div class="col-md-3 mb-3">
-            <div class="stat-card shadow" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">
-                <i class="bi bi-fire" style="font-size: 2rem;"></i>
+        <div class="col-md-3 col-sm-6 mb-3">
+            <div class="stat-card shadow">
+                <i class="bi bi-fire" style="font-size: 3rem;"></i>
                 <div class="stat-number">{{ stats.study_streak }}</div>
-                <div class="stat-label">{{ _('Day Streak') }}</div>
+                <div class="stat-label">Day Streak</div>
             </div>
         </div>
-
     </div>
 
-    <div class="row mb-4">
-
-        <div class="col-md-6">
-            <div class="card shadow p-4">
-                <h5 class="mb-3">{{ _('Study Statistics') }}</h5>
-
+    <!-- Statistics Tables -->
+    <div class="row mb-5">
+        <div class="col-md-6 mb-3">
+            <div class="card shadow p-5">
+                <h5>
+                    <i class="bi bi-bar-chart"></i> Study Statistics
+                </h5>
                 <table class="table">
                     <tr>
-                        <td>{{ _('Total Quizzes') }}</td>
+                        <td>
+                            <i class="bi bi-check-circle" style="color: #43e97b;"></i>
+                            Total Quizzes
+                        </td>
                         <td class="text-end"><strong>{{ stats.total_quizzes }}</strong></td>
                     </tr>
                     <tr>
-                        <td>{{ _('Average Score') }}</td>
+                        <td>
+                            <i class="bi bi-star" style="color: var(--gold);"></i>
+                            Average Score
+                        </td>
                         <td class="text-end"><strong>{{ stats.avg_score|round(1) }}</strong></td>
                     </tr>
                     <tr>
-                        <td>{{ _('Total Uploads') }}</td>
+                        <td>
+                            <i class="bi bi-folder" style="color: var(--teal);"></i>
+                            Total Uploads
+                        </td>
                         <td class="text-end"><strong>{{ stats.total_uploads }}</strong></td>
                     </tr>
                     <tr>
-                        <td>{{ _('Most Active Day') }}</td>
+                        <td>
+                            <i class="bi bi-calendar" style="color: var(--blue);"></i>
+                            Most Active Day
+                        </td>
                         <td class="text-end"><strong>{{ stats.most_active_day }}</strong></td>
                     </tr>
                 </table>
             </div>
         </div>
 
-        <div class="col-md-6">
-            <div class="card shadow p-4">
-                <h5 class="mb-3">{{ _('Performance Insights') }}</h5>
-
+        <div class="col-md-6 mb-3">
+            <div class="card shadow p-5">
+                <h5>
+                    <i class="bi bi-graph-up-arrow"></i> Performance Insights
+                </h5>
+                
                 {% if performance %}
-                <p><strong>{{ _('Best Score') }}:</strong> {{ performance.max_score }}</p>
-                <p><strong>{{ _('Average') }}:</strong> {{ performance.avg_score|round(1) }}</p>
-                <p><strong>{{ _('Total Quizzes') }}:</strong> {{ performance.total_quizzes }}</p>
-
+                <div class="mb-4">
+                    <p><strong>🏆 Best Score:</strong> {{ performance.max_score }}</p>
+                    <p><strong>📊 Average:</strong> {{ performance.avg_score|round(1) }}</p>
+                    <p><strong>📝 Total Quizzes:</strong> {{ performance.total_quizzes }}</p>
+                </div>
+                
                 {% if performance.chart %}
-                <img src="/{{ performance.chart }}" class="img-fluid rounded">
+                <img src="/{{ performance.chart }}" class="img-fluid rounded" alt="Performance Chart">
                 {% endif %}
-
+                
                 {% else %}
-                <div class="text-center p-4">
-                    <i class="bi bi-graph-up" style="font-size: 3rem; color: #ccc;"></i>
-                    <p class="mt-3 text-muted">{{ _('Take more quizzes to see your performance trends') }}</p>
+                <div class="empty-state">
+                    <i class="bi bi-graph-up"></i>
+                    <p class="mt-3 text-muted" style="font-weight: 600;">Take more quizzes to see your performance trends</p>
                 </div>
                 {% endif %}
             </div>
         </div>
-
     </div>
 
+    <!-- Weekly Report -->
     {% if weekly_report %}
-    <div class="card shadow p-4 mb-4">
-        <h5 class="mb-4">{{ _('Weekly Performance Report') }}</h5>
-
+    <div class="card shadow p-5 mb-4">
+        <h5 class="mb-4">
+            <i class="bi bi-calendar-week"></i> Weekly Performance Report
+        </h5>
         <div class="table-responsive">
             <table class="table table-hover">
-                <thead class="table-dark">
+                <thead>
                     <tr>
-                        <th>{{ _('Week') }}</th>
-                        <th>{{ _('Quizzes Completed') }}</th>
-                        <th>{{ _('Accuracy') }}</th>
-                        <th>{{ _('Performance') }}</th>
+                        <th>📅 Week</th>
+                        <th>📝 Quizzes Completed</th>
+                        <th>🎯 Accuracy</th>
+                        <th>📊 Performance</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for week in weekly_report %}
                     <tr>
-                        <td>{{ week.week }}</td>
+                        <td><strong>{{ week.week }}</strong></td>
                         <td>{{ week.quizzes }}</td>
-                        <td>{{ week.accuracy }}%</td>
+                        <td><strong>{{ week.accuracy }}%</strong></td>
                         <td>
-                            <div class="progress" style="height: 20px;">
-                                <div class="progress-bar
+                            <div class="progress">
+                                <div class="progress-bar 
                                     {% if week.accuracy >= 80 %}bg-success
                                     {% elif week.accuracy >= 60 %}bg-warning
                                     {% else %}bg-danger
-                                    {% endif %}"
+                                    {% endif %}" 
+                                    role="progressbar" 
                                     style="width: {{ week.accuracy }}%">
                                 </div>
                             </div>
@@ -191,43 +519,51 @@
     </div>
     {% endif %}
 
-    <div class="card shadow p-4">
-        <h5 class="mb-4">{{ _('Achievements') }}</h5>
-
-        <div class="row text-center">
-
-            <div class="col-md-3 mb-3">
-                <i class="bi bi-trophy-fill" style="font-size: 3rem;"></i>
-                <p class="mt-2">{{ _('First Quiz') }}</p>
-                <small class="text-muted">{{ _('Complete your first quiz') }}</small>
+    <!-- Achievements -->
+    <div class="card shadow p-5">
+        <h5 class="mb-4">
+            <i class="bi bi-trophy"></i> Achievements
+        </h5>
+        <div class="row">
+            <div class="col-md-3 col-sm-6">
+                <div class="achievement-box text-center">
+                    <i class="bi bi-trophy-fill" style="font-size: 4rem;"></i>
+                    <p class="mt-3">🎯 First Quiz</p>
+                    <small class="text-muted">Complete your first quiz</small>
+                </div>
             </div>
 
-            <div class="col-md-3 mb-3">
-                <i class="bi bi-star-fill" style="font-size: 3rem;"></i>
-                <p class="mt-2">{{ _('Quiz Master') }}</p>
-                <small class="text-muted">{{ _('Complete 10 quizzes') }}</small>
+            <div class="col-md-3 col-sm-6">
+                <div class="achievement-box text-center">
+                    <i class="bi bi-star-fill" style="font-size: 4rem;"></i>
+                    <p class="mt-3">⭐ Quiz Master</p>
+                    <small class="text-muted">Complete 10 quizzes</small>
+                </div>
             </div>
 
-            <div class="col-md-3 mb-3">
-                <i class="bi bi-fire" style="font-size: 3rem;"></i>
-                <p class="mt-2">{{ _('Week Streak') }}</p>
-                <small class="text-muted">{{ _('Study 7 days in a row') }}</small>
+            <div class="col-md-3 col-sm-6">
+                <div class="achievement-box text-center">
+                    <i class="bi bi-fire" style="font-size: 4rem;"></i>
+                    <p class="mt-3">🔥 Week Streak</p>
+                    <small class="text-muted">Study 7 days in a row</small>
+                </div>
             </div>
 
-            <div class="col-md-3 mb-3">
-                <i class="bi bi-bullseye" style="font-size: 3rem;"></i>
-                <p class="mt-2">{{ _('Perfectionist') }}</p>
-                <small class="text-muted">{{ _('Achieve 90% accuracy') }}</small>
+            <div class="col-md-3 col-sm-6">
+                <div class="achievement-box text-center">
+                    <i class="bi bi-bullseye" style="font-size: 4rem;"></i>
+                    <p class="mt-3">🎯 Perfectionist</p>
+                    <small class="text-muted">Achieve 90% accuracy</small>
+                </div>
             </div>
-
         </div>
     </div>
-
 </div>
 
 <footer>
     <div class="container text-center">
-        {{ _('Developed by Vortex Team - Level 10 Students') }}
+        <p class="mb-1">Developed By <strong>Vortex Team</strong> 💜</p>
+        <p class="mb-0">🎓 University College Of Ranyah - Computer Science - Level 10 🎓</p>
     </div>
 </footer>
 

@@ -2,61 +2,302 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vortex - Puzzle Mode</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     
     <style>
-        body.light-mode { background: #f5f5f5; color: #333; }
-        body.dark-mode { background: #1e1e2f; color: #f0f0f0; }
+        /* ========================================
+           Puzzle Mode - Pastel Illustration Theme
+           ======================================== */
         
-        .card { border-radius: 18px; }
-        body.dark-mode .card { background: #2a2a40; color: #f0f0f0; }
-        
-        .puzzle-header {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            color: white;
-            padding: 40px;
-            border-radius: 18px 18px 0 0;
-            text-align: center;
+        :root {
+            --bg-lavender: #E8D5F2;
+            --bg-purple: #C4A7D7;
+            --teal: #5DBAA4;
+            --teal-light: #7DD3BD;
+            --yellow: #FFD166;
+            --pink: #FFB3BA;
+            --coral: #FF9AA2;
+            --blue: #6BA3C8;
+            --navy: #4A6FA5;
+            --text: #2C2C54;
         }
         
+        * {
+            font-family: 'Poppins', 'Cairo', sans-serif;
+        }
+        
+        body.light-mode { 
+            background: linear-gradient(135deg, var(--bg-lavender) 0%, var(--bg-purple) 100%);
+            color: var(--text);
+            min-height: 100vh;
+        }
+        
+        body.dark-mode { 
+            background: linear-gradient(135deg, #4A3A5C 0%, #2C1E3F 100%);
+            color: #f0f0f0;
+        }
+        
+        .container {
+            padding-top: 40px;
+            padding-bottom: 40px;
+        }
+        
+        .card { 
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 25px;
+            border: 4px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 10px 35px rgba(108, 91, 123, 0.2);
+            overflow: hidden;
+        }
+        
+        body.dark-mode .card { 
+            background: rgba(42, 42, 64, 0.95);
+            border-color: rgba(93, 186, 164, 0.3);
+            color: #f0f0f0;
+        }
+        
+        /* Puzzle Header */
+        .puzzle-header {
+            background: linear-gradient(135deg, var(--pink), var(--coral));
+            color: white;
+            padding: 50px 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .puzzle-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%);
+            animation: pulse 3s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+        
+        .puzzle-header h2 {
+            font-weight: 900;
+            font-size: 3rem;
+            text-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            position: relative;
+            z-index: 1;
+            margin-bottom: 15px;
+        }
+        
+        .puzzle-header h2::before {
+            content: '🧩 ';
+        }
+        
+        .puzzle-header p {
+            font-size: 1.2rem;
+            font-weight: 700;
+            opacity: 0.95;
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Section Titles */
+        .card-body h5 {
+            background: linear-gradient(90deg, var(--teal), var(--blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
+            font-size: 1.5rem;
+            margin-bottom: 25px;
+        }
+        
+        /* Word Tiles */
         .word-tile {
             display: inline-block;
-            padding: 10px 20px;
-            margin: 5px;
-            background: #6C63FF;
+            padding: 12px 25px;
+            margin: 8px;
+            background: linear-gradient(135deg, var(--teal), var(--blue));
             color: white;
-            border-radius: 10px;
+            border-radius: 15px;
             cursor: pointer;
-            transition: transform 0.2s;
+            transition: all 0.3s ease;
             user-select: none;
+            font-weight: 800;
+            font-size: 1.05rem;
+            box-shadow: 0 5px 15px rgba(93, 186, 164, 0.3);
+            border: 3px solid rgba(255, 255, 255, 0.3);
         }
         
         .word-tile:hover {
-            transform: scale(1.1);
+            transform: translateY(-5px) scale(1.08);
+            box-shadow: 0 10px 25px rgba(93, 186, 164, 0.4);
         }
         
         .word-tile.selected {
-            background: #28a745;
+            background: linear-gradient(135deg, #43e97b, #38f9d7);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(67, 233, 123, 0.4);
         }
         
+        /* Scrambled Words Area */
+        #scrambledWords {
+            min-height: 120px;
+            padding: 25px;
+            background: rgba(93, 186, 164, 0.05);
+            border: 3px dashed rgba(93, 186, 164, 0.3);
+            border-radius: 20px;
+            margin-bottom: 35px;
+        }
+        
+        body.dark-mode #scrambledWords {
+            background: rgba(93, 186, 164, 0.08);
+        }
+        
+        /* User Answer Area */
         #userAnswer {
-            min-height: 100px;
-            border: 2px dashed #6C63FF;
-            padding: 20px;
-            border-radius: 10px;
-            margin: 20px 0;
+            min-height: 120px;
+            border: 3px dashed var(--teal);
+            padding: 25px;
+            border-radius: 20px;
+            margin: 25px 0;
+            background: rgba(93, 186, 164, 0.05);
+            transition: all 0.3s ease;
         }
         
-        footer { 
-            background: #1f2d3d; 
-            color: #ddd; 
-            padding: 25px 0; 
-            margin-top: 80px; 
-            text-align: center; 
+        #userAnswer:empty::before {
+            content: '🎯 Click words above to arrange them here...';
+            color: #999;
+            font-weight: 700;
+            font-style: italic;
         }
-        body.dark-mode footer { background: #111; }
+        
+        body.dark-mode #userAnswer {
+            background: rgba(93, 186, 164, 0.08);
+        }
+        
+        /* Buttons */
+        .btn-warning {
+            background: linear-gradient(135deg, var(--yellow), #F4C542);
+            border: none;
+            color: var(--text);
+            font-weight: 800;
+            padding: 12px 30px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(255, 209, 102, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-warning:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(255, 209, 102, 0.4);
+            color: var(--text);
+        }
+        
+        .btn-info {
+            background: linear-gradient(135deg, #4facfe, #00f2fe);
+            border: none;
+            color: white;
+            font-weight: 800;
+            padding: 12px 30px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(79, 172, 254, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-info:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(79, 172, 254, 0.4);
+        }
+        
+        .btn-success {
+            background: linear-gradient(135deg, #43e97b, #38f9d7);
+            border: none;
+            font-weight: 800;
+            padding: 18px 50px;
+            border-radius: 18px;
+            font-size: 1.3rem;
+            box-shadow: 0 10px 30px rgba(67, 233, 123, 0.4);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-success:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(67, 233, 123, 0.5);
+        }
+        
+        /* Alert */
+        .alert-info {
+            background: linear-gradient(135deg, rgba(93, 186, 164, 0.15), rgba(107, 163, 200, 0.15));
+            border: 3px solid rgba(93, 186, 164, 0.3);
+            border-radius: 15px;
+            color: var(--text);
+            font-weight: 700;
+            padding: 20px 25px;
+        }
+        
+        body.dark-mode .alert-info {
+            background: linear-gradient(135deg, rgba(93, 186, 164, 0.2), rgba(107, 163, 200, 0.2));
+            color: #f0f0f0;
+        }
+        
+        .alert-info strong {
+            color: var(--teal);
+            font-weight: 900;
+        }
+        
+        body.dark-mode .alert-info strong {
+            color: var(--teal-light);
+        }
+        
+        /* Footer */
+        footer { 
+            background: linear-gradient(135deg, var(--navy), var(--blue));
+            color: white;
+            padding: 30px 0;
+            margin-top: 80px;
+            text-align: center;
+            box-shadow: 0 -5px 20px rgba(74, 111, 165, 0.3);
+        }
+        
+        footer strong {
+            color: var(--yellow);
+            font-weight: 800;
+        }
+        
+        body.dark-mode footer { 
+            background: linear-gradient(135deg, #1a1a2e, #0f0f1e);
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .puzzle-header h2 {
+                font-size: 2.2rem;
+            }
+            
+            .word-tile {
+                padding: 10px 18px;
+                margin: 6px;
+                font-size: 1rem;
+            }
+            
+            #scrambledWords,
+            #userAnswer {
+                min-height: 100px;
+                padding: 20px;
+            }
+            
+            .btn-success {
+                padding: 16px 40px;
+                font-size: 1.1rem;
+            }
+        }
     </style>
 </head>
 
@@ -66,40 +307,47 @@
 
 <div class="container mt-5">
     <div class="card shadow">
+        <!-- Puzzle Header -->
         <div class="puzzle-header">
-            <h2 class="mb-3">Puzzle Mode</h2>
+            <h2>Puzzle Mode</h2>
             <p>Arrange the words in the correct order</p>
         </div>
 
+        <!-- Puzzle Body -->
         <div class="card-body p-5">
-            <h5 class="mb-3">Scrambled Words:</h5>
-            <div id="scrambledWords" class="mb-4">
+            <h5>
+                <i class="bi bi-puzzle"></i> Scrambled Words:
+            </h5>
+            <div id="scrambledWords">
                 {% for word in scrambled %}
                 <span class="word-tile" data-word="{{ word }}">{{ word }}</span>
                 {% endfor %}
             </div>
 
-            <h5 class="mb-3">Your Answer:</h5>
+            <h5>
+                <i class="bi bi-cursor-text"></i> Your Answer:
+            </h5>
             <div id="userAnswer"></div>
             
-            <div class="d-flex gap-2">
+            <div class="d-flex gap-3 mb-4">
                 <button id="clearBtn" class="btn btn-warning">
                     <i class="bi bi-arrow-counterclockwise"></i> Clear
                 </button>
                 <button id="hintBtn" class="btn btn-info">
-                    <i class="bi bi-lightbulb"></i> Hint
+                    <i class="bi bi-lightbulb-fill"></i> Hint
                 </button>
             </div>
 
             <form method="POST" action="{{ url_for('submit_puzzle', puzzle_id=puzzle_id) }}" id="puzzleForm">
                 <input type="hidden" name="answer" id="answerInput">
                 <button type="submit" class="btn btn-success w-100 btn-lg mt-4">
-                    <i class="bi bi-check-circle"></i> Submit Answer
+                    <i class="bi bi-check-circle-fill"></i> Submit Answer
                 </button>
             </form>
 
             <div class="alert alert-info mt-4">
-                <strong>Hint:</strong> The original text has {{ original.split()|length }} words.
+                <i class="bi bi-info-circle-fill"></i>
+                <strong>Hint:</strong> The original text has <strong>{{ original.split()|length }} words</strong>. Look for proper sentence structure!
             </div>
         </div>
     </div>
@@ -107,7 +355,8 @@
 
 <footer>
     <div class="container text-center">
-        Developed by <strong>Vortex Team</strong> - Level 10 Students
+        <p class="mb-1">Developed By <strong>Vortex Team</strong> 💜</p>
+        <p class="mb-0">🎓 University College Of Ranyah - Computer Science - Level 10 🎓</p>
     </div>
 </footer>
 
@@ -152,13 +401,13 @@ clearBtn.addEventListener('click', () => {
 });
 
 hintBtn.addEventListener('click', () => {
-    alert('Original text has {{ original.split()|length }} words. Look for sentence structure.');
+    alert('💡 Hint:\n\nThe original text has {{ original.split()|length }} words.\n\nLook for proper sentence structure and grammar!\n\nThink about subject-verb-object order. 🎯');
 });
 
 document.getElementById('puzzleForm').addEventListener('submit', (e) => {
     if (selectedWords.length === 0) {
         e.preventDefault();
-        alert('Please arrange some words first.');
+        alert('⚠️ Please arrange some words first!\n\nClick on the words above to build your answer. 🧩');
     }
 });
 </script>

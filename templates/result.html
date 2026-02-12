@@ -1,195 +1,364 @@
 <!DOCTYPE html>
-<html lang="{{ current_lang }}" {% if current_lang == 'ar' %}dir="rtl"{% endif %}>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Vortex - {{ t('learning_results') }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vortex - Result</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     
     <style>
+        /* ========================================
+           Result Page - Pastel Illustration Theme
+           ======================================== */
+        
+        :root {
+            --bg-lavender: #E8D5F2;
+            --bg-purple: #C4A7D7;
+            --teal: #5DBAA4;
+            --teal-light: #7DD3BD;
+            --yellow: #FFD166;
+            --gold: #FFD700;
+            --pink: #FFB3BA;
+            --coral: #FF9AA2;
+            --blue: #6BA3C8;
+            --navy: #4A6FA5;
+            --text: #2C2C54;
+        }
+        
+        * {
+            font-family: 'Poppins', 'Cairo', sans-serif;
+        }
+        
         body.light-mode { 
-            background: #f0f8ff; 
-            color: #333; 
+            background: linear-gradient(135deg, var(--bg-lavender) 0%, var(--bg-purple) 100%);
+            color: var(--text);
+            min-height: 100vh;
             transition: background 0.3s ease, color 0.3s ease;
         }
         
         body.dark-mode { 
-            background: #1e1e2f; 
-            color: #f0f0f0; 
+            background: linear-gradient(135deg, #4A3A5C 0%, #2C1E3F 100%);
+            color: #f0f0f0;
             transition: background 0.3s ease, color 0.3s ease;
         }
         
-        .card {
-            border-radius: 18px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            margin-bottom: 25px;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        .container {
+            padding-top: 40px;
+            padding-bottom: 40px;
         }
         
-        body.dark-mode .card {
-            background: #2a2a40;
-            color: #f0f0f0;
-            border: 1px solid #3a3a50;
+        /* Page Title */
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 900;
+            text-align: center;
+            margin-bottom: 50px;
+            background: linear-gradient(90deg, var(--teal), var(--blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            position: relative;
+            padding-top: 60px;
+        }
+        
+        h1::before {
+            content: '🎉';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 4rem;
+            animation: bounce 2s ease-in-out infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(-15px); }
+        }
+        
+        /* Cards */
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 25px;
+            border: 4px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 10px 35px rgba(108, 91, 123, 0.2);
+            margin-bottom: 30px;
+            transition: all 0.3s ease;
         }
         
         .card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            transform: translateY(-5px);
+            box-shadow: 0 15px 45px rgba(108, 91, 123, 0.3);
+        }
+        
+        body.dark-mode .card {
+            background: rgba(42, 42, 64, 0.95);
+            border-color: rgba(93, 186, 164, 0.3);
+            color: #f0f0f0;
         }
         
         .card-header {
-            background: linear-gradient(90deg, #1abc9c, #3498db) !important;
+            background: linear-gradient(135deg, var(--teal), var(--blue)) !important;
             color: white !important;
-            border-radius: 18px 18px 0 0 !important;
-            font-weight: 600;
-            padding: 15px 20px;
+            border-radius: 25px 25px 0 0 !important;
+            font-weight: 800;
+            padding: 20px 30px;
+            border: none;
+            font-size: 1.3rem;
         }
         
+        .card-body .lead {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            font-weight: 600;
+            color: var(--text);
+        }
+        
+        body.dark-mode .card-body .lead {
+            color: #ddd;
+        }
+        
+        /* Action Cards */
         .action-card {
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            transition: all 0.3s ease;
             cursor: pointer;
             text-align: center;
-            padding: 30px;
-            border-radius: 18px;
-            background: white;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            padding: 40px 30px;
+            border-radius: 25px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 10px 35px rgba(108, 91, 123, 0.2);
+            border: 4px solid rgba(255, 255, 255, 0.6);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .action-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(93, 186, 164, 0.1) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .action-card:hover::before {
+            opacity: 1;
         }
         
         body.dark-mode .action-card {
-            background: #2a2a40;
+            background: rgba(42, 42, 64, 0.95);
+            border-color: rgba(93, 186, 164, 0.3);
         }
         
         .action-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 12px 35px rgba(26, 188, 156, 0.2);
+            transform: translateY(-12px) scale(1.02);
+            box-shadow: 0 20px 50px rgba(108, 91, 123, 0.35);
         }
         
         .action-icon {
-            font-size: 4rem;
-            margin-bottom: 20px;
+            font-size: 5rem;
+            margin-bottom: 25px;
             animation: float 3s ease-in-out infinite;
+            position: relative;
+            z-index: 1;
         }
         
         @keyframes float {
             0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
+            50% { transform: translateY(-15px); }
         }
         
-        .gradient-text {
-            background: linear-gradient(90deg, #1abc9c, #3498db);
+        .action-card:nth-child(1) .action-icon::before { content: '🎴'; }
+        .action-card:nth-child(2) .action-icon::before { content: '📝'; }
+        .action-card:nth-child(3) .action-icon::before { content: '📊'; }
+        
+        .action-card h4 {
+            background: linear-gradient(90deg, var(--teal), var(--blue));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            font-weight: 800;
+            font-weight: 900;
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            position: relative;
+            z-index: 1;
         }
         
-        .btn {
-            border-radius: 12px;
+        .action-card p {
             font-weight: 600;
-            padding: 12px 30px;
-            transition: all 0.3s ease;
-            border: none;
+            font-size: 1.05rem;
+            position: relative;
+            z-index: 1;
         }
         
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-        }
-        
-        .btn-primary {
-            background: linear-gradient(90deg, #1abc9c, #3498db);
-            color: white;
-        }
-        
-        .btn-success {
-            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
-            color: white;
-        }
-        
-        .btn-info {
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-            color: white;
-        }
-        
-        .btn-secondary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-        }
-        
-        .stat-box {
-            padding: 20px;
-            border-radius: 12px;
+        /* Mind Map */
+        .mindmap-img {
+            max-width: 100%;
+            border-radius: 20px;
+            box-shadow: 0 10px 35px rgba(108, 91, 123, 0.25);
             transition: transform 0.3s ease;
+            border: 4px solid rgba(255, 255, 255, 0.6);
+        }
+        
+        .mindmap-img:hover {
+            transform: scale(1.03);
+            box-shadow: 0 15px 45px rgba(108, 91, 123, 0.35);
+        }
+        
+        /* Stat Boxes */
+        .stat-box {
+            padding: 30px 20px;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            background: rgba(93, 186, 164, 0.08);
         }
         
         .stat-box:hover {
-            transform: scale(1.05);
+            transform: translateY(-8px) scale(1.05);
+            background: rgba(93, 186, 164, 0.15);
+        }
+        
+        body.dark-mode .stat-box {
+            background: rgba(93, 186, 164, 0.12);
+        }
+        
+        body.dark-mode .stat-box:hover {
+            background: rgba(93, 186, 164, 0.2);
         }
         
         .stat-box i {
             transition: transform 0.3s ease;
+            animation: float 3s ease-in-out infinite;
         }
         
         .stat-box:hover i {
-            transform: rotate(10deg);
+            transform: rotate(15deg) scale(1.1);
         }
         
+        .stat-box h3 {
+            background: linear-gradient(90deg, var(--teal), var(--blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 900;
+            font-size: 2.5rem;
+            margin: 15px 0 10px;
+        }
+        
+        .stat-box p {
+            font-weight: 700;
+            font-size: 1rem;
+        }
+        
+        /* Buttons */
+        .btn {
+            border-radius: 15px;
+            font-weight: 800;
+            padding: 14px 35px;
+            transition: all 0.3s ease;
+            border: none;
+            font-size: 1.05rem;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--teal), var(--blue));
+            color: white;
+            box-shadow: 0 5px 15px rgba(93, 186, 164, 0.3);
+        }
+        
+        .btn-primary:hover {
+            box-shadow: 0 8px 25px rgba(93, 186, 164, 0.4);
+        }
+        
+        .btn-success {
+            background: linear-gradient(135deg, #43e97b, #38f9d7);
+            color: white;
+            box-shadow: 0 5px 15px rgba(67, 233, 123, 0.3);
+        }
+        
+        .btn-success:hover {
+            box-shadow: 0 8px 25px rgba(67, 233, 123, 0.4);
+        }
+        
+        .btn-info {
+            background: linear-gradient(135deg, #4facfe, #00f2fe);
+            color: white;
+            box-shadow: 0 5px 15px rgba(79, 172, 254, 0.3);
+        }
+        
+        .btn-info:hover {
+            box-shadow: 0 8px 25px rgba(79, 172, 254, 0.4);
+        }
+        
+        .btn-secondary {
+            background: linear-gradient(135deg, var(--pink), var(--coral));
+            color: white;
+            box-shadow: 0 5px 15px rgba(255, 179, 186, 0.3);
+        }
+        
+        .btn-secondary:hover {
+            box-shadow: 0 8px 25px rgba(255, 179, 186, 0.4);
+        }
+        
+        /* Footer */
         footer {
-            background: #1f2d3d;
-            color: #ddd;
+            background: linear-gradient(135deg, var(--navy), var(--blue));
+            color: white;
             padding: 30px 0;
             margin-top: 80px;
             text-align: center;
-        }
-        
-        body.dark-mode footer {
-            background: #111;
+            box-shadow: 0 -5px 20px rgba(74, 111, 165, 0.3);
         }
         
         footer strong {
-            color: #1abc9c;
-        }
-        
-        h1 {
-            font-size: 2.5rem;
+            color: var(--yellow);
             font-weight: 800;
-            margin-bottom: 30px;
         }
         
-        h4 {
-            font-weight: 700;
+        body.dark-mode footer {
+            background: linear-gradient(135deg, #1a1a2e, #0f0f1e);
         }
         
+        /* Animations */
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
+            from { opacity: 0; transform: translateY(30px); }
             to { opacity: 1; transform: translateY(0); }
         }
         
         .fade-in {
-            animation: fadeIn 0.5s ease;
+            animation: fadeIn 0.6s ease;
         }
         
-        .mindmap-img {
-            max-width: 100%;
-            border-radius: 15px;
-            box-shadow: 0 8px 30px rgba(0,0,0,0.15);
-            transition: transform 0.3s ease;
-        }
-        
-        .mindmap-img:hover {
-            transform: scale(1.02);
-        }
-        
+        /* Responsive */
         @media (max-width: 768px) {
             h1 {
-                font-size: 2rem;
+                font-size: 2.5rem;
+                padding-top: 50px;
             }
             
-            .action-icon {
+            h1::before {
                 font-size: 3rem;
             }
             
+            .action-icon {
+                font-size: 3.5rem;
+            }
+            
             .action-card {
-                padding: 20px;
+                padding: 30px 20px;
+            }
+            
+            .stat-box {
+                margin-bottom: 20px;
             }
         }
     </style>
@@ -200,105 +369,110 @@
 {% include 'navbar.html' %}
 
 <div class="container mt-5">
-    <h1 class="text-center mb-5 gradient-text fade-in">{{ t('learning_results') }}</h1>
+    <h1 class="fade-in">Your Learning Results</h1>
 
+    <!-- Summary Card -->
     <div class="card shadow fade-in">
         <div class="card-header">
-            <i class="bi bi-file-text"></i> {{ t('summary') }}
+            <i class="bi bi-file-text-fill"></i> Summary
         </div>
-        <div class="card-body">
+        <div class="card-body p-5">
             <p class="lead">{{ summary }}</p>
         </div>
     </div>
 
+    <!-- Mind Map Card -->
     <div class="card shadow fade-in">
         <div class="card-header">
-            <i class="bi bi-diagram-3"></i> {{ t('mind_map') }}
+            <i class="bi bi-diagram-3-fill"></i> Mind Map
         </div>
-        <div class="card-body text-center">
+        <div class="card-body text-center p-5">
             <img src="{{ url_for('static', filename='images/mindmap.png') }}"
                  class="mindmap-img"
-                 alt="{{ t('mind_map') }}">
+                 alt="Mind Map">
         </div>
     </div>
 
+    <!-- Action Cards -->
     <div class="row mt-5 mb-5">
         <div class="col-md-4 mb-4 fade-in">
             <div class="action-card" onclick="window.location.href='{{ url_for('flashcards') }}'">
-                <div class="action-icon">📚</div>
-                <h4 class="gradient-text mb-3">{{ t('flashcards') }}</h4>
-                <p class="text-muted mb-4">{{ t('flashcards_desc') }}</p>
+                <div class="action-icon"></div>
+                <h4>Flashcards</h4>
+                <p class="text-muted mb-4">Review with interactive flashcards</p>
                 <button class="btn btn-primary w-100">
-                    <i class="bi bi-arrow-right"></i> {{ t('start_review') }}
+                    <i class="bi bi-arrow-right-circle"></i> Start Review
                 </button>
             </div>
         </div>
 
         <div class="col-md-4 mb-4 fade-in">
             <div class="action-card" onclick="window.location.href='{{ url_for('quiz_page') }}'">
-                <div class="action-icon">🎯</div>
-                <h4 class="gradient-text mb-3">{{ t('quiz_title') }}</h4>
-                <p class="text-muted mb-4">{{ t('quiz_desc') }} {{ quiz|length }} {{ t('questions') }}</p>
+                <div class="action-icon"></div>
+                <h4>Quiz</h4>
+                <p class="text-muted mb-4">Test your knowledge with {{ quiz|length }} questions</p>
                 <button class="btn btn-success w-100">
-                    <i class="bi bi-play-fill"></i> {{ t('start_quiz') }}
+                    <i class="bi bi-play-fill"></i> Start Quiz
                 </button>
             </div>
         </div>
 
         <div class="col-md-4 mb-4 fade-in">
             <div class="action-card" onclick="window.location.href='{{ url_for('dashboard') }}'">
-                <div class="action-icon">📊</div>
-                <h4 class="gradient-text mb-3">{{ t('dashboard_title') }}</h4>
-                <p class="text-muted mb-4">{{ t('dashboard_desc') }}</p>
+                <div class="action-icon"></div>
+                <h4>Dashboard</h4>
+                <p class="text-muted mb-4">View your progress and stats</p>
                 <button class="btn btn-info w-100">
-                    <i class="bi bi-speedometer2"></i> {{ t('go_dashboard') }}
+                    <i class="bi bi-speedometer2"></i> Go to Dashboard
                 </button>
             </div>
         </div>
     </div>
 
+    <!-- Quick Stats Card -->
     <div class="card shadow fade-in">
-        <div class="card-body">
-            <h5 class="text-center mb-4">
-                <i class="bi bi-graph-up"></i> {{ t('quick_stats') }}
+        <div class="card-body p-5">
+            <h5 class="text-center mb-5" style="font-size: 2rem; font-weight: 800; background: linear-gradient(90deg, var(--teal), var(--blue)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+                <i class="bi bi-graph-up-arrow"></i> Quick Stats
             </h5>
             <div class="row">
                 <div class="col-md-4 mb-3">
                     <div class="stat-box text-center">
-                        <i class="bi bi-card-checklist" style="font-size: 3rem; color: #1abc9c;"></i>
-                        <h3 class="mt-3 gradient-text">{{ quiz|length }}</h3>
-                        <p class="text-muted mb-0">{{ t('questions_generated') }}</p>
+                        <i class="bi bi-card-checklist" style="font-size: 4rem; color: var(--teal);"></i>
+                        <h3>{{ quiz|length }}</h3>
+                        <p class="text-muted mb-0">Questions Generated</p>
                     </div>
                 </div>
                 <div class="col-md-4 mb-3">
                     <div class="stat-box text-center">
-                        <i class="bi bi-lightning-fill" style="font-size: 3rem; color: #3498db;"></i>
-                        <h3 class="mt-3 gradient-text">{{ quiz|length * 10 }}</h3>
-                        <p class="text-muted mb-0">{{ t('potential_points') }}</p>
+                        <i class="bi bi-lightning-fill" style="font-size: 4rem; color: var(--gold);"></i>
+                        <h3>{{ quiz|length * 10 }}</h3>
+                        <p class="text-muted mb-0">Potential Points</p>
                     </div>
                 </div>
                 <div class="col-md-4 mb-3">
                     <div class="stat-box text-center">
-                        <i class="bi bi-clock-fill" style="font-size: 3rem; color: #43e97b;"></i>
-                        <h3 class="mt-3 gradient-text">~10 min</h3>
-                        <p class="text-muted mb-0">{{ t('estimated_time') }}</p>
+                        <i class="bi bi-clock-fill" style="font-size: 4rem; color: #43e97b;"></i>
+                        <h3>~10 min</h3>
+                        <p class="text-muted mb-0">Estimated Time</p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- Back Button -->
     <div class="text-center mt-5 mb-5">
         <a href="{{ url_for('home') }}" class="btn btn-secondary btn-lg">
-            <i class="bi bi-house"></i> {{ t('back_home') }}
+            <i class="bi bi-house-door-fill"></i> Back Home
         </a>
     </div>
 </div>
 
 <footer>
     <div class="container text-center">
-        <p class="mb-1">{{ t('developed_by') }} <strong>{{ t('team_name') }}</strong></p>
-        <p class="mb-0">💚 💙 {{ t('university') }} 💚 💙</p>
+        <p class="mb-1">Developed By <strong>Vortex Team</strong> 💜</p>
+        <p class="mb-0">🎓 University College Of Ranyah - Computer Science - Level 10 🎓</p>
     </div>
 </footer>
 

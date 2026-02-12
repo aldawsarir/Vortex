@@ -1,158 +1,298 @@
 <!DOCTYPE html>
-<html lang="{{ current_lang }}" {% if current_lang == 'ar' %}dir="rtl"{% endif %}>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Vortex - {{ t('leaderboard') }}</title>
+    <title>Vortex - Leaderboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     
     <style>
-        body.light-mode { 
-            background: #f0f8ff; 
-            color: #333; 
-            transition: all 0.3s ease;
-        }
-        body.dark-mode { 
-            background: #1e1e2f; 
-            color: #f0f0f0; 
-            transition: all 0.3s ease;
+        /* ========================================
+           Leaderboard - Pastel Illustration Theme
+           ======================================== */
+        
+        :root {
+            --bg-lavender: #E8D5F2;
+            --bg-purple: #C4A7D7;
+            --teal: #5DBAA4;
+            --teal-light: #7DD3BD;
+            --yellow: #FFD166;
+            --gold: #FFD700;
+            --silver: #C0C0C0;
+            --bronze: #CD7F32;
+            --pink: #FFB3BA;
+            --blue: #6BA3C8;
+            --navy: #4A6FA5;
+            --text: #2C2C54;
         }
         
-        .page-title {
-            font-size: 3rem;
-            font-weight: 800;
+        * {
+            font-family: 'Poppins', 'Cairo', sans-serif;
+        }
+        
+        body.light-mode { 
+            background: linear-gradient(135deg, var(--bg-lavender) 0%, var(--bg-purple) 100%);
+            color: var(--text);
+            min-height: 100vh;
+        }
+        
+        body.dark-mode { 
+            background: linear-gradient(135deg, #4A3A5C 0%, #2C1E3F 100%);
+            color: #f0f0f0;
+        }
+        
+        .container {
+            padding-top: 40px;
+            padding-bottom: 40px;
+        }
+        
+        /* Page Title */
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 900;
             text-align: center;
-            margin-bottom: 40px;
-            background: linear-gradient(90deg, #1abc9c, #3498db);
+            margin-bottom: 50px;
+            background: linear-gradient(90deg, var(--teal), var(--blue));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            position: relative;
+            padding-top: 60px;
+        }
+        
+        h1::before {
+            content: '🏆';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 4rem;
+            animation: trophy-shake 2s ease-in-out infinite;
+        }
+        
+        @keyframes trophy-shake {
+            0%, 100% { transform: translateX(-50%) rotate(0deg); }
+            25% { transform: translateX(-50%) rotate(-10deg); }
+            75% { transform: translateX(-50%) rotate(10deg); }
         }
         
         .card { 
-            border-radius: 18px; 
-            border: none;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 25px;
+            border: 4px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 10px 35px rgba(108, 91, 123, 0.2);
+            padding: 30px;
         }
+        
         body.dark-mode .card { 
-            background: #2a2a40; 
-            color: #f0f0f0; 
+            background: rgba(42, 42, 64, 0.95);
+            border-color: rgba(93, 186, 164, 0.3);
+            color: #f0f0f0;
         }
         
-        .rank-1 { 
-            background: linear-gradient(135deg, #FFD700, #FFA500); 
-            color: white;
-            box-shadow: 0 8px 20px rgba(255, 215, 0, 0.3);
-        }
-        .rank-2 { 
-            background: linear-gradient(135deg, #C0C0C0, #A8A8A8); 
-            color: white;
-            box-shadow: 0 8px 20px rgba(192, 192, 192, 0.3);
-        }
-        .rank-3 { 
-            background: linear-gradient(135deg, #CD7F32, #8B4513); 
-            color: white;
-            box-shadow: 0 8px 20px rgba(205, 127, 50, 0.3);
-        }
-        
+        /* Leaderboard Items */
         .leaderboard-item { 
-            padding: 20px; 
-            border-radius: 12px; 
-            margin-bottom: 15px; 
+            padding: 25px 30px; 
+            border-radius: 20px; 
+            margin-bottom: 18px; 
             transition: all 0.3s ease;
-            background: white;
+            position: relative;
+            overflow: hidden;
+            border: 3px solid transparent;
         }
         
-        body.dark-mode .leaderboard-item {
-            background: #1e1e2f;
+        .leaderboard-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at top left, rgba(255,255,255,0.2), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .leaderboard-item:hover::before {
+            opacity: 1;
         }
         
         .leaderboard-item:hover { 
-            transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(26, 188, 156, 0.2);
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
         }
         
+        /* Top 3 Ranks */
+        .rank-1 { 
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            color: white;
+            border-color: #FFD700;
+            box-shadow: 0 8px 25px rgba(255, 215, 0, 0.4);
+            animation: pulse-gold 2s ease-in-out infinite;
+        }
+        
+        @keyframes pulse-gold {
+            0%, 100% { box-shadow: 0 8px 25px rgba(255, 215, 0, 0.4); }
+            50% { box-shadow: 0 12px 35px rgba(255, 215, 0, 0.6); }
+        }
+        
+        .rank-2 { 
+            background: linear-gradient(135deg, #C0C0C0, #A8A8A8);
+            color: white;
+            border-color: #C0C0C0;
+            box-shadow: 0 6px 20px rgba(192, 192, 192, 0.4);
+        }
+        
+        .rank-3 { 
+            background: linear-gradient(135deg, #CD7F32, #8B4513);
+            color: white;
+            border-color: #CD7F32;
+            box-shadow: 0 6px 20px rgba(205, 127, 50, 0.4);
+        }
+        
+        /* Regular Ranks */
+        .rank-regular {
+            background: rgba(93, 186, 164, 0.08);
+            border-color: rgba(93, 186, 164, 0.3);
+        }
+        
+        body.dark-mode .rank-regular {
+            background: rgba(93, 186, 164, 0.12);
+            border-color: rgba(93, 186, 164, 0.4);
+        }
+        
+        /* Rank Number */
         .rank-number {
-            font-size: 2rem;
-            font-weight: 900;
-            width: 60px;
-            text-align: center;
-        }
-        
-        .trophy-icon {
             font-size: 2.5rem;
-            margin-right: 15px;
+            font-weight: 900;
+            margin-right: 25px;
+            min-width: 60px;
+            text-align: center;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.15);
         }
         
-        [dir="rtl"] .trophy-icon {
-            margin-right: 0;
-            margin-left: 15px;
+        .rank-1 .rank-number::after {
+            content: '👑';
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 1.8rem;
         }
         
+        /* User Info */
         .user-info h5 {
-            font-weight: 700;
+            font-weight: 800;
+            font-size: 1.4rem;
             margin-bottom: 5px;
         }
         
-        .user-stats {
+        .user-info small {
+            font-weight: 700;
+            opacity: 0.85;
+            font-size: 0.95rem;
+        }
+        
+        /* Score Display */
+        .score-display {
             text-align: right;
         }
         
-        [dir="rtl"] .user-stats {
-            text-align: left;
+        .score-display h4 {
+            font-size: 2.2rem;
+            font-weight: 900;
+            margin-bottom: 5px;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.15);
         }
         
-        .score-number {
-            font-size: 1.8rem;
-            font-weight: 800;
-            color: #1abc9c;
+        .score-display small {
+            font-weight: 700;
+            opacity: 0.85;
+            font-size: 0.95rem;
         }
         
-        .rank-1 .score-number,
-        .rank-2 .score-number,
-        .rank-3 .score-number {
-            color: white;
-        }
-        
-        footer { 
-            background: #1f2d3d; 
-            color: #ddd; 
-            padding: 25px 0; 
-            margin-top: 80px; 
-            text-align: center; 
-        }
-        body.dark-mode footer { background: #111; }
-        
-        footer strong {
-            color: #1abc9c;
-        }
-        
+        /* Empty State */
         .empty-state {
             text-align: center;
-            padding: 60px 20px;
+            padding: 80px 30px;
         }
         
         .empty-state i {
-            font-size: 5rem;
-            color: #ccc;
-            margin-bottom: 20px;
+            font-size: 6rem;
+            background: linear-gradient(135deg, var(--pink), var(--teal));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 25px;
         }
         
+        .empty-state p {
+            font-size: 1.2rem;
+            color: var(--text);
+            font-weight: 600;
+        }
+        
+        body.dark-mode .empty-state p {
+            color: #ddd;
+        }
+        
+        /* Footer */
+        footer { 
+            background: linear-gradient(135deg, var(--navy), var(--blue));
+            color: white;
+            padding: 30px 0;
+            margin-top: 80px;
+            text-align: center;
+            box-shadow: 0 -5px 20px rgba(74, 111, 165, 0.3);
+        }
+        
+        footer strong {
+            color: var(--yellow);
+            font-weight: 800;
+        }
+        
+        body.dark-mode footer { 
+            background: linear-gradient(135deg, #1a1a2e, #0f0f1e);
+        }
+        
+        /* Medal Icons */
+        .medal-icon {
+            font-size: 2rem;
+            margin-left: 15px;
+        }
+        
+        /* Responsive */
         @media (max-width: 768px) {
-            .page-title {
-                font-size: 2rem;
+            h1 {
+                font-size: 2.5rem;
+                padding-top: 50px;
+            }
+            
+            h1::before {
+                font-size: 3rem;
+            }
+            
+            .leaderboard-item {
+                padding: 20px 18px;
             }
             
             .rank-number {
-                font-size: 1.5rem;
-                width: 50px;
-            }
-            
-            .trophy-icon {
                 font-size: 2rem;
+                min-width: 50px;
+                margin-right: 15px;
             }
             
-            .score-number {
-                font-size: 1.5rem;
+            .user-info h5 {
+                font-size: 1.2rem;
+            }
+            
+            .score-display h4 {
+                font-size: 1.8rem;
+            }
+            
+            .medal-icon {
+                display: none;
             }
         }
     </style>
@@ -163,33 +303,42 @@
 {% include 'navbar.html' %}
 
 <div class="container mt-5">
-    <h1 class="page-title">🏆 {{ t('leaderboard') }}</h1>
+    <h1>Top Learners</h1>
 
-    <div class="card shadow p-4">
+    <div class="card shadow">
         {% if users %}
             {% for user in users %}
-            <div class="leaderboard-item {{ 'rank-' + loop.index|string if loop.index <= 3 else '' }}">
-                <div class="d-flex justify-content-between align-items-center">
-                    <div class="d-flex align-items-center">
-                        {% if loop.index == 1 %}
-                            <div class="trophy-icon">🥇</div>
-                        {% elif loop.index == 2 %}
-                            <div class="trophy-icon">🥈</div>
-                        {% elif loop.index == 3 %}
-                            <div class="trophy-icon">🥉</div>
-                        {% else %}
-                            <div class="rank-number">#{{ loop.index }}</div>
-                        {% endif %}
-                        
+            <div class="leaderboard-item {{ 'rank-' + loop.index|string if loop.index <= 3 else 'rank-regular' }}">
+                <div class="d-flex justify-content-between align-items-center flex-wrap">
+                    <div class="d-flex align-items-center mb-2 mb-md-0">
+                        <div class="rank-number position-relative">
+                            #{{ loop.index }}
+                        </div>
                         <div class="user-info">
-                            <h5 class="mb-0">{{ user.username }}</h5>
-                            <small>{{ t('level') }} {{ user.level }}</small>
+                            <h5 class="mb-0">
+                                <i class="bi bi-person-circle"></i>
+                                {{ user.username }}
+                                {% if loop.index == 1 %}
+                                    <span class="medal-icon">🥇</span>
+                                {% elif loop.index == 2 %}
+                                    <span class="medal-icon">🥈</span>
+                                {% elif loop.index == 3 %}
+                                    <span class="medal-icon">🥉</span>
+                                {% endif %}
+                            </h5>
+                            <small>
+                                <i class="bi bi-star-fill"></i>
+                                Level {{ user.level }}
+                            </small>
                         </div>
                     </div>
                     
-                    <div class="user-stats">
-                        <div class="score-number">{{ user.score }}</div>
-                        <small>{{ t('points') }}</small>
+                    <div class="score-display">
+                        <h4 class="mb-0">{{ user.score }}</h4>
+                        <small>
+                            <i class="bi bi-trophy-fill"></i>
+                            points
+                        </small>
                     </div>
                 </div>
             </div>
@@ -197,8 +346,7 @@
         {% else %}
             <div class="empty-state">
                 <i class="bi bi-trophy"></i>
-                <h4>{{ t('no_users_yet') }}</h4>
-                <p class="text-muted">{{ t('be_first_to_join') }}</p>
+                <p>No users yet. Be the first to join the leaderboard!</p>
             </div>
         {% endif %}
     </div>
@@ -206,8 +354,8 @@
 
 <footer>
     <div class="container text-center">
-        <p class="mb-1">{{ t('developed_by') }} <strong>{{ t('team_name') }}</strong></p>
-        <p class="mb-0">💚 💙 {{ t('university') }} 💚 💙</p>
+        <p class="mb-1">Developed By <strong>Vortex Team</strong> 💜</p>
+        <p class="mb-0">🎓 University College Of Ranyah - Computer Science - Level 10 🎓</p>
     </div>
 </footer>
 

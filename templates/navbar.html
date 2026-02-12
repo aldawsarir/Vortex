@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg px-4 shadow-sm" {% if current_lang == 'ar' %}dir="rtl"{% endif %}>
+<nav class="navbar navbar-expand-lg px-4 shadow-sm">
     <a class="navbar-brand fw-bold" href="{{ url_for('home') }}">
         <i class="bi bi-hurricane"></i> Vortex
     </a>
@@ -7,10 +7,10 @@
     </button>
 
     <div class="collapse navbar-collapse" id="navbarMenu">
-        <ul class="navbar-nav {% if current_lang == 'ar' %}me-auto{% else %}ms-auto{% endif %} gap-3 align-items-center">
+        <ul class="navbar-nav ms-auto align-items-center">
             <li class="nav-item">
                 <a class="nav-link" href="{{ url_for('home') }}">
-                    <i class="bi bi-house-door-fill"></i> {{ t('home') }}
+                    <i class="bi bi-house-door-fill"></i> Home
                 </a>
             </li>
             
@@ -19,38 +19,38 @@
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="gamificationDropdown" 
                    role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    <i class="bi bi-trophy"></i> {{ t('gamification') }}
+                    <i class="bi bi-trophy"></i> Gamification
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="gamificationDropdown">
                     <li>
                         <a class="dropdown-item" href="{{ url_for('quiz_page') }}">
-                            <i class="bi bi-card-checklist"></i> {{ t('quiz') }}
+                            <i class="bi bi-card-checklist"></i> Quiz
                         </a>
                     </li>
                     <li>
                         <a class="dropdown-item" href="{{ url_for('quiz_battles') }}">
-                            <i class="bi bi-lightning-fill"></i> {{ t('quiz_battles') }}
+                            <i class="bi bi-lightning-fill"></i> Quiz Battles
                         </a>
                     </li>
                     <li>
                         <a class="dropdown-item" href="{{ url_for('puzzle_mode') }}">
-                            <i class="bi bi-puzzle-fill"></i> {{ t('puzzle_mode') }}
+                            <i class="bi bi-puzzle-fill"></i> Puzzle Mode
                         </a>
                     </li>
                     <li>
                         <a class="dropdown-item" href="{{ url_for('daily_challenge') }}">
-                            <i class="bi bi-calendar-check"></i> {{ t('daily_challenge') }}
+                            <i class="bi bi-calendar-check"></i> Daily Challenge
                         </a>
                     </li>
                     <li><hr class="dropdown-divider"></li>
                     <li>
                         <a class="dropdown-item" href="{{ url_for('leaderboard') }}">
-                            <i class="bi bi-bar-chart-fill"></i> {{ t('leaderboard') }}
+                            <i class="bi bi-bar-chart-fill"></i> Leaderboard
                         </a>
                     </li>
                     <li>
                         <a class="dropdown-item" href="{{ url_for('gamification') }}">
-                            <i class="bi bi-stars"></i> {{ t('your_progress') }}
+                            <i class="bi bi-stars"></i> Your Progress
                         </a>
                     </li>
                 </ul>
@@ -58,19 +58,19 @@
 
             <li class="nav-item">
                 <a class="nav-link" href="{{ url_for('grading_center') }}">
-                    <i class="bi bi-clipboard-data"></i> {{ t('grades') }}
+                    <i class="bi bi-clipboard-data"></i> Grades
                 </a>
             </li>
 
             <li class="nav-item">
                 <a class="nav-link" href="{{ url_for('shared_library') }}">
-                    <i class="bi bi-folder-fill"></i> {{ t('library') }}
+                    <i class="bi bi-folder-fill"></i> Library
                 </a>
             </li>
 
             <li class="nav-item">
                 <a class="nav-link" href="{{ url_for('search') }}">
-                    <i class="bi bi-search"></i> {{ t('search') }}
+                    <i class="bi bi-search"></i> Search
                 </a>
             </li>
             
@@ -78,13 +78,13 @@
             
             <li class="nav-item">
                 <a class="nav-link" href="{{ url_for('about') }}">
-                    <i class="bi bi-info-circle-fill"></i> {{ t('about') }}
+                    <i class="bi bi-info-circle-fill"></i> About
                 </a>
             </li>
 
             <li class="nav-item">
                 <a class="nav-link" href="{{ url_for('help_page') }}">
-                    <i class="bi bi-question-circle-fill"></i> {{ t('help') }}
+                    <i class="bi bi-question-circle-fill"></i> Help
                 </a>
             </li>
             
@@ -98,18 +98,18 @@
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
                     <li>
                         <a class="dropdown-item" href="{{ url_for('dashboard') }}">
-                            <i class="bi bi-speedometer2"></i> {{ t('dashboard') }}
+                            <i class="bi bi-speedometer2"></i> Dashboard
                         </a>
                     </li>
                     <li>
                         <a class="dropdown-item" href="{{ url_for('analytics') }}">
-                            <i class="bi bi-graph-up-arrow"></i> {{ t('analytics') }}
+                            <i class="bi bi-graph-up-arrow"></i> Analytics
                         </a>
                     </li>
                     <li><hr class="dropdown-divider"></li>
                     <li>
                         <a class="dropdown-item text-danger" href="{{ url_for('logout') }}">
-                            <i class="bi bi-box-arrow-right"></i> {{ t('logout') }}
+                            <i class="bi bi-box-arrow-right"></i> Logout
                         </a>
                     </li>
                 </ul>
@@ -119,34 +119,19 @@
             
             <li class="nav-item">
                 <a class="nav-link" href="{{ url_for('login') }}">
-                    <i class="bi bi-box-arrow-in-right"></i> {{ t('login') }}
+                    <i class="bi bi-box-arrow-in-right"></i> Login
                 </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="{{ url_for('register') }}">
-                    <i class="bi bi-person-plus"></i> {{ t('register') }}
+                    <i class="bi bi-person-plus"></i> Register
                 </a>
             </li>
             
             {% endif %}
             
-            <!-- Language Toggle -->
             <li class="nav-item">
-                <div class="btn-group" role="group">
-                    <a href="{{ url_for('change_language', lang='en') }}" 
-                       class="btn btn-sm {% if current_lang == 'en' %}btn-light{% else %}btn-outline-light{% endif %}">
-                        EN
-                    </a>
-                    <a href="{{ url_for('change_language', lang='ar') }}" 
-                       class="btn btn-sm {% if current_lang == 'ar' %}btn-light{% else %}btn-outline-light{% endif %}">
-                        ع
-                    </a>
-                </div>
-            </li>
-            
-            <!-- Dark Mode Toggle -->
-            <li class="nav-item {% if current_lang == 'ar' %}me-3{% else %}ms-3{% endif %}">
-                <button id="toggle-mode" class="btn btn-outline-light btn-sm">
+                <button id="toggle-mode" class="btn btn-mode">
                     <i class="bi bi-moon-stars"></i>
                 </button>
             </li>
@@ -155,53 +140,106 @@
 </nav>
 
 <style>
+    /* ========================================
+       Navbar - Pastel Illustration Theme
+       Fixed Position with No Overlap
+       ======================================== */
+    
     .navbar { 
-        background: linear-gradient(90deg, #1abc9c, #3498db); 
-        transition: background 0.5s; 
+        background: linear-gradient(135deg, #5DBAA4, #6BA3C8);
+        transition: all 0.5s ease;
+        box-shadow: 0 4px 20px rgba(93, 186, 164, 0.3);
+        backdrop-filter: blur(10px);
+        position: fixed !important;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 1050;
     }
+    
     body.dark-mode .navbar { 
-        background: linear-gradient(90deg, #2c3e50, #34495e); 
+        background: linear-gradient(135deg, #4A6FA5, #2C2C54);
+        box-shadow: 0 4px 20px rgba(44, 44, 84, 0.5);
+    }
+    
+    /* Add padding to body to prevent content from hiding under navbar */
+    body {
+        padding-top: 80px;
     }
     
     .navbar-brand { 
         color: white !important; 
         font-size: 1.8rem; 
-        font-weight: 800;
+        font-weight: 900;
+        text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        transition: transform 0.3s ease;
+    }
+    
+    .navbar-brand:hover {
+        transform: scale(1.05) rotate(-2deg);
+    }
+    
+    .navbar-brand i {
+        animation: spin 3s linear infinite;
+    }
+    
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+    
+    /* Compact Navigation Items */
+    .navbar-nav {
+        gap: 0 !important;
     }
     
     .nav-link { 
         color: white !important; 
-        font-weight: 600; 
-        transition: all 0.3s; 
-        padding: 8px 15px !important;
-        border-radius: 8px;
+        font-weight: 700; 
+        transition: all 0.3s ease; 
+        padding: 8px 12px !important;
+        margin: 0 2px;
+        border-radius: 10px;
+        font-size: 0.95rem;
     }
     
     .nav-link:hover { 
-        background: rgba(255,255,255,0.2);
+        background: rgba(255,255,255,0.25);
         transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(255,255,255,0.2);
+    }
+    
+    .nav-link i {
+        margin-right: 5px;
+        font-size: 1rem;
     }
     
     .dropdown-menu { 
-        background: white; 
-        border-radius: 12px; 
-        box-shadow: 0 8px 24px rgba(0,0,0,0.15);
-        border: none;
-        margin-top: 10px !important;
+        background: rgba(255, 255, 255, 0.98);
+        backdrop-filter: blur(10px);
+        border-radius: 18px; 
+        box-shadow: 0 10px 40px rgba(93, 186, 164, 0.25);
+        border: 3px solid rgba(93, 186, 164, 0.3);
+        margin-top: 8px !important;
         min-width: 220px;
+        padding: 8px;
+        z-index: 1051;
     }
     
     body.dark-mode .dropdown-menu {
-        background: #2a2a40;
-        color: #f0f0f0;
+        background: rgba(42, 42, 64, 0.98);
+        border-color: rgba(93, 186, 164, 0.4);
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
     }
     
     .dropdown-item { 
-        padding: 12px 20px;
-        transition: all 0.3s;
-        border-radius: 8px;
-        margin: 4px 8px;
-        color: #333;
+        padding: 11px 18px;
+        transition: all 0.3s ease;
+        border-radius: 10px;
+        margin: 3px 0;
+        color: #2C2C54;
+        font-weight: 600;
+        font-size: 0.95rem;
     }
     
     body.dark-mode .dropdown-item {
@@ -209,100 +247,136 @@
     }
     
     .dropdown-item:hover { 
-        background: linear-gradient(90deg, #1abc9c, #3498db);
+        background: linear-gradient(135deg, #5DBAA4, #6BA3C8);
         color: white !important;
-        transform: translateX(5px);
+        transform: translateX(6px);
+        box-shadow: 0 4px 12px rgba(93, 186, 164, 0.3);
     }
     
-    [dir="rtl"] .dropdown-item:hover {
-        transform: translateX(-5px);
+    .dropdown-item.text-danger:hover {
+        background: linear-gradient(135deg, #FF9AA2, #FFB3BA);
     }
     
     .dropdown-item i {
-        width: 20px;
+        width: 22px;
         margin-right: 8px;
-    }
-    
-    [dir="rtl"] .dropdown-item i {
-        margin-right: 0;
-        margin-left: 8px;
+        font-size: 1rem;
     }
     
     .dropdown-divider {
         margin: 8px 0;
-        border-color: rgba(0,0,0,0.1);
+        border-color: rgba(93, 186, 164, 0.3);
     }
     
     body.dark-mode .dropdown-divider {
-        border-color: rgba(255,255,255,0.1);
+        border-color: rgba(93, 186, 164, 0.4);
     }
     
     .user-dropdown {
-        background: rgba(255,255,255,0.15);
-        border-radius: 25px;
-        padding: 8px 20px !important;
-    }
-    
-    .btn-outline-light {
-        border-color: white;
-        color: white;
-    }
-    
-    .btn-outline-light:hover {
-        background: white;
-        color: #1abc9c;
-    }
-    
-    /* Language Toggle */
-    .btn-group .btn-sm {
-        padding: 5px 12px;
-        font-weight: 700;
-        border-radius: 6px;
-        transition: all 0.3s ease;
-    }
-    
-    .btn-group .btn-light {
-        background: white;
-        color: #1abc9c;
-        border: 2px solid white;
-    }
-    
-    .btn-group .btn-outline-light {
-        border: 2px solid white;
-        background: transparent;
-    }
-    
-    .btn-group .btn-outline-light:hover {
         background: rgba(255,255,255,0.2);
+        border-radius: 25px;
+        padding: 8px 18px !important;
+        border: 2px solid rgba(255,255,255,0.3);
+    }
+    
+    .user-dropdown:hover {
+        background: rgba(255,255,255,0.3);
+        border-color: rgba(255,255,255,0.5);
+    }
+    
+    .btn-mode {
+        background: rgba(255,255,255,0.25);
+        border: 2px solid rgba(255,255,255,0.4);
         color: white;
+        border-radius: 10px;
+        padding: 8px 14px;
+        transition: all 0.3s ease;
+        font-size: 1.1rem;
+        margin-left: 5px;
     }
     
-    /* RTL Support */
-    [dir="rtl"] {
-        text-align: right;
+    .btn-mode:hover {
+        background: rgba(255,255,255,0.35);
+        transform: scale(1.08) rotate(12deg);
+        box-shadow: 0 4px 12px rgba(255,255,255,0.3);
     }
     
-    [dir="rtl"] .navbar-nav {
-        margin-right: 0 !important;
-        margin-left: auto !important;
+    .navbar-toggler {
+        border: 2px solid rgba(255,255,255,0.5);
+        padding: 6px 10px;
+        border-radius: 8px;
     }
     
+    .navbar-toggler:focus {
+        box-shadow: 0 0 0 0.2rem rgba(255,255,255,0.3);
+    }
+    
+    .navbar-toggler-icon {
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(255, 255, 255, 1)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+    }
+    
+    /* Mobile Responsive */
     @media (max-width: 991px) {
+        body {
+            padding-top: 70px;
+        }
+        
+        .navbar-collapse {
+            background: rgba(93, 186, 164, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 15px;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            z-index: 1051;
+        }
+        
+        body.dark-mode .navbar-collapse {
+            background: rgba(42, 42, 64, 0.95);
+        }
+        
         .dropdown-menu {
             background: rgba(255,255,255,0.95);
+            border: none;
+            position: static !important;
+            transform: none !important;
         }
         
         body.dark-mode .dropdown-menu {
             background: rgba(42, 42, 64, 0.95);
         }
+        
+        .nav-item {
+            margin: 4px 0;
+        }
+        
+        .nav-link {
+            padding: 10px 15px !important;
+        }
+        
+        .btn-mode {
+            width: 100%;
+            margin-top: 10px;
+            margin-left: 0;
+        }
+    }
+    
+    /* Navbar scroll effect */
+    .navbar.scrolled {
+        box-shadow: 0 6px 30px rgba(93, 186, 164, 0.4);
     }
 </style>
 
 <script>
+// Dark/Light Mode Toggle
 const toggleBtn = document.getElementById('toggle-mode');
 const body = document.body;
 const icon = toggleBtn.querySelector('i');
 
+// Load saved theme
 if(localStorage.getItem('theme') === 'dark'){
     body.classList.add('dark-mode');
     body.classList.remove('light-mode');
@@ -313,6 +387,7 @@ if(localStorage.getItem('theme') === 'dark'){
     icon.className = 'bi bi-moon-stars';
 }
 
+// Toggle theme
 toggleBtn.addEventListener('click', () => {
     body.classList.toggle('dark-mode');
     body.classList.toggle('light-mode');
@@ -324,5 +399,28 @@ toggleBtn.addEventListener('click', () => {
         icon.className = 'bi bi-moon-stars';
         localStorage.setItem('theme','light');
     }
+});
+
+// Navbar scroll effect
+window.addEventListener('scroll', () => {
+    const navbar = document.querySelector('.navbar');
+    if (window.scrollY > 50) {
+        navbar.classList.add('scrolled');
+    } else {
+        navbar.classList.remove('scrolled');
+    }
+});
+
+// Close dropdown on click outside
+document.addEventListener('click', (e) => {
+    const dropdowns = document.querySelectorAll('.dropdown-menu.show');
+    dropdowns.forEach(dropdown => {
+        if (!dropdown.parentElement.contains(e.target)) {
+            const bsDropdown = bootstrap.Dropdown.getInstance(dropdown.previousElementSibling);
+            if (bsDropdown) {
+                bsDropdown.hide();
+            }
+        }
+    });
 });
 </script>

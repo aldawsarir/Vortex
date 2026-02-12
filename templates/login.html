@@ -1,128 +1,255 @@
 <!DOCTYPE html>
-<html lang="{{ current_lang }}" {% if current_lang == 'ar' %}dir="rtl"{% endif %}>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Vortex - {{ t('login') }}</title>
+    <title>Vortex - Login</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     
     <style>
+        /* ========================================
+           Login Page - Pastel Illustration Theme
+           ======================================== */
+        
+        :root {
+            --bg-lavender: #E8D5F2;
+            --bg-purple: #C4A7D7;
+            --teal: #5DBAA4;
+            --teal-light: #7DD3BD;
+            --yellow: #FFD166;
+            --pink: #FFB3BA;
+            --blue: #6BA3C8;
+            --text: #2C2C54;
+        }
+        
+        * {
+            font-family: 'Poppins', 'Cairo', sans-serif;
+        }
+        
         body { 
-            background: linear-gradient(135deg, #1abc9c 0%, #3498db 100%); 
+            background: linear-gradient(135deg, var(--bg-lavender) 0%, var(--bg-purple) 100%);
             min-height: 100vh; 
             display: flex; 
             align-items: center; 
             justify-content: center;
             padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* Floating Decorative Elements */
+        .floating-deco {
+            position: absolute;
+            font-size: 4rem;
+            opacity: 0.3;
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        .deco-1 { top: 10%; left: 10%; animation-delay: 0s; }
+        .deco-2 { top: 20%; right: 15%; animation-delay: 2s; }
+        .deco-3 { bottom: 15%; left: 15%; animation-delay: 4s; }
+        .deco-4 { bottom: 20%; right: 10%; animation-delay: 3s; }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-25px) rotate(10deg); }
         }
         
         .login-card { 
-            background: white; 
-            border-radius: 20px; 
-            padding: 40px; 
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3); 
-            max-width: 450px; 
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(15px);
+            border-radius: 30px; 
+            padding: 50px 45px; 
+            box-shadow: 0 25px 70px rgba(108, 91, 123, 0.35);
+            max-width: 480px; 
             width: 100%;
+            border: 5px solid rgba(255, 255, 255, 0.6);
+            position: relative;
+            z-index: 1;
+            animation: slideUp 0.6s ease-out;
+        }
+        
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
         
         .login-header { 
             text-align: center; 
-            margin-bottom: 30px; 
+            margin-bottom: 35px;
+            position: relative;
+        }
+        
+        .login-header::before {
+            content: '🔐';
+            display: block;
+            font-size: 4rem;
+            margin-bottom: 15px;
+            animation: bounce 2s ease-in-out infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
         }
         
         .login-header h2 { 
-            background: linear-gradient(90deg, #1abc9c, #3498db); 
+            background: linear-gradient(90deg, var(--teal), var(--blue));
             -webkit-background-clip: text; 
             -webkit-text-fill-color: transparent; 
-            font-weight: 800;
+            font-weight: 900;
             font-size: 2.5rem;
+            margin-bottom: 12px;
         }
         
-        .form-label {
+        .login-header p {
+            color: var(--text);
+            font-size: 1.1rem;
             font-weight: 600;
-            color: #333;
+            opacity: 0.8;
+        }
+        
+        /* Form Elements */
+        .form-label {
+            font-weight: 700;
+            color: var(--teal);
+            margin-bottom: 10px;
+            font-size: 1.05rem;
         }
         
         .form-control {
-            border: 2px solid #e2e8f0;
-            border-radius: 10px;
-            padding: 12px;
+            border: 3px solid rgba(93, 186, 164, 0.3);
+            border-radius: 15px;
+            padding: 14px 18px;
+            font-size: 1rem;
             transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.8);
         }
         
         .form-control:focus {
-            border-color: #1abc9c;
-            box-shadow: 0 0 0 3px rgba(26, 188, 156, 0.1);
+            border-color: var(--teal);
+            box-shadow: 0 0 0 0.25rem rgba(93, 186, 164, 0.25);
+            background: white;
+            transform: translateY(-2px);
         }
         
+        /* Button */
         .btn-vortex { 
-            background: linear-gradient(90deg, #1abc9c, #3498db); 
+            background: linear-gradient(135deg, var(--teal), var(--blue));
             color: white; 
             border: none; 
-            font-weight: 600;
-            padding: 14px 30px;
-            border-radius: 10px;
+            font-weight: 800;
+            font-size: 1.2rem;
+            padding: 16px 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(93, 186, 164, 0.35);
             transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn-vortex::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.2);
+            transition: left 0.5s ease;
+        }
+        
+        .btn-vortex:hover::before {
+            left: 100%;
         }
         
         .btn-vortex:hover { 
-            opacity: 0.9; 
+            transform: translateY(-4px);
+            box-shadow: 0 12px 35px rgba(93, 186, 164, 0.45);
             color: white;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(26, 188, 156, 0.3);
         }
         
-        .language-toggle {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-        }
-        
-        [dir="rtl"] .language-toggle {
-            right: auto;
-            left: 20px;
-        }
-        
-        .btn-lang {
-            background: white;
-            border: 2px solid rgba(255,255,255,0.3);
-            color: #1abc9c;
-            padding: 8px 16px;
-            border-radius: 8px;
-            font-weight: 600;
-            margin: 0 5px;
+        /* Links */
+        a {
+            color: var(--teal);
+            font-weight: 700;
+            text-decoration: none;
             transition: all 0.3s ease;
         }
         
-        .btn-lang:hover {
-            background: #1abc9c;
-            color: white;
-            border-color: #1abc9c;
-        }
-        
-        .btn-lang.active {
-            background: #1abc9c;
-            color: white;
-            border-color: #1abc9c;
-        }
-        
-        a {
-            color: #1abc9c;
-            text-decoration: none;
-            font-weight: 600;
-        }
-        
         a:hover {
-            color: #3498db;
+            color: var(--blue);
+            text-decoration: underline;
         }
         
+        /* Alert */
+        .alert {
+            border-radius: 12px;
+            border: none;
+            font-weight: 600;
+            animation: slideDown 0.4s ease-out;
+        }
+        
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .alert-danger {
+            background: linear-gradient(135deg, rgba(255, 154, 162, 0.2), rgba(255, 179, 186, 0.2));
+            color: #c0392b;
+            border-left: 5px solid #e74c3c;
+        }
+        
+        .alert-success {
+            background: linear-gradient(135deg, rgba(67, 233, 123, 0.2), rgba(56, 249, 215, 0.2));
+            color: #27ae60;
+            border-left: 5px solid #2ecc71;
+        }
+        
+        .alert-info {
+            background: linear-gradient(135deg, rgba(93, 186, 164, 0.2), rgba(125, 211, 189, 0.2));
+            color: #16a085;
+            border-left: 5px solid var(--teal);
+        }
+        
+        /* Footer Text */
+        .text-center p {
+            color: var(--text);
+            font-weight: 600;
+            font-size: 1rem;
+        }
+        
+        /* Responsive */
         @media (max-width: 576px) {
             .login-card {
-                padding: 30px 20px;
+                padding: 40px 30px;
             }
             
             .login-header h2 {
                 font-size: 2rem;
+            }
+            
+            .login-header::before {
+                font-size: 3rem;
+            }
+            
+            .floating-deco {
+                font-size: 2.5rem;
             }
         }
     </style>
@@ -130,28 +257,23 @@
 
 <body>
 
-<!-- Language Toggle -->
-<div class="language-toggle">
-    <a href="{{ url_for('change_language', lang='en') }}" 
-       class="btn btn-lang btn-sm {% if current_lang == 'en' %}active{% endif %}">
-        EN
-    </a>
-    <a href="{{ url_for('change_language', lang='ar') }}" 
-       class="btn btn-lang btn-sm {% if current_lang == 'ar' %}active{% endif %}">
-        ع
-    </a>
-</div>
+<!-- Floating Decorative Elements -->
+<div class="floating-deco deco-1">📚</div>
+<div class="floating-deco deco-2">✏️</div>
+<div class="floating-deco deco-3">💡</div>
+<div class="floating-deco deco-4">🎯</div>
 
 <div class="login-card">
     <div class="login-header">
-        <h2>{{ t('vortex_login') }}</h2>
-        <p class="text-muted">{{ t('welcome_back_message') }}</p>
+        <h2>Vortex Login</h2>
+        <p>Welcome back! Please login to continue</p>
     </div>
 
     {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
             {% for category, message in messages %}
             <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                <i class="bi bi-{{ 'check-circle-fill' if category == 'success' else 'exclamation-triangle-fill' if category == 'danger' else 'info-circle-fill' }}"></i>
                 {{ message }}
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
@@ -160,26 +282,45 @@
     {% endwith %}
 
     <form method="POST">
-        <div class="mb-3">
-            <label class="form-label">{{ t('username') }}</label>
-            <input type="text" name="username" class="form-control" 
-                   placeholder="{{ t('enter_username') }}" required>
+        <div class="mb-4">
+            <label class="form-label">
+                <i class="bi bi-person-fill"></i> Username
+            </label>
+            <input type="text" 
+                   name="username" 
+                   class="form-control" 
+                   placeholder="Enter your username"
+                   required 
+                   autofocus>
         </div>
 
-        <div class="mb-3">
-            <label class="form-label">{{ t('password') }}</label>
-            <input type="password" name="password" class="form-control" 
-                   placeholder="{{ t('enter_password') }}" required>
+        <div class="mb-4">
+            <label class="form-label">
+                <i class="bi bi-lock-fill"></i> Password
+            </label>
+            <input type="password" 
+                   name="password" 
+                   class="form-control" 
+                   placeholder="Enter your password"
+                   required>
         </div>
 
-        <button type="submit" class="btn btn-vortex w-100 mb-3">
-            <i class="bi bi-box-arrow-in-right"></i> {{ t('login') }}
+        <button type="submit" class="btn btn-vortex w-100 mb-4">
+            <i class="bi bi-box-arrow-in-right"></i> Login
         </button>
     </form>
 
     <div class="text-center">
-        <p class="mb-0">{{ t('no_account') }} 
-            <a href="{{ url_for('register') }}">{{ t('register_here') }}</a>
+        <p class="mb-0">
+            Don't have an account? 
+            <a href="{{ url_for('register') }}">
+                <i class="bi bi-person-plus"></i> Register here
+            </a>
+        </p>
+        <p class="mt-2 mb-0">
+            <a href="{{ url_for('home') }}">
+                <i class="bi bi-house-door"></i> Back to Home
+            </a>
         </p>
     </div>
 </div>
