@@ -4,7 +4,6 @@ Flask-Login==0.6.3
 PyPDF2==3.0.1
 python-docx==1.1.0
 python-pptx==0.6.23
-matplotlib==3.8.2
 networkx==3.2.1
 Werkzeug==3.0.1
 nltk==3.8.1
@@ -12,4 +11,9 @@ pandas==2.1.4
 Pillow==10.1.0
 pytesseract==0.3.10
 PyMuPDF==1.23.8
+<<<<<<< HEAD
 openpyxl==3.1.2
+=======
+matplotlib==3.8.2
+gunicorn
+>>>>>>> a4ea1e385c4280d6955d53d928e6bb88202280bd
