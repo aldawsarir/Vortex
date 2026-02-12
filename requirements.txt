@@ -11,9 +11,6 @@ pandas==2.1.4
 Pillow==10.1.0
 pytesseract==0.3.10
 PyMuPDF==1.23.8
-<<<<<<< HEAD
 openpyxl==3.1.2
-=======
 matplotlib==3.8.2
 gunicorn
->>>>>>> a4ea1e385c4280d6955d53d928e6bb88202280bd
