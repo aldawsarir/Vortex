@@ -18,6 +18,18 @@ AI-Powered Visual Search & Understanding Engine for Students and Researchers
 
 ---
 
+## 🌍 Live Demo & Project Evaluation
+
+🎯 Try Vortex Online:  
+👉 https://vortex-1pwc.onrender.com/
+
+📝 Project Evaluation Survey:  
+👉 https://docs.google.com/forms/d/e/1FAIpQLSf5vQS3nR3oDcPnLnHSfG0fsOCdo02O6phorzWUSN-0L01o7A/viewform
+
+Your feedback helps us improve the system and evaluate its academic impact.
+
+---
+
 ## 🎓 Graduation Project
 
 **Bachelor of Computer Science – Taif University (2026)**
@@ -95,20 +107,17 @@ Vortex converts PDFs and slides into:
 
 ## 🧩 System Architecture
 
-
-
-Document Upload
-↓
-NLP Processing
-↓
-Summarization Engine
-↓
-Visualization Module
-↓
-Gamification Engine
-↓
-Interactive Interface
-
+Document Upload  
+↓  
+NLP Processing  
+↓  
+Summarization Engine  
+↓  
+Visualization Module  
+↓  
+Gamification Engine  
+↓  
+Interactive Interface  
 
 Modular • Scalable • AI-driven
 
@@ -185,5 +194,5 @@ Academic research project – educational use permitted.
 
 We dedicate this work to students, researchers, and educators seeking smarter ways to learn.
 
-> “And say: My Lord, increase me in knowledge.”
+> “And say: My Lord, increase me in knowledge.”  
 > Quran 20:114
