@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/banner.png" width="600">
+  <img src="assets/banner.png" width="300">
 </p>
 
 <h1 align="center">🌪 Vortex</h1>
