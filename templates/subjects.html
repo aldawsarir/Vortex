@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Subjects - Vortex</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <style>
+        * { 
+            font-family: 'Poppins', sans-serif; 
+        }
+        
+        body.light-mode {
+            background: linear-gradient(135deg, #E8D5F2 0%, #C4A7D7 100%);
+            min-height: 100vh;
+        }
+        
+        body.dark-mode {
+            background: linear-gradient(135deg, #4A3A5C 0%, #2C1E3F 100%);
+            min-height: 100vh;
+            color: #f0f0f0;
+        }
+        
+        .subject-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 25px;
+            border: 4px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 10px 35px rgba(108, 91, 123, 0.2);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            padding: 30px;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+        
+        body.dark-mode .subject-card {
+            background: rgba(42, 42, 64, 0.95);
+            border-color: rgba(93, 186, 164, 0.3);
+        }
+        
+        .subject-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 45px rgba(108, 91, 123, 0.3);
+        }
+        
+        .subject-icon {
+            font-size: 4rem;
+            margin-bottom: 15px;
+        }
+        
+        .subject-title {
+            font-size: 1.8rem;
+            font-weight: 900;
+            margin-bottom: 10px;
+            color: #2C2C54;
+        }
+        
+        body.dark-mode .subject-title {
+            color: #f0f0f0;
+        }
+        
+        .chapter-count {
+            font-size: 1rem;
+            color: #6C5B7B;
+            font-weight: 600;
+        }
+        
+        body.dark-mode .chapter-count {
+            color: #ddd;
+        }
+        
+        .btn-create {
+            background: linear-gradient(135deg, #5DBAA4, #7DD3BD);
+            color: white;
+            border: none;
+            border-radius: 15px;
+            padding: 15px 30px;
+            font-weight: 800;
+            box-shadow: 0 5px 20px rgba(93, 186, 164, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-create:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(93, 186, 164, 0.4);
+            color: white;
+        }
+        
+        .page-title {
+            font-weight: 900;
+            background: linear-gradient(90deg, #5DBAA4, #6BA3C8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 30px;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+        }
+        
+        .empty-state i {
+            font-size: 5rem;
+            color: #6C5B7B;
+            margin-bottom: 20px;
+        }
+        
+        body.dark-mode .empty-state i {
+            color: #9B8AAA;
+        }
+    </style>
+</head>
+
+<body class="light-mode">
+
+{% include 'navbar.html' %}
+
+<div class="container mt-5 mb-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="page-title">
+            📚 My Subjects
+        </h1>
+        <a href="{{ url_for('create_subject') }}" class="btn btn-create">
+            <i class="bi bi-plus-circle"></i> Create Subject
+        </a>
+    </div>
+    
+    {% if subjects %}
+    <div class="row">
+        {% for subject in subjects %}
+        <div class="col-md-4">
+            <div class="subject-card" onclick="window.location.href='{{ url_for('view_subject', subject_id=subject.id) }}'">
+                <div class="subject-icon">{{ subject.icon }}</div>
+                <h3 class="subject-title">{{ subject.name }}</h3>
+                <p class="chapter-count">
+                    <i class="bi bi-folder"></i> {{ subject.chapters.count() }} Chapters
+                </p>
+                {% if subject.description %}
+                <p class="text-muted mt-2">{{ subject.description[:100] }}...</p>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <i class="bi bi-journal-bookmark"></i>
+        <h3>No Subjects Yet</h3>
+        <p class="text-muted" style="font-size: 1.1rem;">
+            Create your first subject to organize your study materials
+        </p>
+        <a href="{{ url_for('create_subject') }}" class="btn btn-create mt-3">
+            <i class="bi bi-plus-circle"></i> Create Your First Subject
+        </a>
+    </div>
+    {% endif %}
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ subject.name }} - Vortex</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <style>
+        * { font-family: 'Poppins', sans-serif; }
+        
+        body.light-mode {
+            background: linear-gradient(135deg, #E8D5F2 0%, #C4A7D7 100%);
+            min-height: 100vh;
+        }
+        
+        body.dark-mode {
+            background: linear-gradient(135deg, #4A3A5C 0%, #2C1E3F 100%);
+            min-height: 100vh;
+            color: #f0f0f0;
+        }
+        
+        .subject-header {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 25px;
+            border: 4px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 10px 35px rgba(108, 91, 123, 0.2);
+            padding: 40px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        body.dark-mode .subject-header {
+            background: rgba(42, 42, 64, 0.95);
+            border-color: rgba(93, 186, 164, 0.3);
+        }
+        
+        .subject-icon-large {
+            font-size: 5rem;
+            margin-bottom: 15px;
+        }
+        
+        .subject-title {
+            font-size: 2.5rem;
+            font-weight: 900;
+            background: linear-gradient(90deg, {{ subject.color }}, #6BA3C8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 15px;
+        }
+        
+        .chapter-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 5px 20px rgba(108, 91, 123, 0.15);
+            padding: 25px;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        body.dark-mode .chapter-card {
+            background: rgba(42, 42, 64, 0.95);
+            border-color: rgba(93, 186, 164, 0.3);
+        }
+        
+        .chapter-card:hover {
+            transform: translateX(10px);
+            box-shadow: 0 8px 30px rgba(108, 91, 123, 0.25);
+            border-color: {{ subject.color }};
+        }
+        
+        .chapter-number {
+            background: {{ subject.color }};
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 1.3rem;
+            margin-right: 15px;
+        }
+        
+        .chapter-title {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: #2C2C54;
+            margin-bottom: 5px;
+        }
+        
+        body.dark-mode .chapter-title {
+            color: #f0f0f0;
+        }
+        
+        .btn-create {
+            background: linear-gradient(135deg, {{ subject.color }}, #7DD3BD);
+            color: white;
+            border: none;
+            border-radius: 15px;
+            padding: 12px 25px;
+            font-weight: 800;
+            box-shadow: 0 5px 15px rgba(93, 186, 164, 0.3);
+        }
+        
+        .btn-create:hover {
+            transform: translateY(-3px);
+            color: white;
+        }
+        
+        .btn-back {
+            background: #6C5B7B;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 10px 20px;
+            font-weight: 700;
+        }
+        
+        .btn-delete {
+            background: linear-gradient(135deg, #FF9AA2, #FFB3BA);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 10px 20px;
+            font-weight: 700;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+        }
+        
+        .empty-state i {
+            font-size: 4rem;
+            color: #6C5B7B;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+
+<body class="light-mode">
+
+{% include 'navbar.html' %}
+
+<div class="container mt-5 mb-5">
+    <!-- Subject Header -->
+    <div class="subject-header">
+        <div class="subject-icon-large">{{ subject.icon }}</div>
+        <h1 class="subject-title">{{ subject.name }}</h1>
+        {% if subject.description %}
+        <p class="text-muted" style="font-size: 1.1rem;">{{ subject.description }}</p>
+        {% endif %}
+        
+        <div class="mt-4">
+            <a href="{{ url_for('create_chapter', subject_id=subject.id) }}" class="btn btn-create">
+                <i class="bi bi-plus-circle"></i> Add Chapter
+            </a>
+            <a href="{{ url_for('subjects') }}" class="btn btn-back ms-2">
+                <i class="bi bi-arrow-left"></i> Back
+            </a>
+            
+            <form method="POST" action="{{ url_for('delete_subject', subject_id=subject.id) }}" 
+                  style="display: inline;" 
+                  onsubmit="return confirm('Are you sure you want to delete this subject and all its chapters?');">
+                <button type="submit" class="btn btn-delete ms-2">
+                    <i class="bi bi-trash"></i> Delete Subject
+                </button>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Chapters List -->
+    <h3 class="mb-4" style="font-weight: 800; color: #2C2C54;">
+        <i class="bi bi-folder"></i> Chapters ({{ chapters|length }})
+    </h3>
+    
+    {% if chapters %}
+    <div class="row">
+        <div class="col-md-12">
+            {% for chapter in chapters %}
+            <div class="chapter-card" onclick="window.location.href='{{ url_for('view_chapter', chapter_id=chapter.id) }}'">
+                <div class="d-flex align-items-center">
+                    <div class="chapter-number">{{ chapter.order }}</div>
+                    <div class="flex-grow-1">
+                        <h4 class="chapter-title">{{ chapter.name }}</h4>
+                        {% if chapter.description %}
+                        <p class="text-muted mb-0">{{ chapter.description }}</p>
+                        {% endif %}
+                    </div>
+                    <div class="text-end">
+                        <p class="mb-0" style="color: {{ subject.color }}; font-weight: 700;">
+                            <i class="bi bi-file-earmark-text"></i> {{ chapter_stats[chapter.id] }} Uploads
+                        </p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <i class="bi bi-folder-x"></i>
+        <h4>No Chapters Yet</h4>
+        <p class="text-muted">Add your first chapter to start organizing materials</p>
+        <a href="{{ url_for('create_chapter', subject_id=subject.id) }}" class="btn btn-create mt-3">
+            <i class="bi bi-plus-circle"></i> Create First Chapter
+        </a>
+    </div>
+    {% endif %}
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

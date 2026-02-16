@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Knowledge Base - Vortex</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <style>
+        * { font-family: 'Poppins', sans-serif; }
+        
+        body.light-mode {
+            background: linear-gradient(135deg, #E8D5F2 0%, #C4A7D7 100%);
+            min-height: 100vh;
+            padding-top: 80px;
+        }
+        
+        body.dark-mode {
+            background: linear-gradient(135deg, #4A3A5C 0%, #2C1E3F 100%);
+            min-height: 100vh;
+            color: #f0f0f0;
+            padding-top: 80px;
+        }
+        
+        .page-header {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 25px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 35px rgba(108, 91, 123, 0.2);
+            text-align: center;
+        }
+        
+        body.dark-mode .page-header {
+            background: rgba(42, 42, 64, 0.95);
+        }
+        
+        .page-title {
+            font-size: 2.5rem;
+            font-weight: 900;
+            background: linear-gradient(90deg, #5DBAA4, #6BA3C8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .category-section {
+            margin-bottom: 40px;
+        }
+        
+        .category-title {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #2C2C54;
+            margin-bottom: 20px;
+        }
+        
+        body.dark-mode .category-title {
+            color: #f0f0f0;
+        }
+        
+        .topic-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 5px 20px rgba(108, 91, 123, 0.15);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-align: center;
+            height: 100%;
+        }
+        
+        body.dark-mode .topic-card {
+            background: rgba(42, 42, 64, 0.95);
+        }
+        
+        .topic-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 35px rgba(108, 91, 123, 0.3);
+        }
+        
+        .topic-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+        
+        .topic-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #2C2C54;
+        }
+        
+        body.dark-mode .topic-title {
+            color: #f0f0f0;
+        }
+        
+        .search-box {
+            margin-bottom: 30px;
+        }
+        
+        .search-input {
+            border: 3px solid rgba(93, 186, 164, 0.3);
+            border-radius: 18px;
+            padding: 15px 20px;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+        
+        .search-input:focus {
+            border-color: #5DBAA4;
+            box-shadow: 0 0 0 0.25rem rgba(93, 186, 164, 0.25);
+        }
+    </style>
+</head>
+
+<body class="light-mode">
+
+{% include 'navbar.html' %}
+
+<div class="container mt-5 mb-5">
+    <div class="page-header">
+        <h1 class="page-title">📚 Knowledge Base</h1>
+        <p style="font-size: 1.1rem; color: #6C5B7B; margin-top: 15px;">
+            Pre-loaded study materials ready to summarize and quiz
+        </p>
+    </div>
+    
+    <div class="search-box">
+        <form action="{{ url_for('search_knowledge') }}" method="GET">
+            <input type="text" name="q" class="form-control search-input" 
+                   placeholder="🔍 Search topics..." required>
+        </form>
+    </div>
+    
+    {% for category in categories %}
+    <div class="category-section">
+        <h2 class="category-title">{{ category }}</h2>
+        
+        <div class="row">
+            {% for topic in category_topics[category] %}
+            <div class="col-md-4 mb-4">
+                <div class="topic-card" onclick="window.location.href='{{ url_for('view_knowledge_topic', topic_id=topic.id) }}'">
+                    <div class="topic-icon">{{ topic.icon }}</div>
+                    <h4 class="topic-title">{{ topic.title }}</h4>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

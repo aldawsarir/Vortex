@@ -1,47 +1,77 @@
-try:
-    from PIL import Image
-    import pytesseract
-    OCR_AVAILABLE = True
-except ImportError:
-    OCR_AVAILABLE = False
+import pytesseract
+from PIL import Image
+import cv2
+import numpy as np
+import os
+
+# ✅ تحديد مسار Tesseract
+pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
 
 def extract_text_from_image(image_path):
-    if not OCR_AVAILABLE:
-        return "OCR not available. Please install: pip install pytesseract pillow"
-    
+    """
+    استخراج النص من الصور باستخدام OCR
+    يدعم: PNG, JPG, JPEG, BMP, TIFF
+    """
     try:
-        image = Image.open(image_path)
-        text = pytesseract.image_to_string(image)
+        # قراءة الصورة
+        img = cv2.imread(image_path)
+        
+        if img is None:
+            print(f"❌ Could not read image: {image_path}")
+            return ""
+        
+        # تحسين جودة الصورة للـ OCR
+        gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+        
+        # إزالة الضوضاء
+        denoised = cv2.fastNlMeansDenoising(gray, None, 10, 7, 21)
+        
+        # زيادة التباين
+        _, threshold = cv2.threshold(denoised, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+        
+        # استخراج النص باستخدام Tesseract
+        # دعم العربية والإنجليزية
+        text = pytesseract.image_to_string(threshold, lang='eng+ara')
+        
+        print(f"✅ OCR extracted {len(text)} characters from image")
+        
         return text.strip()
     
     except Exception as e:
-        return f"Error extracting text: {str(e)}"
+        print(f"❌ OCR Error: {str(e)}")
+        return ""
 
-def extract_text_from_pdf_images(pdf_path):
+def is_image_file(filename):
+    """التحقق من امتداد الصورة"""
+    ALLOWED_IMAGE_EXTENSIONS = {'png', 'jpg', 'jpeg', 'bmp', 'tiff', 'gif', 'webp'}
+    ext = filename.rsplit('.', 1)[1].lower() if '.' in filename else ''
+    return ext in ALLOWED_IMAGE_EXTENSIONS
+
+def preprocess_image_for_ocr(image_path, output_path=None):
+    """
+    معالجة مسبقة للصورة لتحسين دقة OCR
+    """
     try:
-        import fitz
+        img = cv2.imread(image_path)
         
-        doc = fitz.open(pdf_path)
-        text = ""
+        # تحويل لـ grayscale
+        gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
         
-        for page_num in range(len(doc)):
-            page = doc[page_num]
-            page_text = page.get_text()
-            
-            if len(page_text.strip()) < 50:
-                pix = page.get_pixmap()
-                img_path = f"temp_page_{page_num}.png"
-                pix.save(img_path)
-                
-                ocr_text = extract_text_from_image(img_path)
-                text += ocr_text + "\n"
-                
-                import os
-                os.remove(img_path)
-            else:
-                text += page_text + "\n"
+        # إزالة الضوضاء
+        denoised = cv2.fastNlMeansDenoising(gray, None, 10, 7, 21)
         
-        return text
+        # تحسين التباين
+        clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8,8))
+        enhanced = clahe.apply(denoised)
+        
+        # Thresholding
+        _, binary = cv2.threshold(enhanced, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+        
+        if output_path:
+            cv2.imwrite(output_path, binary)
+        
+        return binary
     
     except Exception as e:
-        return f"Error: {str(e)}"
+        print(f"❌ Image preprocessing error: {e}")
+        return None

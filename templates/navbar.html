@@ -16,6 +16,27 @@
             
             {% if current_user.is_authenticated %}
 
+            <!-- Learning Dropdown (My Subjects + Knowledge Base) -->
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="learningDropdown" 
+                   role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi bi-mortarboard-fill"></i> Learning
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="learningDropdown">
+                    <li>
+                        <a class="dropdown-item" href="{{ url_for('subjects') }}">
+                            <i class="bi bi-folder2-open"></i> My Subjects
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="{{ url_for('knowledge_base') }}">
+                            <i class="bi bi-book"></i> Knowledge Base
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
+            <!-- Gamification Dropdown -->
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="gamificationDropdown" 
                    role="button" data-bs-toggle="dropdown" aria-expanded="false">

@@ -109,15 +109,42 @@
             font-size: 1.3rem;
         }
         
-        .card-body .lead {
-            font-size: 1.2rem;
-            line-height: 1.8;
+        /* Summary Content - Preserve Formatting */
+        .summary-content {
+            font-size: 1.15rem;
+            line-height: 2;
             font-weight: 600;
             color: var(--text);
+            white-space: pre-wrap; /* Preserve line breaks */
+            word-wrap: break-word;
         }
         
-        body.dark-mode .card-body .lead {
-            color: #ddd;
+        body.dark-mode .summary-content {
+            color: #e0e0e0;
+        }
+        
+        /* Bullet Points Styling */
+        .summary-content ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .summary-content ul li::before {
+            content: "• ";
+            color: var(--teal);
+            font-weight: bold;
+            font-size: 1.3rem;
+            margin-right: 10px;
+        }
+        
+        /* Numbered List Styling */
+        .summary-content ol {
+            padding-left: 25px;
+        }
+        
+        .summary-content ol li {
+            margin-bottom: 12px;
+            padding-left: 10px;
         }
         
         /* Action Cards */
@@ -360,6 +387,11 @@
             .stat-box {
                 margin-bottom: 20px;
             }
+            
+            .summary-content {
+                font-size: 1.05rem;
+                line-height: 1.8;
+            }
         }
     </style>
 </head>
@@ -371,13 +403,13 @@
 <div class="container mt-5">
     <h1 class="fade-in">Your Learning Results</h1>
 
-    <!-- Summary Card -->
+    <!-- Summary Card with Formatted Content -->
     <div class="card shadow fade-in">
         <div class="card-header">
             <i class="bi bi-file-text-fill"></i> Summary
         </div>
         <div class="card-body p-5">
-            <p class="lead">{{ summary }}</p>
+            <div class="summary-content">{{ summary }}</div>
         </div>
     </div>
 
@@ -387,7 +419,7 @@
             <i class="bi bi-diagram-3-fill"></i> Mind Map
         </div>
         <div class="card-body text-center p-5">
-            <img src="{{ url_for('static', filename='images/mindmap.png') }}"
+            <img src="{{ url_for('static', filename='images/mindmap.png') }}?t={{ range(1, 10000) | random }}"
                  class="mindmap-img"
                  alt="Mind Map">
         </div>

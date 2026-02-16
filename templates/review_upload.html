@@ -2,48 +2,360 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vortex - Review Upload</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     
     <style>
-        body.light-mode { background: #f5f5f5; color: #333; }
-        body.dark-mode { background: #1e1e2f; color: #f0f0f0; }
+        /* ========================================
+           Review Upload - Pastel Illustration Theme
+           ======================================== */
         
-        .card { border-radius: 18px; margin-bottom: 20px; }
-        body.dark-mode .card { background: #2a2a40; color: #f0f0f0; }
+        :root {
+            --bg-lavender: #E8D5F2;
+            --bg-purple: #C4A7D7;
+            --teal: #5DBAA4;
+            --teal-light: #7DD3BD;
+            --yellow: #FFD166;
+            --gold: #FFD700;
+            --pink: #FFB3BA;
+            --coral: #FF9AA2;
+            --blue: #6BA3C8;
+            --navy: #4A6FA5;
+            --text: #2C2C54;
+        }
         
+        * {
+            font-family: 'Poppins', 'Cairo', sans-serif;
+        }
+        
+        body.light-mode { 
+            background: linear-gradient(135deg, var(--bg-lavender) 0%, var(--bg-purple) 100%);
+            color: var(--text);
+            min-height: 100vh;
+        }
+        
+        body.dark-mode { 
+            background: linear-gradient(135deg, #4A3A5C 0%, #2C1E3F 100%);
+            color: #f0f0f0;
+        }
+        
+        .container {
+            padding-top: 40px;
+            padding-bottom: 40px;
+        }
+        
+        /* Page Title */
+        h1 {
+            font-size: 3rem;
+            font-weight: 900;
+            margin-bottom: 40px;
+            background: linear-gradient(90deg, var(--teal), var(--blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            position: relative;
+            padding-left: 70px;
+        }
+        
+        h1::before {
+            content: '⭐';
+            position: absolute;
+            left: 0;
+            font-size: 4rem;
+        }
+        
+        .card { 
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 25px;
+            border: 4px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 10px 35px rgba(108, 91, 123, 0.2);
+            margin-bottom: 30px;
+            transition: all 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 45px rgba(108, 91, 123, 0.3);
+        }
+        
+        body.dark-mode .card { 
+            background: rgba(42, 42, 64, 0.95);
+            border-color: rgba(93, 186, 164, 0.3);
+            color: #f0f0f0;
+        }
+        
+        .card h3, .card h4, .card h5 {
+            background: linear-gradient(90deg, var(--teal), var(--blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
+        }
+        
+        /* Rating Stars */
         .rating-stars {
-            font-size: 2rem;
-            color: #FFD700;
+            font-size: 3rem;
+            color: var(--gold);
             cursor: pointer;
+            display: inline-block;
+        }
+        
+        .rating-stars i {
+            transition: all 0.3s ease;
+            display: inline-block;
+            margin: 0 5px;
         }
         
         .rating-stars i:hover {
-            transform: scale(1.2);
+            transform: scale(1.3) rotate(10deg);
+            text-shadow: 0 5px 15px rgba(255, 215, 0, 0.5);
         }
         
+        /* Average Rating Card */
+        .average-rating-card {
+            text-align: center;
+            padding: 50px 30px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .average-rating-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 215, 0, 0.1) 0%, transparent 70%);
+            animation: pulse 3s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+        
+        .average-rating-card h4 {
+            font-size: 3rem;
+            margin: 20px 0;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .average-rating-card p {
+            font-weight: 700;
+            font-size: 1.1rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Form Elements */
+        .form-label {
+            font-weight: 700;
+            color: var(--teal);
+            margin-bottom: 12px;
+            font-size: 1.1rem;
+        }
+        
+        body.dark-mode .form-label {
+            color: var(--teal-light);
+        }
+        
+        .form-control {
+            border: 3px solid rgba(93, 186, 164, 0.3);
+            border-radius: 15px;
+            padding: 14px 18px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+        
+        .form-control:focus {
+            border-color: var(--teal);
+            box-shadow: 0 0 0 0.25rem rgba(93, 186, 164, 0.25);
+            transform: translateY(-2px);
+        }
+        
+        body.dark-mode .form-control {
+            background: rgba(30, 30, 47, 0.9);
+            border-color: rgba(93, 186, 164, 0.4);
+            color: #f0f0f0;
+        }
+        
+        textarea.form-control {
+            min-height: 120px;
+            resize: vertical;
+        }
+        
+        /* Rating Input Area */
+        #ratingInput {
+            padding: 20px;
+            background: rgba(255, 215, 0, 0.05);
+            border-radius: 20px;
+            display: inline-block;
+        }
+        
+        /* Buttons */
+        .btn-primary {
+            background: linear-gradient(135deg, var(--teal), var(--blue));
+            border: none;
+            border-radius: 15px;
+            padding: 14px 40px;
+            font-weight: 800;
+            font-size: 1.1rem;
+            box-shadow: 0 6px 20px rgba(93, 186, 164, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(93, 186, 164, 0.4);
+        }
+        
+        /* Review Items */
         .review-item {
-            border-bottom: 1px solid #ddd;
-            padding: 20px 0;
+            border-bottom: 2px solid rgba(93, 186, 164, 0.15);
+            padding: 25px 0;
+            transition: all 0.3s ease;
         }
         
         .review-item:last-child {
             border-bottom: none;
         }
         
-        body.dark-mode .review-item {
-            border-color: #444;
+        .review-item:hover {
+            background: rgba(93, 186, 164, 0.05);
+            padding-left: 15px;
+            padding-right: 15px;
+            border-radius: 15px;
         }
         
-        footer { 
-            background: #1f2d3d; 
-            color: #ddd; 
-            padding: 25px 0; 
-            margin-top: 80px; 
-            text-align: center; 
+        body.dark-mode .review-item {
+            border-color: rgba(93, 186, 164, 0.2);
         }
-        body.dark-mode footer { background: #111; }
+        
+        body.dark-mode .review-item:hover {
+            background: rgba(93, 186, 164, 0.1);
+        }
+        
+        .review-item strong {
+            font-size: 1.2rem;
+            color: var(--teal);
+            font-weight: 800;
+        }
+        
+        body.dark-mode .review-item strong {
+            color: var(--teal-light);
+        }
+        
+        .review-item .rating-stars {
+            font-size: 1.2rem;
+            margin: 8px 0;
+            cursor: default;
+        }
+        
+        .review-item .rating-stars i:hover {
+            transform: none;
+            text-shadow: none;
+        }
+        
+        .review-item p {
+            font-weight: 600;
+            font-size: 1.05rem;
+            line-height: 1.7;
+            color: var(--text);
+            margin-top: 15px;
+        }
+        
+        body.dark-mode .review-item p {
+            color: #ddd;
+        }
+        
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 60px 30px;
+        }
+        
+        .empty-state i {
+            font-size: 5rem;
+            background: linear-gradient(135deg, var(--pink), var(--teal));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        /* Alert */
+        .alert {
+            border-radius: 18px;
+            border: none;
+            font-weight: 700;
+            padding: 18px 25px;
+            animation: slideDown 0.4s ease-out;
+        }
+        
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .alert-success {
+            background: linear-gradient(135deg, rgba(67, 233, 123, 0.2), rgba(56, 249, 215, 0.2));
+            color: #27ae60;
+            border-left: 5px solid #2ecc71;
+        }
+        
+        .alert-danger {
+            background: linear-gradient(135deg, rgba(255, 154, 162, 0.2), rgba(255, 179, 186, 0.2));
+            color: #c0392b;
+            border-left: 5px solid #e74c3c;
+        }
+        
+        /* Footer */
+        footer { 
+            background: linear-gradient(135deg, var(--navy), var(--blue));
+            color: white;
+            padding: 30px 0;
+            margin-top: 80px;
+            text-align: center;
+            box-shadow: 0 -5px 20px rgba(74, 111, 165, 0.3);
+        }
+        
+        footer strong {
+            color: var(--yellow);
+            font-weight: 800;
+        }
+        
+        body.dark-mode footer { 
+            background: linear-gradient(135deg, #1a1a2e, #0f0f1e);
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.2rem;
+                padding-left: 60px;
+            }
+            
+            h1::before {
+                font-size: 3rem;
+            }
+            
+            .rating-stars {
+                font-size: 2rem;
+            }
+            
+            .average-rating-card {
+                padding: 40px 20px;
+            }
+        }
     </style>
 </head>
 
@@ -52,12 +364,13 @@
 {% include 'navbar.html' %}
 
 <div class="container mt-5">
-    <h1 class="mb-4">Review: {{ upload.filename }}</h1>
+    <h1>Review: {{ upload.filename }}</h1>
 
     {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
             {% for category, message in messages %}
             <div class="alert alert-{{ category }} alert-dismissible fade show">
+                <i class="bi bi-{{ 'check-circle-fill' if category == 'success' else 'exclamation-triangle-fill' }}"></i>
                 {{ message }}
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
@@ -65,10 +378,11 @@
         {% endif %}
     {% endwith %}
 
+    <!-- Average Rating Card -->
     <div class="card shadow p-4 mb-4">
-        <div class="text-center">
-            <h3 class="mb-3">Average Rating</h3>
-            <div class="rating-stars mb-3">
+        <div class="average-rating-card">
+            <h3 class="mb-4">Average Rating</h3>
+            <div class="rating-stars mb-4">
                 {% for i in range(1, 6) %}
                     {% if i <= avg_rating|round %}
                     <i class="bi bi-star-fill"></i>
@@ -78,48 +392,62 @@
                 {% endfor %}
             </div>
             <h4>{{ avg_rating|round(1) }} / 5.0</h4>
-            <p class="text-muted">Based on {{ reviews|length }} reviews</p>
+            <p class="text-muted">Based on {{ reviews|length }} review{{ 's' if reviews|length != 1 else '' }}</p>
         </div>
     </div>
 
-    <div class="card shadow p-4 mb-4">
-        <h5 class="mb-3">Write a Review</h5>
+    <!-- Write Review Card -->
+    <div class="card shadow p-5 mb-4">
+        <h5 class="mb-4">
+            <i class="bi bi-pencil-square"></i> Write a Review
+        </h5>
         
         <form method="POST">
-            <div class="mb-3">
-                <label class="form-label">Your Rating</label>
-                <div class="rating-stars" id="ratingInput">
-                    <i class="bi bi-star" data-rating="1"></i>
-                    <i class="bi bi-star" data-rating="2"></i>
-                    <i class="bi bi-star" data-rating="3"></i>
-                    <i class="bi bi-star" data-rating="4"></i>
-                    <i class="bi bi-star" data-rating="5"></i>
+            <div class="mb-4">
+                <label class="form-label">
+                    <i class="bi bi-star-fill"></i> Your Rating
+                </label>
+                <div>
+                    <div class="rating-stars" id="ratingInput">
+                        <i class="bi bi-star" data-rating="1"></i>
+                        <i class="bi bi-star" data-rating="2"></i>
+                        <i class="bi bi-star" data-rating="3"></i>
+                        <i class="bi bi-star" data-rating="4"></i>
+                        <i class="bi bi-star" data-rating="5"></i>
+                    </div>
                 </div>
                 <input type="hidden" name="rating" id="ratingValue" value="3">
             </div>
 
-            <div class="mb-3">
-                <label class="form-label">Comment (Optional)</label>
-                <textarea name="comment" class="form-control" rows="4"
+            <div class="mb-4">
+                <label class="form-label">
+                    <i class="bi bi-chat-left-text"></i> Comment (Optional)
+                </label>
+                <textarea name="comment" class="form-control" rows="5"
                           placeholder="Share your thoughts about this material..."></textarea>
             </div>
 
             <button type="submit" class="btn btn-primary">
-                <i class="bi bi-send"></i> Submit Review
+                <i class="bi bi-send-fill"></i> Submit Review
             </button>
         </form>
     </div>
 
-    <div class="card shadow p-4">
-        <h5 class="mb-4">All Reviews</h5>
+    <!-- All Reviews Card -->
+    <div class="card shadow p-5">
+        <h5 class="mb-4">
+            <i class="bi bi-chat-dots"></i> All Reviews
+        </h5>
 
         {% if reviews %}
             {% for review in reviews %}
             <div class="review-item">
                 <div class="d-flex justify-content-between align-items-start mb-2">
                     <div>
-                        <strong>{{ review.user.username }}</strong>
-                        <div class="rating-stars" style="font-size: 1rem;">
+                        <strong>
+                            <i class="bi bi-person-circle"></i> {{ review.user.username }}
+                        </strong>
+                        <div class="rating-stars">
                             {% for i in range(1, 6) %}
                                 {% if i <= review.rating %}
                                 <i class="bi bi-star-fill"></i>
@@ -129,25 +457,32 @@
                             {% endfor %}
                         </div>
                     </div>
-                    <small class="text-muted">
+                    <small class="text-muted" style="font-weight: 700;">
+                        <i class="bi bi-calendar"></i> 
                         {{ review.created_at.strftime('%Y-%m-%d') }}
                     </small>
                 </div>
                 
                 {% if review.comment %}
-                <p class="mb-0">{{ review.comment }}</p>
+                <p class="mb-0">💬 {{ review.comment }}</p>
                 {% endif %}
             </div>
             {% endfor %}
         {% else %}
-            <p class="text-muted text-center">No reviews yet. Be the first to review!</p>
+            <div class="empty-state">
+                <i class="bi bi-chat-left-dots"></i>
+                <p class="text-muted mt-3" style="font-weight: 700; font-size: 1.1rem;">
+                    No reviews yet. Be the first to review!
+                </p>
+            </div>
         {% endif %}
     </div>
 </div>
 
 <footer>
     <div class="container text-center">
-        Developed by <strong>Vortex Team</strong> - Level 10 Students
+        <p class="mb-1">Developed By <strong>Vortex Team</strong> 💜</p>
+        <p class="mb-0">🎓 University College Of Ranyah - Computer Science - Level 10 🎓</p>
     </div>
 </footer>
 
@@ -156,22 +491,37 @@
     const stars = document.querySelectorAll('#ratingInput i');
     const ratingValue = document.getElementById('ratingValue');
     
+    // Set initial 3-star rating
+    updateStarDisplay(3);
+    
     stars.forEach(star => {
         star.addEventListener('click', () => {
             const rating = star.dataset.rating;
             ratingValue.value = rating;
-            
-            stars.forEach((s, index) => {
-                if (index < rating) {
-                    s.classList.remove('bi-star');
-                    s.classList.add('bi-star-fill');
-                } else {
-                    s.classList.remove('bi-star-fill');
-                    s.classList.add('bi-star');
-                }
-            });
+            updateStarDisplay(rating);
+        });
+        
+        star.addEventListener('mouseenter', () => {
+            const rating = star.dataset.rating;
+            updateStarDisplay(rating);
         });
     });
+    
+    document.getElementById('ratingInput').addEventListener('mouseleave', () => {
+        updateStarDisplay(ratingValue.value);
+    });
+    
+    function updateStarDisplay(rating) {
+        stars.forEach((s, index) => {
+            if (index < rating) {
+                s.classList.remove('bi-star');
+                s.classList.add('bi-star-fill');
+            } else {
+                s.classList.remove('bi-star-fill');
+                s.classList.add('bi-star');
+            }
+        });
+    }
 </script>
 
 </body>

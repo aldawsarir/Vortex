@@ -3,40 +3,212 @@
 <head>
     <meta charset="UTF-8">
     <title>Vortex - Gamification</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     
     <style>
-        body.light-mode { background: #f5f5f5; color: #333; }
-        body.dark-mode { background: #1e1e2f; color: #f0f0f0; }
+        /* ========================================
+           Gamification - Pastel Illustration Theme
+           ======================================== */
         
-        .card { border-radius: 18px; }
-        body.dark-mode .card { background: #2a2a40; color: #f0f0f0; }
-        
-        .score-display {
-            font-size: 3rem;
-            font-weight: 900;
-            background: linear-gradient(90deg, #FFD700, #FFA500);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+        :root {
+            --bg-lavender: #E8D5F2;
+            --bg-purple: #C4A7D7;
+            --teal: #5DBAA4;
+            --teal-light: #7DD3BD;
+            --yellow: #FFD166;
+            --gold: #FFD700;
+            --pink: #FFB3BA;
+            --coral: #FF9AA2;
+            --blue: #6BA3C8;
+            --navy: #4A6FA5;
+            --text: #2C2C54;
         }
         
-        .progress { height: 35px; margin: 30px 0; }
+        * {
+            font-family: 'Poppins', 'Cairo', sans-serif;
+        }
+        
+        body.light-mode { 
+            background: linear-gradient(135deg, var(--bg-lavender) 0%, var(--bg-purple) 100%);
+            color: var(--text);
+            min-height: 100vh;
+            padding-top: 100px;
+        }
+        
+        body.dark-mode { 
+            background: linear-gradient(135deg, #4A3A5C 0%, #2C1E3F 100%);
+            color: #f0f0f0;
+            padding-top: 100px;
+        }
+        
+        .container {
+            padding-top: 40px;
+            padding-bottom: 40px;
+        }
+        
+        /* Page Title */
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 900;
+            text-align: center;
+            margin-bottom: 50px;
+            background: linear-gradient(90deg, var(--teal), var(--blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            position: relative;
+            padding-top: 60px;
+        }
+        
+        h1::before {
+            content: '🏆';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 4rem;
+            animation: bounce 2s ease-in-out infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(-15px); }
+        }
+        
+        .card { 
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 25px;
+            border: 4px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 10px 35px rgba(108, 91, 123, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 45px rgba(108, 91, 123, 0.3);
+        }
+        
+        body.dark-mode .card { 
+            background: rgba(42, 42, 64, 0.95);
+            border-color: rgba(93, 186, 164, 0.3);
+            color: #f0f0f0;
+        }
+        
+        /* Score Display */
+        .score-display {
+            font-size: 5rem;
+            font-weight: 900;
+            background: linear-gradient(90deg, var(--gold), var(--yellow));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: pulse-score 2s ease-in-out infinite;
+        }
+        
+        @keyframes pulse-score {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .card h3, .card h5 {
+            background: linear-gradient(90deg, var(--teal), var(--blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
+            margin-bottom: 25px;
+        }
+        
+        /* Progress Bar */
+        .progress { 
+            height: 40px;
+            border-radius: 25px;
+            background: rgba(93, 186, 164, 0.15);
+            overflow: hidden;
+            border: 3px solid rgba(93, 186, 164, 0.3);
+            margin: 30px 0;
+        }
+        
+        .progress-bar {
+            background: linear-gradient(90deg, #43e97b, #38f9d7);
+            border-radius: 25px;
+            font-weight: 800;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(67, 233, 123, 0.3);
+            transition: width 0.6s ease;
+        }
+        
+        /* Achievements */
+        .achievement-icon {
+            font-size: 4rem;
+            margin-bottom: 15px;
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+        
+        .achievement-box {
+            padding: 25px;
+            transition: all 0.3s ease;
+            border-radius: 20px;
+        }
+        
+        .achievement-box:hover {
+            background: rgba(93, 186, 164, 0.08);
+            transform: translateY(-8px);
+        }
+        
+        body.dark-mode .achievement-box:hover {
+            background: rgba(93, 186, 164, 0.12);
+        }
+        
+        .achievement-box p {
+            font-weight: 700;
+            color: var(--text);
+            margin-top: 10px;
+        }
+        
+        body.dark-mode .achievement-box p {
+            color: #f0f0f0;
+        }
+        
+        /* Flashcards Section Title */
+        h4 {
+            background: linear-gradient(90deg, var(--teal), var(--blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
+            font-size: 2rem;
+            margin-bottom: 30px;
+        }
         
         .flashcards-container { 
             display: flex; 
             flex-wrap: wrap; 
-            gap: 1rem; 
+            gap: 20px; 
             justify-content: center; 
-            margin-top: 2rem; 
+            margin-top: 30px; 
         }
         
+        /* Flashcard - Fixed overflow issue */
         .flashcard { 
             perspective: 1000px; 
-            width: 180px; 
-            height: 100px; 
+            width: 200px; 
+            height: 120px; 
             cursor: pointer; 
-            position: relative; 
+            position: relative;
+            transition: transform 0.3s ease;
+        }
+        
+        .flashcard:hover {
+            transform: scale(1.05);
         }
         
         .flashcard div { 
@@ -44,38 +216,149 @@
             height: 100%; 
             position: absolute; 
             backface-visibility: hidden; 
-            border-radius: 0.5rem; 
+            border-radius: 18px;
             display: flex; 
             align-items: center; 
             justify-content: center; 
-            padding: 0.5rem; 
-            font-weight: bold; 
+            padding: 12px; 
+            font-weight: 800; 
             text-align: center; 
-            transition: transform 0.6s; 
+            transition: transform 0.6s cubic-bezier(0.4, 0.0, 0.2, 1);
+            box-shadow: 0 8px 25px rgba(108, 91, 123, 0.2);
+            border: 3px solid rgba(255, 255, 255, 0.4);
+            
+            /* Fix overflow */
+            overflow-y: auto;
+            overflow-x: hidden;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            hyphens: auto;
+            font-size: 0.95rem;
+            line-height: 1.3;
+        }
+        
+        /* Scrollbar for flashcards */
+        .flashcard div::-webkit-scrollbar {
+            width: 5px;
+        }
+        
+        .flashcard div::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+        
+        .flashcard div::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
         }
         
         .flashcard .front { 
-            background: linear-gradient(90deg, #6C63FF, #8A76FF); 
+            background: linear-gradient(135deg, var(--teal), var(--blue));
             color: white; 
         }
         
         .flashcard .back { 
-            background: linear-gradient(90deg, #FF6F61, #FF9C6E); 
+            background: linear-gradient(135deg, var(--pink), var(--coral));
             color: white; 
             transform: rotateY(180deg); 
         }
         
-        .flashcard.flipped .front { transform: rotateY(180deg); }
-        .flashcard.flipped .back { transform: rotateY(0deg); }
-        
-        footer { 
-            background: #1f2d3d; 
-            color: #ddd; 
-            padding: 25px 0; 
-            margin-top: 80px; 
-            text-align: center; 
+        .flashcard.flipped .front { 
+            transform: rotateY(180deg); 
         }
-        body.dark-mode footer { background: #111; }
+        
+        .flashcard.flipped .back { 
+            transform: rotateY(0deg); 
+        }
+        
+        /* Buttons */
+        .btn-primary {
+            background: linear-gradient(135deg, var(--teal), var(--blue));
+            border: none;
+            border-radius: 18px;
+            padding: 16px 45px;
+            font-weight: 800;
+            font-size: 1.2rem;
+            box-shadow: 0 8px 25px rgba(93, 186, 164, 0.35);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 35px rgba(93, 186, 164, 0.45);
+        }
+        
+        .btn-secondary {
+            background: linear-gradient(135deg, var(--pink), var(--coral));
+            border: none;
+            border-radius: 18px;
+            padding: 16px 45px;
+            font-weight: 800;
+            font-size: 1.2rem;
+            box-shadow: 0 8px 25px rgba(255, 179, 186, 0.35);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-secondary:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 35px rgba(255, 179, 186, 0.45);
+        }
+        
+        /* Footer */
+        footer { 
+            background: linear-gradient(135deg, var(--navy), var(--blue));
+            color: white;
+            padding: 30px 0;
+            margin-top: 80px;
+            text-align: center;
+            box-shadow: 0 -5px 20px rgba(74, 111, 165, 0.3);
+        }
+        
+        footer strong {
+            color: var(--yellow);
+            font-weight: 800;
+        }
+        
+        body.dark-mode footer { 
+            background: linear-gradient(135deg, #1a1a2e, #0f0f1e);
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            body.light-mode, body.dark-mode {
+                padding-top: 90px;
+            }
+            
+            h1 {
+                font-size: 2.5rem;
+                padding-top: 50px;
+            }
+            
+            h1::before {
+                font-size: 3rem;
+            }
+            
+            .score-display {
+                font-size: 3.5rem;
+            }
+            
+            .flashcard {
+                width: 160px;
+                height: 100px;
+            }
+            
+            .flashcard div {
+                font-size: 0.85rem;
+                padding: 10px;
+            }
+            
+            .btn-primary, .btn-secondary {
+                padding: 14px 35px;
+                font-size: 1.1rem;
+                width: 100%;
+                margin-bottom: 10px;
+            }
+        }
     </style>
 </head>
 
@@ -84,46 +367,59 @@
 {% include 'navbar.html' %}
 
 <div class="container mt-5">
-    <h1 class="text-center mb-4">Gamification Dashboard</h1>
+    <h1>Gamification Dashboard</h1>
 
-    <div class="card shadow text-center p-4 mb-4">
-        <h3>Your Score</h3>
+    <!-- Score Card -->
+    <div class="card shadow text-center p-5 mb-4">
+        <h3>🌟 Your Score</h3>
         <div class="score-display">{{ score }}</div>
-        <p class="text-muted">Points Earned</p>
+        <p class="text-muted" style="font-weight: 700; font-size: 1.1rem;">Points Earned</p>
     </div>
 
-    <div class="card shadow p-4 mb-4">
-        <h5 class="mb-3">Progress to Next Level</h5>
+    <!-- Progress Card -->
+    <div class="card shadow p-5 mb-4">
+        <h5>📊 Progress to Next Level</h5>
         <div class="progress">
-            <div class="progress-bar bg-success" 
+            <div class="progress-bar" 
                  role="progressbar" 
                  style="width: {{ (score % 100) }}%">
                 {{ score % 100 }}%
             </div>
         </div>
-        <p class="text-muted mt-2">Level {{ (score // 100) + 1 }}</p>
+        <p class="text-muted mt-3" style="font-weight: 700; font-size: 1.2rem;">
+            <i class="bi bi-star-fill" style="color: var(--gold);"></i>
+            Level {{ (score // 100) + 1 }}
+        </p>
     </div>
 
-    <div class="card shadow p-4 mb-4">
-        <h5 class="mb-3">Achievements</h5>
-        <div class="row">
-            <div class="col-md-4 text-center mb-3">
-                <i class="bi bi-trophy-fill" style="font-size: 3rem; color: #FFD700;"></i>
-                <p class="mt-2">First Quiz Completed</p>
+    <!-- Achievements Card -->
+    <div class="card shadow p-5 mb-5">
+        <h5>🏅 Achievements</h5>
+        <div class="row text-center">
+            <div class="col-md-4 mb-3">
+                <div class="achievement-box">
+                    <i class="bi bi-trophy-fill achievement-icon" style="color: var(--gold);"></i>
+                    <p>First Quiz Completed</p>
+                </div>
             </div>
-            <div class="col-md-4 text-center mb-3">
-                <i class="bi bi-star-fill" style="font-size: 3rem; color: #FFA500;"></i>
-                <p class="mt-2">{{ score }} Points Earned</p>
+            <div class="col-md-4 mb-3">
+                <div class="achievement-box">
+                    <i class="bi bi-star-fill achievement-icon" style="color: var(--yellow);"></i>
+                    <p>{{ score }} Points Earned</p>
+                </div>
             </div>
-            <div class="col-md-4 text-center mb-3">
-                <i class="bi bi-lightning-fill" style="font-size: 3rem; color: #FF6F61;"></i>
-                <p class="mt-2">Quick Learner</p>
+            <div class="col-md-4 mb-3">
+                <div class="achievement-box">
+                    <i class="bi bi-lightning-fill achievement-icon" style="color: var(--coral);"></i>
+                    <p>Quick Learner</p>
+                </div>
             </div>
         </div>
     </div>
 
+    <!-- Flashcards Section -->
     {% if quiz and quiz|length > 0 %}
-    <h4 class="text-center mb-3">Review Flashcards</h4>
+    <h4 class="text-center mb-4">🎴 Review Flashcards</h4>
     <div class="flashcards-container">
         {% for q in quiz %}
         <div class="flashcard">
@@ -134,24 +430,27 @@
     </div>
     {% endif %}
 
+    <!-- Action Buttons -->
     <div class="text-center mt-5 mb-4">
         <a href="{{ url_for('quiz_page') }}" class="btn btn-primary me-2">
-            Take Quiz Again
+            <i class="bi bi-card-checklist"></i> Take Quiz Again
         </a>
         <a href="{{ url_for('home') }}" class="btn btn-secondary">
-            Back Home
+            <i class="bi bi-house-door-fill"></i> Back Home
         </a>
     </div>
 </div>
 
 <footer>
     <div class="container text-center">
-        Developed by <strong>Vortex Team</strong> - Level 10 Students
+        <p class="mb-1">Developed By <strong>Vortex Team</strong> 💜</p>
+        <p class="mb-0">🎓 University College Of Ranyah - Computer Science - Level 10 🎓</p>
     </div>
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <script>
+// Flashcard flip functionality
 document.querySelectorAll('.flashcard').forEach(card => {
     card.addEventListener('click', () => {
         card.classList.toggle('flipped');

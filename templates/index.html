@@ -159,23 +159,25 @@
             color: var(--teal-light);
         }
         
-        .form-control {
+        .form-control, .form-select {
             border: 3px solid rgba(93, 186, 164, 0.3);
             border-radius: 18px;
             padding: 15px 20px;
             background: rgba(255, 255, 255, 0.9);
             transition: all 0.3s ease;
             font-size: 1rem;
+            font-weight: 600;
         }
         
-        .form-control:focus {
+        .form-control:focus, .form-select:focus {
             border-color: var(--teal);
             box-shadow: 0 0 0 0.25rem rgba(93, 186, 164, 0.25);
             background: white;
             transform: translateY(-2px);
         }
         
-        body.dark-mode .form-control {
+        body.dark-mode .form-control,
+        body.dark-mode .form-select {
             background: rgba(30, 30, 47, 0.9);
             border-color: rgba(93, 186, 164, 0.4);
             color: #f0f0f0;
@@ -183,6 +185,39 @@
         
         textarea.form-control {
             resize: vertical;
+        }
+        
+        /* Customization Section */
+        .customization-section {
+            background: linear-gradient(135deg, rgba(93, 186, 164, 0.08), rgba(107, 163, 200, 0.08));
+            border-radius: 20px;
+            padding: 25px;
+            margin-top: 20px;
+            border: 3px solid rgba(93, 186, 164, 0.2);
+        }
+        
+        body.dark-mode .customization-section {
+            background: linear-gradient(135deg, rgba(93, 186, 164, 0.12), rgba(107, 163, 200, 0.12));
+            border-color: rgba(93, 186, 164, 0.3);
+        }
+        
+        .customization-title {
+            font-size: 1.2rem;
+            font-weight: 800;
+            background: linear-gradient(90deg, var(--teal), var(--blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .customization-title i {
+            background: linear-gradient(135deg, var(--teal), var(--blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 1.5rem;
         }
         
         /* Buttons */
@@ -332,6 +367,10 @@
             .floating-notes {
                 display: none;
             }
+            
+            .customization-section {
+                padding: 20px;
+            }
         }
     </style>
 </head>
@@ -385,13 +424,77 @@
 
             <div class="mb-4">
                 <label class="form-label">
-                    📂 Or Upload Document
+                    📂 Or Upload Document / Image
                 </label>
-                <input type="file" name="file" class="form-control" accept=".pdf,.docx,.pptx">
-                <small class="text-muted">📄 PDF, DOCX, PPTX supported</small>
+                <input type="file" name="file" class="form-control" 
+                       accept=".pdf,.docx,.pptx,.txt,.png,.jpg,.jpeg,.bmp,.tiff">
+                <small class="text-muted">
+                    📄 <strong>Documents:</strong> PDF, DOCX, PPTX, TXT<br>
+                    🖼️ <strong>Images (OCR):</strong> PNG, JPG, JPEG, BMP, TIFF<br>
+                    📏 Maximum file size: 32MB
+                </small>
             </div>
 
-            <button type="submit" class="btn btn-vortex w-100">
+            <!-- Chapter Selection (Optional) -->
+            <div class="mb-4">
+                <label class="form-label">
+                    <i class="bi bi-folder2-open"></i> Save to Chapter (Optional)
+                </label>
+                <select name="chapter_id" class="form-select">
+                    <option value="">-- No Chapter (Save to Dashboard) --</option>
+                    {% for subject in current_user.subjects %}
+                        <optgroup label="{{ subject.icon }} {{ subject.name }}">
+                            {% for chapter in subject.chapters|sort(attribute='order') %}
+                                <option value="{{ chapter.id }}">
+                                    {{ chapter.order }}. {{ chapter.name }}
+                                </option>
+                            {% endfor %}
+                        </optgroup>
+                    {% endfor %}
+                </select>
+                <small class="text-muted">
+                    <i class="bi bi-info-circle"></i> Choose a chapter to organize your study material. 
+                    <a href="{{ url_for('subjects') }}" style="color: var(--teal); font-weight: 700;">Create subjects</a> to get started.
+                </small>
+            </div>
+
+            <!-- Summary Customization Section -->
+            <div class="customization-section">
+                <div class="customization-title">
+                    <i class="bi bi-gear-fill"></i>
+                    <span>Customize Your Summary</span>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">
+                            <i class="bi bi-palette"></i> Summary Style
+                        </label>
+                        <select name="summary_style" class="form-select">
+                            <option value="paragraphs" selected>📄 Paragraphs (Default)</option>
+                            <option value="bullets">📝 Bullet Points</option>
+                            <option value="numbered">🔢 Numbered List</option>
+                            <option value="very_short">⚡ Very Short</option>
+                            <option value="detailed">📋 Detailed</option>
+                        </select>
+                        <small class="text-muted">Choose how you want the summary formatted</small>
+                    </div>
+                    
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">
+                            <i class="bi bi-rulers"></i> Summary Length
+                        </label>
+                        <select name="summary_length" class="form-select">
+                            <option value="short">📏 Short (~100 words)</option>
+                            <option value="medium" selected>📐 Medium (~200 words)</option>
+                            <option value="long">📏 Long (~400 words)</option>
+                        </select>
+                        <small class="text-muted">Select your preferred summary length</small>
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-vortex w-100 mt-4">
                 <i class="bi bi-magic"></i> Generate Summary and Quiz
             </button>
         </form>

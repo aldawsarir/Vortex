@@ -249,6 +249,12 @@
             border-left: 5px solid #e74c3c;
         }
         
+        .alert-warning {
+            background: linear-gradient(135deg, rgba(255, 209, 102, 0.2), rgba(255, 193, 7, 0.2));
+            color: #d68910;
+            border-left: 5px solid var(--yellow);
+        }
+        
         .alert-info {
             background: linear-gradient(135deg, rgba(93, 186, 164, 0.2), rgba(125, 211, 189, 0.2));
             color: #16a085;
@@ -383,7 +389,7 @@
         {% if messages %}
             {% for category, message in messages %}
             <div class="alert alert-{{ category }} alert-dismissible fade show">
-                <i class="bi bi-{{ 'check-circle-fill' if category == 'success' else 'exclamation-triangle-fill' if category == 'danger' else 'info-circle-fill' }}"></i>
+                <i class="bi bi-{{ 'check-circle-fill' if category == 'success' else 'exclamation-triangle-fill' if category in ['danger', 'warning'] else 'info-circle-fill' }}"></i>
                 {{ message }}
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
@@ -401,7 +407,7 @@
                     
                     <div class="battle-info">
                         <i class="bi bi-people-fill"></i>
-                        <strong>{{ battle.participants|length }}</strong> Players
+                        <strong>{{ battle.participants|list|length }}</strong> Players
                     </div>
                     
                     <div class="mb-3">

@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ topic.title }} - Vortex</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <style>
+        * { font-family: 'Poppins', sans-serif; }
+        
+        body.light-mode {
+            background: linear-gradient(135deg, #E8D5F2 0%, #C4A7D7 100%);
+            min-height: 100vh;
+            padding-top: 80px;
+        }
+        
+        body.dark-mode {
+            background: linear-gradient(135deg, #4A3A5C 0%, #2C1E3F 100%);
+            min-height: 100vh;
+            color: #f0f0f0;
+            padding-top: 80px;
+        }
+        
+        .content-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 25px;
+            padding: 40px;
+            box-shadow: 0 10px 35px rgba(108, 91, 123, 0.2);
+        }
+        
+        body.dark-mode .content-card {
+            background: rgba(42, 42, 64, 0.95);
+        }
+        
+        .topic-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .topic-icon-large {
+            font-size: 5rem;
+        }
+        
+        .topic-title {
+            font-size: 2.5rem;
+            font-weight: 900;
+            background: linear-gradient(90deg, #5DBAA4, #6BA3C8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin: 20px 0;
+        }
+        
+        .topic-category {
+            font-size: 1.2rem;
+            color: #6C5B7B;
+            font-weight: 600;
+        }
+        
+        .topic-content {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #2C2C54;
+            white-space: pre-line;
+        }
+        
+        body.dark-mode .topic-content {
+            color: #f0f0f0;
+        }
+        
+        .form-label {
+            font-weight: 700;
+            color: #5DBAA4;
+            margin-bottom: 12px;
+        }
+        
+        body.dark-mode .form-label {
+            color: #7DD3BD;
+        }
+        
+        .form-select {
+            border: 3px solid rgba(93, 186, 164, 0.3);
+            border-radius: 15px;
+            padding: 12px;
+            font-weight: 600;
+        }
+        
+        .form-select:focus {
+            border-color: #5DBAA4;
+            box-shadow: 0 0 0 0.25rem rgba(93, 186, 164, 0.25);
+        }
+        
+        .btn-generate {
+            background: linear-gradient(135deg, #5DBAA4, #7DD3BD);
+            color: white;
+            border: none;
+            border-radius: 15px;
+            padding: 15px 30px;
+            font-weight: 800;
+            font-size: 1.1rem;
+            box-shadow: 0 5px 20px rgba(93, 186, 164, 0.3);
+        }
+        
+        .btn-generate:hover {
+            transform: translateY(-3px);
+            color: white;
+        }
+        
+        .btn-back {
+            background: #6C5B7B;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 10px 20px;
+            font-weight: 700;
+        }
+        
+        .btn-back:hover {
+            background: #5A4A63;
+            color: white;
+        }
+    </style>
+</head>
+
+<body class="light-mode">
+
+{% include 'navbar.html' %}
+
+<div class="container mt-5 mb-5">
+    <div class="content-card">
+        <div class="topic-header">
+            <div class="topic-icon-large">{{ topic.icon }}</div>
+            <h1 class="topic-title">{{ topic.title }}</h1>
+            <p class="topic-category">{{ topic.category }}</p>
+        </div>
+        
+        <div class="topic-content mb-5">{{ topic.content }}</div>
+        
+        <hr class="my-5">
+        
+        <h3 style="font-weight: 800; color: #5DBAA4;">
+            <i class="bi bi-gear-fill"></i> Generate Summary & Quiz
+        </h3>
+        
+        <form method="POST" action="{{ url_for('use_knowledge_topic', topic_id=topic_id) }}">
+            <div class="row mt-4">
+                <div class="col-md-4 mb-3">
+                    <label class="form-label">
+                        <i class="bi bi-palette"></i> Summary Style
+                    </label>
+                    <select name="summary_style" class="form-select">
+                        <option value="paragraphs" selected>📄 Paragraphs</option>
+                        <option value="bullets">📝 Bullet Points</option>
+                        <option value="numbered">🔢 Numbered List</option>
+                        <option value="very_short">⚡ Very Short</option>
+                        <option value="detailed">📋 Detailed</option>
+                    </select>
+                </div>
+                
+                <div class="col-md-4 mb-3">
+                    <label class="form-label">
+                        <i class="bi bi-rulers"></i> Summary Length
+                    </label>
+                    <select name="summary_length" class="form-select">
+                        <option value="short">📏 Short</option>
+                        <option value="medium" selected>📐 Medium</option>
+                        <option value="long">📏 Long</option>
+                    </select>
+                </div>
+                
+                <div class="col-md-4 mb-3">
+                    <label class="form-label">
+                        <i class="bi bi-folder2-open"></i> Save to Chapter
+                    </label>
+                    <select name="chapter_id" class="form-select">
+                        <option value="">-- Dashboard --</option>
+                        {% for subject in current_user.subjects %}
+                            <optgroup label="{{ subject.icon }} {{ subject.name }}">
+                                {% for chapter in subject.chapters|sort(attribute='order') %}
+                                    <option value="{{ chapter.id }}">
+                                        {{ chapter.order }}. {{ chapter.name }}
+                                    </option>
+                                {% endfor %}
+                            </optgroup>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            
+            <div class="d-flex justify-content-between mt-4">
+                <a href="{{ url_for('knowledge_base') }}" class="btn btn-back">
+                    <i class="bi bi-arrow-left"></i> Back to Library
+                </a>
+                <button type="submit" class="btn btn-generate">
+                    <i class="bi bi-magic"></i> Generate Summary & Quiz
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
