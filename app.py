@@ -297,8 +297,8 @@ def summarize():
             if ext in ['png', 'jpg', 'jpeg', 'bmp', 'tiff', 'gif', 'webp']:
                 from utils.ocr import extract_text_from_image
                 file_text = extract_text_from_image(filepath)
-                if not file_text:
-                    flash("⚠️ Could not extract text from image. Please try a clearer image.", 'warning')
+                if not file_text or len(file_text.strip()) < 10:
+                    flash("⚠️ Could not extract text from image. Make sure Tesseract OCR is installed, or paste the text manually.", 'warning')
                     return redirect(url_for('home'))
             else:
                 file_text = extract_text_from_file(filepath, ext)
